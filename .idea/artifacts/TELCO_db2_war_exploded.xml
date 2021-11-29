@@ -1,22 +1,12 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="TELCO-db2:war exploded">
-    <output-path>$PROJECT_DIR$/target/TELCO-db2-1.0-SNAPSHOT</output-path>
-    <properties id="maven-jee-properties">
-      <options>
-        <exploded>true</exploded>
-        <module>TELCO-db2</module>
-        <packaging>war</packaging>
-        <unpackNestedArchives>false</unpackNestedArchives>
-      </options>
-    </properties>
+    <output-path>$PROJECT_DIR$/out/artifacts/TELCO_db2_war_exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="TELCO-db2" />
+          <element id="jpa-descriptors" facet="TELCO-db2/jpa/JPA" />
         </element>
-      </element>
-      <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/TELCO-db2-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="TELCO-db2/web/Web" />
     </root>

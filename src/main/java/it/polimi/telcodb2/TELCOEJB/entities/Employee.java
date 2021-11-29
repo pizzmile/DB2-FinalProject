@@ -17,12 +17,13 @@ public class Employee {
     @Column(name = "authorization", nullable = false)
     private Boolean authorization;
 
-    public Employee() {}
-
     public Employee(String username, String password, Boolean authorization) {
         this.username = username;
         this.password = password;
         this.authorization = authorization;
+    }
+
+    public Employee() {
     }
 
     public String getUsername() {

@@ -2,6 +2,8 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+
 @Entity
 @Table(name = "Service")
 //@NamedQueries()
@@ -18,22 +20,27 @@ public class Service {
     @Column(name = "minutes", nullable = true)
     private int minutes;
 
-    @Column(name = "extra-minutes", nullable = true)
+    @Column(name = "extraMinutes", nullable = true)
     private int extraMinutes;
 
     @Column(name = "sms", nullable = true)
     private int sms;
 
-    @Column(name = "extra-sms", nullable = true)
+    @Column(name = "extraSms", nullable = true)
     private int extraSms;
 
     @Column(name = "giga", nullable = true)
     private int giga;
 
-    @Column(name = "extra-giga", nullable = true)
+    @Column(name = "extraGiga", nullable = true)
     private int extraGiga;
 
-    public Service(int serviceId, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga) {
+    // Owned (includedService)
+    @OneToMany(mappedBy = "service")
+    private ArrayList<IncludedService> includedServices;
+
+    public Service(int serviceId, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga,
+                   int extraGiga, ArrayList<IncludedService> includedServices) {
         this.serviceId = serviceId;
         this.type = type;
         this.minutes = minutes;
@@ -42,9 +49,11 @@ public class Service {
         this.extraSms = extraSms;
         this.giga = giga;
         this.extraGiga = extraGiga;
+        this.includedServices = includedServices;
     }
 
-    public Service() {}
+    public Service() {
+    }
 
     public int getServiceId() {
         return serviceId;
@@ -108,5 +117,13 @@ public class Service {
 
     public void setExtraGiga(int extraGiga) {
         this.extraGiga = extraGiga;
+    }
+
+    public ArrayList<IncludedService> getIncludedServices() {
+        return includedServices;
+    }
+
+    public void setIncludedServices(ArrayList<IncludedService> includedServices) {
+        this.includedServices = includedServices;
     }
 }
