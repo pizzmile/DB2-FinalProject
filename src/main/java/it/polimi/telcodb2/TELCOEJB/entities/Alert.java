@@ -10,7 +10,9 @@ import java.util.Date;
 //@NamedQueries()
 public class Alert {
 
-    @Id
+    @EmbeddedId
+    private AlertPK id; 
+    /*
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // Owner (alertUser)
     @OneToOne(cascade = CascadeType.ALL)
@@ -18,7 +20,7 @@ public class Alert {
     private User user;
 
     @Column(name = "email", nullable = false)
-    private String email;
+    private String email;*/ \\ TODO controllare constraints
 
     @Column(name = "amount", nullable = false)
     private int amount;
@@ -31,9 +33,8 @@ public class Alert {
     @Column(name = "time", nullable = false)
     private Time time;
 
-    public Alert(User user, String email, int amount, Date date, Time time) {
-        this.user = user;
-        this.email = email;
+    public Alert(AlertPK id, int amount, Date date, Time time) {
+        this.id=id;
         this.amount = amount;
         this.date = date;
         this.time = time;
@@ -42,21 +43,14 @@ public class Alert {
     public Alert() {
     }
 
-    public User getUser() {
-        return user;
+    public AlertPK getId(){
+        return id;
     }
-
-    public void setUser(User user) {
-        this.user = user;
+    
+    public void setId(AlertPK id) {
+        this.id = id;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    
 
     public int getAmount() {
         return amount;
