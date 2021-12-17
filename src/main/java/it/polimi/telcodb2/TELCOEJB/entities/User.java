@@ -18,7 +18,7 @@ public class User {
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "isInsolvent", nullable = false)
     private Boolean status;
 
     @Column(name = "failedPayments", nullable = false)
