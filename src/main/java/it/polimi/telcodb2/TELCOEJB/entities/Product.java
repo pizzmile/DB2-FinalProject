@@ -2,46 +2,50 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
-@Table(name = "Product")
-//@NamedQueries()
-public class Product {
+@Table(name = "Product", schema = "TelcoDB")
+public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "productName", nullable = false)
-    private String productName;
+    @Column(name="name", nullable = true)
+    private String name;
 
-    @Column(name = "fee", nullable = false)
+    @Column(name="fee", nullable = true)
     private float fee;
 
-    // Owned (compatibleProduct)
-    @OneToMany(mappedBy = "product")
-    private ArrayList<CompatibleProduct> compatibleProductArrayList;
+    // Relationship between package (owner) and its compatible products
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    private Collection<Package> packages;
 
-    // Owned (chosenProduct)
-    @OneToMany(mappedBy = "product")
-    private ArrayList<ChosenProduct> chosenProductArrayList;
+    // Relationship between schedule (owner) and the scheduled products
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    private Collection<Schedule> schedules;
 
-    public Product(String productName, float fee, ArrayList<CompatibleProduct> compatibleProductArrayList,
-                   ArrayList<ChosenProduct> chosenProductArrayList) {
-        this.productName = productName;
-        this.fee = fee;
-        this.compatibleProductArrayList = compatibleProductArrayList;
-        this.chosenProductArrayList = chosenProductArrayList;
-    }
+    // Relationship between an order (owner) and the selected additional products
+    @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
+    private Collection<Order> orders;
 
     public Product() {
     }
 
-    public String getProductName() {
-        return productName;
+    public Product(String name, float fee, Collection<Package> packages, Collection<Schedule> schedules, Collection<Order> orders) {
+        this.name = name;
+        this.fee = fee;
+        this.packages = packages;
+        this.schedules = schedules;
+        this.orders = orders;
     }
 
-    public void setProductName(String name) {
-        this.productName = name;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public float getFee() {
@@ -52,19 +56,27 @@ public class Product {
         this.fee = fee;
     }
 
-    public ArrayList<CompatibleProduct> getCompatibleProductArrayList() {
-        return compatibleProductArrayList;
+    public Collection<Package> getPackages() {
+        return packages;
     }
 
-    public void setCompatibleProductArrayList(ArrayList<CompatibleProduct> compatibleProductArrayList) {
-        this.compatibleProductArrayList = compatibleProductArrayList;
+    public void setPackages(Collection<Package> packages) {
+        this.packages = packages;
     }
 
-    public ArrayList<ChosenProduct> getChosenProductArrayList() {
-        return chosenProductArrayList;
+    public Collection<Schedule> getSchedules() {
+        return schedules;
     }
 
-    public void setChosenProductArrayList(ArrayList<ChosenProduct> chosenProductArrayList) {
-        this.chosenProductArrayList = chosenProductArrayList;
+    public void setSchedules(Collection<Schedule> schedules) {
+        this.schedules = schedules;
+    }
+
+    public Collection<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(Collection<Order> orders) {
+        this.orders = orders;
     }
 }

@@ -2,46 +2,54 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
-@Table(name = "Service")
-//@NamedQueries()
-public class Service {
+@Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"type", "minutes", "extraMinutes", "sms", "extraSms", "giga", "extraGiga"})
+})
+public class Service implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "serviceId", nullable = false, unique = true)
-    private int serviceId;
+    @Column(name="idService", nullable = false)
+    private int idService;
 
-    @Column(name = "type", nullable = false)
+    @Column(name="type", nullable = false)
     private String type;
 
-    @Column(name = "minutes", nullable = true)
+    @Column(name="minutes")
     private int minutes;
 
-    @Column(name = "extraMinutes", nullable = true)
+    @Column(name="extraMinutes")
     private int extraMinutes;
 
-    @Column(name = "sms", nullable = true)
+    @Column(name="sms")
     private int sms;
 
-    @Column(name = "extraSms", nullable = true)
+    @Column(name="extraSms")
     private int extraSms;
 
-    @Column(name = "giga", nullable = true)
+    @Column(name="giga")
     private int giga;
 
-    @Column(name = "extraGiga", nullable = true)
+    @Column(name="extraGiga")
     private int extraGiga;
 
-    // Owned (includedService)
-    @OneToMany(mappedBy = "service")
-    private ArrayList<IncludedService> includedServices;
+    // Relationship between package (owner) and its services
+    @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    private Collection<Package> packages;
 
-    public Service(int serviceId, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga,
-                   int extraGiga, ArrayList<IncludedService> includedServices) {
-        this.serviceId = serviceId;
+    // Relationship between schedule (owner) and the scheduled services
+    @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    private Collection<Schedule> schedules;
+
+    public Service() {
+    }
+
+    public Service(int idService, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga, Collection<Package> packages, Collection<Schedule> schedules) {
+        this.idService = idService;
         this.type = type;
         this.minutes = minutes;
         this.extraMinutes = extraMinutes;
@@ -49,18 +57,16 @@ public class Service {
         this.extraSms = extraSms;
         this.giga = giga;
         this.extraGiga = extraGiga;
-        this.includedServices = includedServices;
+        this.packages = packages;
+        this.schedules = schedules;
     }
 
-    public Service() {
+    public int getIdService() {
+        return idService;
     }
 
-    public int getServiceId() {
-        return serviceId;
-    }
-
-    public void setServiceId(int serviceId) {
-        this.serviceId = serviceId;
+    public void setIdService(int idService) {
+        this.idService = idService;
     }
 
     public String getType() {
@@ -119,11 +125,19 @@ public class Service {
         this.extraGiga = extraGiga;
     }
 
-    public ArrayList<IncludedService> getIncludedServices() {
-        return includedServices;
+    public Collection<Package> getPackages() {
+        return packages;
     }
 
-    public void setIncludedServices(ArrayList<IncludedService> includedServices) {
-        this.includedServices = includedServices;
+    public void setPackages(Collection<Package> packages) {
+        this.packages = packages;
+    }
+
+    public Collection<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(Collection<Schedule> schedules) {
+        this.schedules = schedules;
     }
 }

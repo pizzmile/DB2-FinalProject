@@ -2,65 +2,81 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Alert")
-//@NamedQueries()
-public class Alert {
+@Table(name = "Alert", schema = "TelcoDB")
+public class Alert implements Serializable {
 
-    // TODO chiedere al tutorato
-    // Owner (alertUser)
     @Id
-    @OneToOne(cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn(name = "username", referencedColumnName = "username")
-    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
-    @MapsId("username")
-    private User user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idAlert", nullable = false)
+    private int idAlert;
+
+    @Column(name = "lastPayment", nullable = false)
+    private LocalDateTime lastPayment;
 
     @Column(name = "amount", nullable = false)
-    private int amount;
+    private float amount;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date", nullable = false)
-    private Date date;
+    @Column(name = "email", nullable = false)
+    private String email;
 
-    @Temporal(TemporalType.TIME)
-    @Column(name = "time", nullable = false)
-    private Time time;
-
-    public Alert(User user, int amount, Date date, Time time) {
-        this.user = user;
-        this.amount = amount;
-        this.date = date;
-        this.time = time;
-    }
+    // REL: Trigger
+    // Relationship between an alert (owner) and the customer it referes to
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usernameCustomer")
+    private Customer customer;
 
     public Alert() {
     }
 
-    public int getAmount() {
+    public Alert(int idAlert, LocalDateTime lastPayment, float amount, String email, Customer customer) {
+        this.idAlert = idAlert;
+        this.lastPayment = lastPayment;
+        this.amount = amount;
+        this.email = email;
+        this.customer = customer;
+    }
+
+    public int getIdAlert() {
+        return idAlert;
+    }
+
+    public void setIdAlert(int idAlert) {
+        this.idAlert = idAlert;
+    }
+
+    public LocalDateTime getLastPayment() {
+        return lastPayment;
+    }
+
+    public void setLastPayment(LocalDateTime lastPayment) {
+        this.lastPayment = lastPayment;
+    }
+
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
-    public Date getDate() {
-        return date;
+    public String getEmail() {
+        return email;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public Time getTime() {
-        return time;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setTime(Time time) {
-        this.time = time;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

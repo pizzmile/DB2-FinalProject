@@ -2,58 +2,72 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
+import java.io.Serializable;
+import java.util.Collection;
 
 @Entity
-@Table(name = "Package")
-//@NamedQueries()
-public class Package {
+@Table(name = "Package", schema = "TelcoDB",
+        uniqueConstraints = {   // TODO: chiedere se va bene
+                @UniqueConstraint(columnNames = {"name", "duration"}),
+                @UniqueConstraint(columnNames = {"name", "fee"}),
+                @UniqueConstraint(columnNames = {"duration", "fee"})
+        })
+public class Package implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "packageId", nullable = false, unique = true)
-    private int packageId;
+    @Column(name = "idPackage", nullable = false)
+    private int idPackage;
 
     @Column(name = "name", nullable = false)
     private String name;
 
-    // Owned (orderPackage)
-    @OneToOne(mappedBy = "pack")
-    private Order order;
+    @Column(name = "duration", nullable = false)
+    private int duration;
 
-    // Owned (compatibleProduct)
-    @OneToMany(mappedBy = "pack")
-    private ArrayList<CompatibleProduct> compatibleProductArrayList;
+    @Column(name = "fee", nullable = false)
+    private float fee;
 
-    // Owned (includedService)
-    @OneToMany(mappedBy = "pack")
-    private ArrayList<IncludedService> includedServiceArrayList;
+    // REL: About
+    // Relationship between an order (owner) and its included package
+    @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL)
+    private Collection<Order> orders;
 
-    // Owned (compatibleValidity)
-    @OneToMany(mappedBy = "pack")
-    private ArrayList<CompatibleValidity> compatibleValidityArrayList;
+    // REL: IncludedServices
+    // Relationship between package (owner) and its included services
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "IncludedServices",
+            joinColumns = @JoinColumn(name = "namePackage"),
+            inverseJoinColumns = @JoinColumn(name = "idService"))
+    private Collection<Service> services;
 
-    public Package(int packageId, String name, Order order,
-                   ArrayList<CompatibleProduct> compatibleProductArrayList,
-                   ArrayList<IncludedService> includedServiceArrayList,
-                   ArrayList<CompatibleValidity> compatibleValidityArrayList) {
-        this.packageId = packageId;
-        this.name = name;
-        this.order = order;
-        this.compatibleProductArrayList = compatibleProductArrayList;
-        this.includedServiceArrayList = includedServiceArrayList;
-        this.compatibleValidityArrayList = compatibleValidityArrayList;
-    }
+    // REL: CompatibleProducts
+    // Relationship between package (owner) and its compatible products
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "CompatibleProducts",
+            joinColumns = @JoinColumn(name = "namePackage"),
+            inverseJoinColumns = @JoinColumn(name = "nameProduct"))
+    private Collection<Product> products;
 
     public Package() {
     }
 
-    public int getPackageId() {
-        return packageId;
+    public Package(int idPackage, String name, int duration, float fee, Collection<Order> orders, Collection<Service> services, Collection<Product> products) {
+        this.idPackage = idPackage;
+        this.name = name;
+        this.duration = duration;
+        this.fee = fee;
+        this.orders = orders;
+        this.services = services;
+        this.products = products;
     }
 
-    public void setPackageId(int packageId) {
-        this.packageId = packageId;
+    public int getIdPackage() {
+        return idPackage;
+    }
+
+    public void setIdPackage(int idPackage) {
+        this.idPackage = idPackage;
     }
 
     public String getName() {
@@ -64,35 +78,43 @@ public class Package {
         this.name = name;
     }
 
-    public Order getOrder() {
-        return order;
+    public int getDuration() {
+        return duration;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setDuration(int duration) {
+        this.duration = duration;
     }
 
-    public ArrayList<CompatibleProduct> getCompatibleProductArrayList() {
-        return compatibleProductArrayList;
+    public float getFee() {
+        return fee;
     }
 
-    public void setCompatibleProductArrayList(ArrayList<CompatibleProduct> compatibleProductArrayList) {
-        this.compatibleProductArrayList = compatibleProductArrayList;
+    public void setFee(float fee) {
+        this.fee = fee;
     }
 
-    public ArrayList<IncludedService> getIncludedServiceArrayList() {
-        return includedServiceArrayList;
+    public Collection<Order> getOrders() {
+        return orders;
     }
 
-    public void setIncludedServiceArrayList(ArrayList<IncludedService> includedServiceArrayList) {
-        this.includedServiceArrayList = includedServiceArrayList;
+    public void setOrders(Collection<Order> orders) {
+        this.orders = orders;
     }
 
-    public ArrayList<CompatibleValidity> getCompatibleValidityArrayList() {
-        return compatibleValidityArrayList;
+    public Collection<Service> getServices() {
+        return services;
     }
 
-    public void setCompatibleValidityArrayList(ArrayList<CompatibleValidity> compatibleValidityArrayList) {
-        this.compatibleValidityArrayList = compatibleValidityArrayList;
+    public void setServices(Collection<Service> services) {
+        this.services = services;
+    }
+
+    public Collection<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Collection<Product> products) {
+        this.products = products;
     }
 }

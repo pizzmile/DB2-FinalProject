@@ -2,111 +2,88 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
-import java.time.LocalDate;
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.Collection;
 
 @Entity
-@Table(name = "Order")
-//@NamedQueries()
-public class Order {
+@Table(name = "Order", schema = "TelcoDB")
+public class Order implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderId", nullable = false, unique = true)
-    private int orderId;
+    @Column(name="idOrder", nullable = false)
+    private int idOrder;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "start", nullable = false)
-    private Date start;
+    @Column(name="startDate", nullable = false)
+    private LocalDate startDate;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "date", nullable = false)
-    private Date date;
+    @Column(name="creationDateTime", nullable = false)
+    private LocalDateTime creationDateTime;
 
-    @Temporal(TemporalType.TIME)
-    @Column(name = "time", nullable = false)
-    private Time time;
-
-    @Column(name = "totalCost", nullable = false)
+    @Column(name="totalCost", nullable = false)
     private float totalCost;
 
-    @Column(name="status", nullable = false)
-    private Boolean status;
+    @Column(name="paid", nullable = false)
+    private boolean paid;
 
-    // Owner (orderUser)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
-    private User user;
+    // REL: Create
+    // Relationship between an order (owner) and its creator customer
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usernameCustomer")
+    private Customer customer;
 
-    // Owner (orderValidity)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "validityId", referencedColumnName = "validityId", nullable = false)
-    private Validity validity;
+    // REL: ChosenProducts
+    // Relationship between an order (owner) and the selected additional products
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "ChosenProducts",
+            joinColumns = @JoinColumn(name = "idOrder"),
+            inverseJoinColumns = @JoinColumn(name = "nameProduct"))
+    private Collection<Product> products;
 
-    // Owner (orderPackage)
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "packageId", referencedColumnName = "packageId", nullable = false)
-    private Package pack;
-
-    // Owned (scheduleOrder)
-    @OneToOne(mappedBy = "order")
-    private Schedule schedule;
-
-    // Owned (chosenProduct)
-    @OneToMany(mappedBy = "order")
-    private ArrayList<ChosenProduct> chosenProductArrayList;
-
-    public Order(int orderId, Date start, Date date, Time time, float totalCost, Boolean status, User user,
-                 Validity validity, Package pack, Schedule schedule, ArrayList<ChosenProduct> chosenProductArrayList) {
-        this.orderId = orderId;
-        this.start = start;
-        this.date = date;
-        this.time = time;
-        this.totalCost = totalCost;
-        this.status = status;
-        this.user = user;
-        this.validity = validity;
-        this.pack = pack;
-        this.schedule = schedule;
-        this.chosenProductArrayList = chosenProductArrayList;
-    }
+    // REL: About
+    // Relationship between an order (owner) and its included package
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idPackage")
+    private Package aPackage;
 
     public Order() {
     }
 
-    public int getOrderId() {
-        return orderId;
+    public Order(int idOrder, LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Customer customer, Collection<Product> products, Package aPackage) {
+        this.idOrder = idOrder;
+        this.startDate = startDate;
+        this.creationDateTime = creationDateTime;
+        this.totalCost = totalCost;
+        this.paid = paid;
+        this.customer = customer;
+        this.products = products;
+        this.aPackage = aPackage;
     }
 
-    public void setOrderId(int orderId) {
-        this.orderId = orderId;
+    public int getIdOrder() {
+        return idOrder;
     }
 
-    public Date getStart() {
-        return start;
+    public void setIdOrder(int idOrder) {
+        this.idOrder = idOrder;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public Date getDate() {
-        return date;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public LocalDateTime getCreationDateTime() {
+        return creationDateTime;
     }
 
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void setCreationDateTime(LocalDateTime creationDateTime) {
+        this.creationDateTime = creationDateTime;
     }
 
     public float getTotalCost() {
@@ -117,51 +94,35 @@ public class Order {
         this.totalCost = totalCost;
     }
 
-    public Boolean getStatus() {
-        return status;
+    public boolean isPaid() {
+        return paid;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setPaid(boolean paid) {
+        this.paid = paid;
     }
 
-    public User getUser() {
-        return user;
+    public Customer getCustomer() {
+        return customer;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public Validity getValidity() {
-        return validity;
+    public Collection<Product> getProducts() {
+        return products;
     }
 
-    public void setValidity(Validity validity) {
-        this.validity = validity;
+    public void setProducts(Collection<Product> products) {
+        this.products = products;
     }
 
-    public Package getPack() {
-        return pack;
+    public Package getaPackage() {
+        return aPackage;
     }
 
-    public void setPack(Package pack) {
-        this.pack = pack;
-    }
-
-    public Schedule getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-    public ArrayList<ChosenProduct> getChosenProductArrayList() {
-        return chosenProductArrayList;
-    }
-
-    public void setChosenProductArrayList(ArrayList<ChosenProduct> chosenProductArrayList) {
-        this.chosenProductArrayList = chosenProductArrayList;
+    public void setaPackage(Package aPackage) {
+        this.aPackage = aPackage;
     }
 }

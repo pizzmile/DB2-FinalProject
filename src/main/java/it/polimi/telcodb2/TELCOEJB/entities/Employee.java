@@ -3,28 +3,23 @@ package it.polimi.telcodb2.TELCOEJB.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "Employee")
-//@NamedQueries()
+@Table(name = "Employee", schema = "TelcoDB")
 public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name="username", nullable = false)
     private String username;
 
-    @Column(name = "password", nullable = false)
+    @Column(name="username", nullable = false)
     private String password;
 
-    @Column(name = "authorization", nullable = false)
-    private Boolean authorization;
-
-    public Employee(String username, String password, Boolean authorization) {
-        this.username = username;
-        this.password = password;
-        this.authorization = authorization;
+    public Employee() {
     }
 
-    public Employee() {
+    public Employee(String username, String password) {
+        this.username = username;
+        this.password = password;
     }
 
     public String getUsername() {
@@ -41,13 +36,5 @@ public class Employee {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Boolean getAuthorization() {
-        return authorization;
-    }
-
-    public void setAuthorization(Boolean authorization) {
-        this.authorization = authorization;
     }
 }
