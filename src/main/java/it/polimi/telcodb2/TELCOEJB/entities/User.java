@@ -24,7 +24,7 @@ public class User {
     @Column(name = "failedPayments", nullable = false)
     private int failedPayments;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "username")
     private Alert alert;    // Owned (alertUser)
 
     @OneToOne(mappedBy = "user")

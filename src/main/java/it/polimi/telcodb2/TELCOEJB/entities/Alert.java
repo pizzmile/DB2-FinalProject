@@ -10,17 +10,14 @@ import java.util.Date;
 //@NamedQueries()
 public class Alert {
 
-    @EmbeddedId
-    private AlertPK id; 
-    /*
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // TODO chiedere al tutorato
     // Owner (alertUser)
+    @Id
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    @PrimaryKeyJoinColumn(name = "username", referencedColumnName = "username")
+    @JoinColumn(name = "email", referencedColumnName = "email", nullable = false)
+    @MapsId("username")
     private User user;
-
-    @Column(name = "email", nullable = false)
-    private String email;*/ \\ TODO controllare constraints
 
     @Column(name = "amount", nullable = false)
     private int amount;
@@ -33,8 +30,8 @@ public class Alert {
     @Column(name = "time", nullable = false)
     private Time time;
 
-    public Alert(AlertPK id, int amount, Date date, Time time) {
-        this.id=id;
+    public Alert(User user, int amount, Date date, Time time) {
+        this.user = user;
         this.amount = amount;
         this.date = date;
         this.time = time;
@@ -42,15 +39,6 @@ public class Alert {
 
     public Alert() {
     }
-
-    public AlertPK getId(){
-        return id;
-    }
-    
-    public void setId(AlertPK id) {
-        this.id = id;
-    }
-    
 
     public int getAmount() {
         return amount;

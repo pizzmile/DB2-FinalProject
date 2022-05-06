@@ -10,12 +10,14 @@ public class ChosenProduct {
     @EmbeddedId
     private ChosenProductPK id;
 
-    @ManyToOne
+    // Owner
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("productName")
     @JoinColumn(name = "productName")
     private Product product;
 
-    @ManyToOne
+    // Owner
+    @ManyToOne(cascade = CascadeType.ALL)
     @MapsId("orderId")
     @JoinColumn(name = "orderId")
     private Order order;

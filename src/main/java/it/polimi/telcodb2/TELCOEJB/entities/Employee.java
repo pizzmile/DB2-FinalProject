@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "Employee")
 //@NamedQueries()
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "username", nullable = false, unique = true)
