@@ -28,7 +28,7 @@ public class Customer implements Serializable {
     private String failedPayments;
 
     // REL: Trigger
-    // Relationship between an alert (owner) and the customer it referes to
+    // Relationship between an alert (owner) and the customer it refers to
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private Alert alert;
 

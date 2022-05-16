@@ -37,7 +37,7 @@ public class Order implements Serializable {
     // REL: ChosenProducts
     // Relationship between an order (owner) and the selected additional products
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "ChosenProducts",
+    @JoinTable(name = "ChosenProduct",
             joinColumns = @JoinColumn(name = "idOrder"),
             inverseJoinColumns = @JoinColumn(name = "nameProduct"))
     private Collection<Product> products;

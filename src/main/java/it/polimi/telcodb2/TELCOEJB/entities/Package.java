@@ -9,8 +9,7 @@ import java.util.Collection;
 @Table(name = "Package", schema = "TelcoDB",
         uniqueConstraints = {   // TODO: chiedere se va bene
                 @UniqueConstraint(columnNames = {"name", "duration"}),
-                @UniqueConstraint(columnNames = {"name", "fee"}),
-                @UniqueConstraint(columnNames = {"duration", "fee"})
+                @UniqueConstraint(columnNames = {"name", "fee"})
         })
 public class Package implements Serializable {
 
