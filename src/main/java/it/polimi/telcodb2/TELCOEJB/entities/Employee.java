@@ -1,10 +1,7 @@
 package it.polimi.telcodb2.TELCOEJB.entities;
 
 
-import javax.persistence.Entity;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "Employee", schema = "TelcoDB")

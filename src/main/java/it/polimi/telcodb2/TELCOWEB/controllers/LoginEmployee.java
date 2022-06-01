@@ -1,18 +1,25 @@
 package it.polimi.telcodb2.TELCOWEB.controllers;
 
 
-
-
-
 import it.polimi.telcodb2.TELCOEJB.entities.Employee;
+import it.polimi.telcodb2.TELCOEJB.exceptions.CredentialsException;
 import it.polimi.telcodb2.TELCOEJB.services.EmployeeService;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.WebContext;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 
 import javax.ejb.EJB;
+import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import org.apache.commons.lang.StringEscapeUtils;
 
 
 @WebServlet("/LoginEmployee")
@@ -56,7 +63,7 @@ public class LoginEmployee extends HttpServlet {
         Employee employee;
         try {
             // query db to authenticate for user
-            username = employeeService.checkCredentials(username, password);
+            employee = employeeService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
             e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
@@ -67,7 +74,7 @@ public class LoginEmployee extends HttpServlet {
         // show login page with error message
 
         String path;
-        if (username == null) {
+        if (employee == null) {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
             ctx.setVariable("errorMsg", "Incorrect username or password");
@@ -75,11 +82,9 @@ public class LoginEmployee extends HttpServlet {
             ctx.setVariable("passwordVal", password);
             path = "/loginEmployee.html";
             templateEngine.process(path, ctx, response.getWriter());
-        } else{
-            request.getSession().setAttribute("user", username);
-            //TODO: inserire path per l'employee
+        } else {
+            request.getSession().setAttribute("user", employee);
             path = getServletContext().getContextPath() + "/employee";
-
             response.sendRedirect(path);
         }
 
