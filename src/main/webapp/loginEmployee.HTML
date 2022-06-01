@@ -1,6 +1,5 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,15 +8,15 @@
     <title>Document</title>
 </head>
 <body>
-<div class = "main"><div class = "wrapper">
-    <h1>Welcome to the Telco Employee page</h1></br>
-    <form action="LoginEmployee" method="POST">
-        <input type="text" name="username" placeholder="username" th:value="${usernameVal}" required></br> </br>
-        <input type="password" name="pwd" placeholder="password" th:value="${passwordVal}" required></br><br>
-        <input type="submit" value="login">
-        <!-- Print an error message if the user or the password is incorrect-->
-        <p th:text="${errorMsg}"></p>
-    </form>
-</div>
+    <div class = "main"><div class = "wrapper">
+        <h1>Welcome to the Telco Employee page</h1><br>
+        <form action="LoginEmployee" method="POST">
+            <input type="text" name="username" placeholder="username" th:value="${usernameVal}" required> <br>
+            <input type="password" name="pwd" placeholder="password" th:value="${passwordVal}" required> <br>
+            <input type="submit" value="login">
+            <!-- Print an error message if the user or the password is incorrect-->
+            <p th:text="${errorMsg}"></p>
+        </form>
+    </div></div>
 </body>
 </html>
