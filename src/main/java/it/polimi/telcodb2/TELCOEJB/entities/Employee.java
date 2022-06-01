@@ -1,9 +1,16 @@
 package it.polimi.telcodb2.TELCOEJB.entities;
 
-import javax.persistence.*;
+
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "Employee", schema = "TelcoDB")
+@NamedQueries({
+        @NamedQuery( name = "Employee.checkCredentials", query = "SELECT e FROM Employee e  WHERE e.username = ?1 and e.password = ?2" )
+})
 public class Employee {
 
     @Id
