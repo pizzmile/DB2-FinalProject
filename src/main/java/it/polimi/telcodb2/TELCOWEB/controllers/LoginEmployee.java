@@ -22,7 +22,7 @@ import java.io.IOException;
 import org.apache.commons.lang.StringEscapeUtils;
 
 
-@WebServlet("/LoginEmployee")
+@WebServlet(name="LoginEmployee",value = "/LoginEmployee")
 public class LoginEmployee extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
