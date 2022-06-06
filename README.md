@@ -11,4 +11,4 @@ Experiments:
 
 Next step:
 * check the compatibility between Apache Tomcat version (plus/plume and version number)
-* try to do everything in Jakarta as a workaround -> Thymeleaf is not well supported
+* try to do everything in Jakarta as a workaround -> Thymeleaf is not well-supported
