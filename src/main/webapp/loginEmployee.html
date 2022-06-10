@@ -12,7 +12,10 @@
     <div class = "main">
         <div class = "wrapper">
             <h1>Welcome to the Telco Employee page</h1></br>
-            <form action="LoginEmployee" method="POST">
+
+            <!-- TODO: set method to POST -->
+            <!-- TODO: set action to a new servlet for login -->
+            <form action="hello-servlet" method="GET">
                 <input type="text" name="username" placeholder="username" th:value="${usernameVal}" required></br> </br>
                 <input type="password" name="pwd" placeholder="password" th:value="${passwordVal}" required></br><br>
                 <input type="submit" value="login">

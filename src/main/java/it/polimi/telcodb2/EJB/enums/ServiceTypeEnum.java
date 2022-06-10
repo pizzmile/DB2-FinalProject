@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.TELCOEJB.enums;
+package it.polimi.telcodb2.EJB.enums;
 
 public enum ServiceTypeEnum {
     FIXED_PHONE,
