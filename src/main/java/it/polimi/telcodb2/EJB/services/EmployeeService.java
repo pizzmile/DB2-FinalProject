@@ -12,7 +12,7 @@ import java.util.List;
 
 @Stateless
 public class EmployeeService {
-    // TODO: capire perchè non funzia @PersistenceContext(unitName = "EJB")
+    @PersistenceContext
     private EntityManager em;
 
     public Employee checkCredentials(String username, String password) throws CredentialsException, NonUniqueResultException {

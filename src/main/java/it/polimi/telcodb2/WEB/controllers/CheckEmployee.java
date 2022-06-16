@@ -46,6 +46,7 @@ public class CheckEmployee extends HttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+
         // obtain and escape params
         String username = null;
         String password = null;
@@ -60,6 +61,7 @@ public class CheckEmployee extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
             return;
         }
+
         Employee employee;
         try {
             // query db to authenticate for user
@@ -69,7 +71,7 @@ public class CheckEmployee extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
             return;
         }
-
+        System.out.println("ciao");
         // If the user exists, add info to the session and go to home page, otherwise
         // show login page with error message
 
@@ -80,7 +82,7 @@ public class CheckEmployee extends HttpServlet {
             ctx.setVariable("errorMsg", "Incorrect username or password");
             ctx.setVariable("usernameVal", username);
             ctx.setVariable("passwordVal", password);
-            path = "/loginEmployee.html";
+            path = "/login-employee.html";
             templateEngine.process(path, ctx, response.getWriter());
         } else{
             request.getSession().setAttribute("user", employee);
