@@ -1,4 +1,5 @@
 # Output files
+.idea
 out/
 target/
 # Default ignored files
