@@ -1,6 +1,7 @@
 # Output files
 out/
 target/
+.idea
 # Default ignored files
 /shelf/
 /workspace.xml
