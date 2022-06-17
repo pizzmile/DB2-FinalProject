@@ -3,8 +3,8 @@ package it.polimi.telcodb2.EJB.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 @Entity
 @Table(name = "Customer", schema = "TelcoDB")
@@ -15,8 +15,8 @@ import java.util.List;
                         query = "SELECT c FROM Customer c WHERE c.username = :username"
                 ),
                 @NamedQuery(
-                        name = "Customer.checkCredentials",
-                        query = "SELECT c FROM Customer c WHERE c.username = :username AND c.password = :password"
+                        name = "Customer.findByEmail",
+                        query = "SELECT c FROM Customer c WHERE c.email = :email"
                 )
         }
 )
@@ -37,35 +37,32 @@ public class Customer implements Serializable {
     private boolean solvent;
 
     @Column(name="failedPayments", nullable = false)
-    private String failedPayments;
+    private int failedPayments;
 
     // REL: Trigger
     // Relationship between an alert (owner) and the customer it refers to
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Alert alert;
 
     // REL: Create
     // Relationship between an order (owner) and its creator customer
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Collection<Order> orders;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Order> orders = new ArrayList<Order>();
 
     // REL: Has
     // Relationship between a client and its schedules (owner)
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
-    private Collection<Schedule> schedules;
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Collection<Schedule> schedules = new ArrayList<Schedule>();
 
     public Customer() {
     }
 
-    public Customer(String username, String password, String email, boolean solvent, String failedPayments, Alert alert, Collection<Order> orders, Collection<Schedule> schedules) {
+    public Customer(String username, String password, String email, boolean solvent, int failedPayments) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.solvent = solvent;
         this.failedPayments = failedPayments;
-        this.alert = alert;
-        this.orders = orders;
-        this.schedules = schedules;
     }
 
     public String getUsername() {
@@ -100,11 +97,11 @@ public class Customer implements Serializable {
         this.solvent = solvent;
     }
 
-    public String getFailedPayments() {
+    public int getFailedPayments() {
         return failedPayments;
     }
 
-    public void setFailedPayments(String failedPayments) {
+    public void setFailedPayments(int failedPayments) {
         this.failedPayments = failedPayments;
     }
 

@@ -9,6 +9,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @Stateless
@@ -16,6 +17,43 @@ public class CustomerService {
 
     @PersistenceContext
     private EntityManager em;
+
+    // Fetch customers by username
+    public List<Customer> findByUsername(String username) {
+        return em.createNamedQuery("Customer.findByUsername", Customer.class)
+                .setParameter("username", username)
+                .getResultList();
+    }
+
+    // Fetch customers by email
+    public List<Customer> findByEmail(String email) {
+        return em.createNamedQuery("Customer.findByEmail", Customer.class)
+                .setParameter("email", email)
+                .getResultList();
+    }
+
+    /**
+     * Create new customer and insert it into the database.
+     * @param username the username of the customer
+     * @param password the password of the customer
+     * @param email the email of the password
+     * @return the customer entity object if the operation was successful, else null
+     */
+    public Customer createCustomer(String username, String password, String email) {
+        // Create new customer entity object
+        Customer customer = new Customer(
+                username, password, email,
+                true, 0);
+
+        // Try to store the new customer into the database
+        try {
+            em.persist(customer);
+            em.flush();
+            return customer;
+        } catch (ConstraintViolationException e) {
+            return null;
+        }
+    }
 
     /**
      * Check that there is a customer in the database that matches some given credentials.
@@ -26,14 +64,10 @@ public class CustomerService {
      * @throws NonUniqueResultException if there are more than one customer with the same username
      */
     public Customer checkCredentials(String username, String password) throws CredentialsException, NonUniqueResultException {
+        // Fetch customers by username
         List<Customer> customerList;
-
-        // Get customers given the username
         try {
-            customerList = em.createNamedQuery("Customer.findByUsername", Customer.class)
-                    .setParameter("username", username)
-                    .getResultList();
-
+            customerList = findByUsername(username);
         } catch (PersistenceException e) {
             throw new CredentialsException("Could not verify credentials");
         }
@@ -57,30 +91,5 @@ public class CustomerService {
         } else {
             throw new NonUniqueResultException("More than one user registered with the same credentials");
         }
-
-
     }
-
-    /*
-    public Customer checkCredentials(String username, String password) throws CredentialsException, NonUniqueResultException {
-        List<Customer> customerList = null;
-
-        try {
-            customerList = em.createNamedQuery("Customer.checkCredentials", Customer.class)
-                    .setParameter("username", username)
-                    .setParameter("password", password)
-                    .getResultList();
-        } catch (PersistenceException e) {
-            throw new CredentialsException("Could not verify credentials");
-        }
-
-        if (customerList.isEmpty())
-            return null;
-        else if (customerList.size() == 1)
-            return customerList.get(0);
-
-        throw new NonUniqueResultException("More than one user registered with same credentials");
-
-    }
-     */
 }
