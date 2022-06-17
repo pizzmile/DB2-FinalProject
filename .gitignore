@@ -12,4 +12,4 @@ target/
 /dataSources.local.xml
 
 # IDE settings
-/.idea/
+/.idea/*

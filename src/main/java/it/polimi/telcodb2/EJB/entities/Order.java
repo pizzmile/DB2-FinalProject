@@ -46,12 +46,12 @@ public class Order implements Serializable {
     // Relationship between an order (owner) and its included package
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "idPackage")
-    private java.lang.Package aPackage;
+    private Package aPackage;
 
     public Order() {
     }
 
-    public Order(int idOrder, LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Customer customer, Collection<Product> products, java.lang.Package aPackage) {
+    public Order(int idOrder, LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Customer customer, Collection<Product> products, Package aPackage) {
         this.idOrder = idOrder;
         this.startDate = startDate;
         this.creationDateTime = creationDateTime;
@@ -118,11 +118,11 @@ public class Order implements Serializable {
         this.products = products;
     }
 
-    public java.lang.Package getaPackage() {
+    public Package getPackage() {
         return aPackage;
     }
 
-    public void setaPackage(java.lang.Package aPackage) {
+    public void setPackage(Package aPackage) {
         this.aPackage = aPackage;
     }
 }

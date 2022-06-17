@@ -39,7 +39,7 @@ public class Service implements Serializable {
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    private Collection<java.lang.Package> packages;
+    private Collection<Package> packages;
 
     // Relationship between schedule (owner) and the scheduled services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
@@ -48,7 +48,7 @@ public class Service implements Serializable {
     public Service() {
     }
 
-    public Service(int idService, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga, Collection<java.lang.Package> packages, Collection<Schedule> schedules) {
+    public Service(int idService, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga, Collection<Package> packages, Collection<Schedule> schedules) {
         this.idService = idService;
         this.type = type;
         this.minutes = minutes;
@@ -125,11 +125,11 @@ public class Service implements Serializable {
         this.extraGiga = extraGiga;
     }
 
-    public Collection<java.lang.Package> getPackages() {
+    public Collection<Package> getPackages() {
         return packages;
     }
 
-    public void setPackages(Collection<java.lang.Package> packages) {
+    public void setPackages(Collection<Package> packages) {
         this.packages = packages;
     }
 

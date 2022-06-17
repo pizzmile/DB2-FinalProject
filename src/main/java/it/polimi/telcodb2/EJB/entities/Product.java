@@ -19,7 +19,7 @@ public class Product implements Serializable {
 
     // Relationship between package (owner) and its compatible products
     @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
-    private Collection<java.lang.Package> packages;
+    private Collection<Package> packages;
 
     // Relationship between schedule (owner) and the scheduled products
     @ManyToMany(mappedBy = "products", cascade = CascadeType.ALL)
@@ -32,7 +32,7 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String name, float fee, Collection<java.lang.Package> packages, Collection<Schedule> schedules, Collection<Order> orders) {
+    public Product(String name, float fee, Collection<Package> packages, Collection<Schedule> schedules, Collection<Order> orders) {
         this.name = name;
         this.fee = fee;
         this.packages = packages;
@@ -56,11 +56,11 @@ public class Product implements Serializable {
         this.fee = fee;
     }
 
-    public Collection<java.lang.Package> getPackages() {
+    public Collection<Package> getPackages() {
         return packages;
     }
 
-    public void setPackages(Collection<java.lang.Package> packages) {
+    public void setPackages(Collection<Package> packages) {
         this.packages = packages;
     }
 

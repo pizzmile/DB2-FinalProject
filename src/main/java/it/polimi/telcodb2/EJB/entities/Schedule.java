@@ -15,10 +15,10 @@ public class Schedule implements Serializable {
     @Column(name="idSchedule", nullable = false)
     private int idSchedule;
 
-    @Column(name="idSchedule", nullable = false)
+    @Column(name="activationDate", nullable = false)
     private LocalDate activationDate;
 
-    @Column(name="idSchedule", nullable = false)
+    @Column(name="deactivationDate", nullable = false)
     private LocalDate deactivationDate;
 
     // REL: Has

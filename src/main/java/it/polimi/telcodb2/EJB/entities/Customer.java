@@ -8,6 +8,18 @@ import java.util.List;
 
 @Entity
 @Table(name = "Customer", schema = "TelcoDB")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Customer.findByUsername",
+                        query = "SELECT c FROM Customer c WHERE c.username = :username"
+                ),
+                @NamedQuery(
+                        name = "Customer.checkCredentials",
+                        query = "SELECT c FROM Customer c WHERE c.username = :username AND c.password = :password"
+                )
+        }
+)
 public class Customer implements Serializable {
 
     @Id

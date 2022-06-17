@@ -1,8 +1,8 @@
 package it.polimi.telcodb2.WEB.controllers;
 
-import it.polimi.telcodb2.EJB.entities.Employee;
+import it.polimi.telcodb2.EJB.entities.Customer;
 import it.polimi.telcodb2.EJB.exceptions.CredentialsException;
-import it.polimi.telcodb2.EJB.services.EmployeeService;
+import it.polimi.telcodb2.EJB.services.CustomerService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -18,22 +18,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.sql.DriverManager;
 
-@WebServlet("/CheckEmployee")
-public class CheckEmployee extends HttpServlet {
+@WebServlet(name = "LoginCustomer", value = "/login-customer")
+public class LoginCustomer extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
-    private static final long serialVersionUID = 1L;
+    @EJB(name = "it.polimi.telcodb2.EJB.services/CustomerService")
+    private CustomerService customerService;
 
-    @EJB(name = "it.polimi.telcodb2.EJB.services/EmployeeService")
-    private EmployeeService employeeService;
-
-    public CheckEmployee() {
+    public LoginCustomer() {
         super();
     }
+
 
     public void init() {
         ServletContext servletContext = getServletContext();
@@ -45,53 +42,55 @@ public class CheckEmployee extends HttpServlet {
     }
 
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+    // GET requests are not allowed
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "GET is not allowed");
+    }
 
-        // obtain and escape params
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Read parameters from request
         String username = null;
         String password = null;
         try {
             username = StringEscapeUtils.escapeJava(request.getParameter("username"));
             password = StringEscapeUtils.escapeJava(request.getParameter("password"));
             if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-                throw new Exception("Missing or empty credential value");
+                throw new Exception("Missing or empty credentials");
             }
+
         } catch (Exception e) {
-            // for debugging only e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
             return;
         }
 
-        Employee employee;
+        Customer customer;
         try {
-            // query db to authenticate for user
-            employee = employeeService.checkCredentials(username, password);
+            customer = customerService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
-            e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+            //e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong username or password");
             return;
         }
-        System.out.println("ciao");
-        // If the user exists, add info to the session and go to home page, otherwise
-        // show login page with error message
 
+        // If the user exists, add info to the session and go to home page
+        // else show login page with error message
         String path;
-        if (employee == null) {
+        if (customer != null) {
+            request.getSession().setAttribute("user", customer);
+            path = getServletContext().getContextPath() + "/customer-home.html";
+            response.sendRedirect(path);
+        } else {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-            ctx.setVariable("errorMsg", "Incorrect username or password");
+            ctx.setVariable("errorMsg", "Wrong username or password");
             ctx.setVariable("usernameVal", username);
             ctx.setVariable("passwordVal", password);
-            path = "/login-employee.html";
+            path = "/customer-login.html";
             templateEngine.process(path, ctx, response.getWriter());
-        } else{
-            request.getSession().setAttribute("user", employee);
-            path = getServletContext().getContextPath() + "/employee.html";
-            response.sendRedirect(path);
         }
     }
 
-    public void destroy() {
-    }
-}
 
+    public void destroy() {}
+}

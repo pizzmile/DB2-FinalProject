@@ -19,7 +19,9 @@ public class EmployeeService {
         List<Employee> employeeList = null;
 
         try {
-            employeeList = em.createNamedQuery("Employee.checkCredentials", Employee.class).setParameter(1, username).setParameter(2, password)
+            employeeList = em.createNamedQuery("Employee.checkCredentials", Employee.class)
+                    .setParameter("username", username)
+                    .setParameter("password", password)
                     .getResultList();
         } catch (PersistenceException e) {
             throw new CredentialsException("Could not verify credentials");

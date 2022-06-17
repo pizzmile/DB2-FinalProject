@@ -6,7 +6,9 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Employee", schema = "TelcoDB")
 @NamedQueries({
-        @NamedQuery( name = "Employee.checkCredentials", query = "SELECT e FROM Employee e  WHERE e.username = ?1 and e.password = ?2" )
+        @NamedQuery(
+                name = "Employee.checkCredentials",
+                query = "SELECT e FROM Employee e  WHERE e.username = :username and e.password = :password" )
 })
 public class Employee {
 
