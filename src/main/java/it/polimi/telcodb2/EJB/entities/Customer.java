@@ -42,7 +42,7 @@ public class Customer implements Serializable {
     // REL: Trigger
     // Relationship between an alert (owner) and the customer it refers to
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Alert alert;
+    private Alert alert = null;
 
     // REL: Create
     // Relationship between an order (owner) and its creator customer
