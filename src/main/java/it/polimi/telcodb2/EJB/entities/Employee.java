@@ -14,10 +14,13 @@ public class Employee {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idEmployee", nullable = false)
+    private int idEmployee;
+
     @Column(name="username", nullable = false)
     private String username;
 
-    @Column(name="username", nullable = false)
+    @Column(name="password", nullable = false)
     private String password;
 
     public Employee() {
@@ -26,6 +29,14 @@ public class Employee {
     public Employee(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    public int getIdEmployee() {
+        return idEmployee;
+    }
+
+    public void setIdEmployee(int idEmployee) {
+        this.idEmployee = idEmployee;
     }
 
     public String getUsername() {
