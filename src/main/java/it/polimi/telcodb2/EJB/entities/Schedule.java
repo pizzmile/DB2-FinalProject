@@ -24,7 +24,7 @@ public class Schedule implements Serializable {
     // REL: Has
     // Relationship between a client and its schedules (owner)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usernameCustomer")
+    @JoinColumn(name = "idCustomer")
     private Customer customer;
 
     // REL: ScheduledProducts

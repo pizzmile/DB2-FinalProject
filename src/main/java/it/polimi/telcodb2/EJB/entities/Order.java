@@ -31,7 +31,7 @@ public class Order implements Serializable {
     // REL: Create
     // Relationship between an order (owner) and its creator customer
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "usernameCustomer")
+    @JoinColumn(name = "idCustomer")
     private Customer customer;
 
     // REL: ChosenProducts

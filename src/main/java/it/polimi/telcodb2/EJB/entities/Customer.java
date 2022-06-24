@@ -24,6 +24,10 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idCustomer", nullable = false)
+    private int idCustomer;
+
+
     @Column(name = "username", nullable = false)
     private String username;
 
