@@ -51,15 +51,11 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(int idOrder, LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Customer customer, Collection<Product> products, Package aPackage) {
-        this.idOrder = idOrder;
+    public Order(LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid) {
         this.startDate = startDate;
         this.creationDateTime = creationDateTime;
         this.totalCost = totalCost;
         this.paid = paid;
-        this.customer = customer;
-        this.products = products;
-        this.aPackage = aPackage;
     }
 
     public int getIdOrder() {

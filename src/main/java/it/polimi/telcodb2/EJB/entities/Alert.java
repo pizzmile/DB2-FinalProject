@@ -31,12 +31,10 @@ public class Alert implements Serializable {
     public Alert() {
     }
 
-    public Alert(int idAlert, LocalDateTime lastPayment, float amount, String email, Customer customer) {
-        this.idAlert = idAlert;
+    public Alert(LocalDateTime lastPayment, float amount, String email) {
         this.lastPayment = lastPayment;
         this.amount = amount;
         this.email = email;
-        this.customer = customer;
     }
 
     public int getIdAlert() {

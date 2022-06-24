@@ -51,14 +51,10 @@ public class Package implements Serializable {
     public Package() {
     }
 
-    public Package(int idPackage, String name, int duration, float fee, Collection<Order> orders, Collection<Service> services, Collection<Product> products) {
-        this.idPackage = idPackage;
+    public Package(String name, int duration, float fee) {
         this.name = name;
         this.duration = duration;
         this.fee = fee;
-        this.orders = orders;
-        this.services = services;
-        this.products = products;
     }
 
     public int getIdPackage() {
