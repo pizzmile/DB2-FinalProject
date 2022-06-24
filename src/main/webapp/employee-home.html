@@ -1,31 +1,94 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
-</head>
-<body>
-<div align="right">
-  <a th:href="@{/Logout}">Logout</a>
-</div>
-<h1>Welcome to the Gamified Marketing Application Home Page (ADMIN)</h1>
-<p th:text="${'Nice to see you again ' + session.user.username}"></p>
-<!-- link for create, erase, inspect questionnaire -->
-<div>
-  <a th:href="@{/CreateQuestionnaire}">Create Packet</a>
-</div>
-</br>
-<div>
-  <a th:href="@{/DeleteQuestionnaire}">Create Product</a>
-</div>
-</br>
-<div>
-  <a th:href="@{/InspectionQuestionnaire}">Views</a>
-</div>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-</body>
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>TelcoDB2 - Employee</title>
+
+  </head>
+
+  <body>
+    <div class="centered">
+      <div class="row centered w100" style="margin-top: 2rem; margin-bottom: 3rem">
+        <h1>Employee Dashboard</h1>
+      </div>
+
+      <form class="creation-form column w-half" action="create-product" method="POST" style="min-width: 40rem">
+        <h2>Enter new product</h2>
+        <div class="form-section w100">
+          <input class="text-field" type="text" name="name" placeholder="name" required style="width: 80%">
+          <input class="text-field" type="number" step="0.01" min="0" name="fee" placeholder="fee"  required style="width: 15%">
+        </div>
+        <input class="submit" type="submit" value="Create">
+      </form>
+
+      <form class="creation-form column w-half" action="create-package"  method="POST" style="min-width: 40rem;">
+        <h2>Enter new package</h2>
+
+        <div class="row w100" style="margin-top: 1rem">
+          <p>Package name</p>
+        </div>
+        <input class="text-field medium-text" type="text" name="name" placeholder="name" required>
+
+        <div class="row w100" style="margin-top: 1rem">
+          <p>Validity option 1</p>
+        </div>
+        <div class="row align-start w100">
+          <input class="text-field w40" type="number" step="12" min="12" max="36" name="duration-2" placeholder="duration" required id="duration-1" style="margin-right: 0.2rem">
+          <label for="duration-2" style="margin-right: 1rem">months</label>
+          <input class="text-field" type="number" step="0.01" min="0" name="fee-2" placeholder="fee" style="width: 10rem; margin-right: 1rem">
+        </div>
+
+        <div class="row w100" style="margin-top: 1rem">
+          <p>Validity option 2</p>
+        </div>
+        <div class="row align-start w100">
+          <input class="text-field w40" type="number" step="12" min="12" max="36" name="duration-2" placeholder="duration" required id="duration-2" style="margin-right: 0.2rem">
+          <label for="duration-2" style="margin-right: 1rem">months</label>
+          <input class="text-field" type="number" step="0.01" min="0" name="fee-2" placeholder="fee" style="width: 10rem; margin-right: 1rem">
+          <input type="checkbox" name="use-validity-2" id="use-validity-2" style="margin-right: 0.2rem">
+          <label for="use-validity-2">Add</label>
+        </div>
+
+        <div class="row w100" style="margin-top: 1rem">
+          <p>Validity option 3</p>
+        </div>
+        <div class="row align-start w100">
+          <input class="text-field w40" type="number" step="12" min="12" max="36" name="duration-3" placeholder="duration" id="duration-3" style="margin-right: 0.2rem">
+          <label for="duration-3" style="margin-right: 1rem">months</label>
+          <input class="text-field" type="number" step="0.01" min="0" name="fee-3" placeholder="fee" style="width: 10rem; margin-right: 1rem">
+          <input type="checkbox" name="use-validity-3" id="use-validity-3" style="margin-right: 0.2rem">
+          <label for="use-validity-3">Add</label>
+        </div>
+
+        <div class="row w100" style="margin-top: 1rem">
+          <p>Optional products</p>
+        </div>
+        <select style="min-width: 32rem; width: 100%;" size="8" multiple>
+          <option value="sample-product-1">Sample product 1</option>
+          <option value="sample-product-2">Sample product 2</option>
+          <option value="sample-product-3">Sample product 3</option>
+          <option value="sample-product-4">Sample product 4</option>
+          <option value="sample-product-5">Sample product 5</option>
+          <option value="sample-product-6">Sample product 6</option>
+          <option value="sample-product-7">Sample product 7</option>
+          <option value="sample-product-8">Sample product 8</option>
+          <option value="sample-product-9">Sample product 9</option>
+          <option value="sample-product-10">Sample product 10</option>
+          <option value="sample-product-11">Sample product 11</option>
+        </select>
+        <input class="submit" type="submit" value="Create">
+      </form>
+
+      <div class="h-full">
+        <h2>Views</h2>
+      </div>
+    </div>
+  </body>
+
 </html>

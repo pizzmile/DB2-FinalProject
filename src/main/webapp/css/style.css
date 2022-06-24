@@ -17,6 +17,7 @@ h1 {
 }
 h2 {
     margin: 0;
+    color: dodgerblue;
 }
 p {
     margin: 0;
@@ -43,7 +44,7 @@ form.login-form {
 form.login-form input {
     margin: 5px 0;
 }
-form.login-form .submit {
+form.login-form .submit, form.creation-form .submit {
     border: none;
     border-radius: 5px;
     background: dodgerblue;
@@ -53,7 +54,7 @@ form.login-form .submit {
     padding: 0.2rem;
     width: 100%;
 }
-form.login-form .text-field {
+form.login-form .text-field, form.creation-form .text-field {
     border-radius: 5px;
     border: 1px solid gray;
     padding: 0.2rem;
@@ -63,6 +64,65 @@ div.login-container p {
     margin: 0.2rem 0;
     font-size: 0.9rem;
 }
+
+form.creation-form {
+    margin: 3rem 0;
+    /*border-bottom: 1px solid gray;*/
+    padding: 1rem;
+}
+
+form.creation-form select {
+    margin: 0;
+    padding: 0 0.2em;
+    border-radius: 5px;
+    border: 1px solid gray;
+    font-size: 1.1rem;
+    /*height: 1.6rem;*/
+}
+
+form.creation-form .submit {
+    max-width: 10rem;
+    margin-top: 1rem;
+}
+
+form.creation-form .form-section{
+    align-items: start;
+    margin-top: 1rem;
+}
+
+form .medium-text {
+    min-width: 32rem;
+    width: 100%;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.row.space-between, .column.space-between {
+    justify-content: space-between !important;
+}
+
+.row.centered, .column.centered {
+    justify-content: center !important;
+}
+
+.row.space-evenly, .column.space-evenly {
+    justify-content: space-evenly !important;
+}
+
+.row.align-start, .column.align-start {
+    align-items: start !important;
+}
+
 
 
 .centered {

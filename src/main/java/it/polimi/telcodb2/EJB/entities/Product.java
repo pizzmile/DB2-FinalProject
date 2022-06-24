@@ -7,6 +7,14 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Product", schema = "TelcoDB")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Product.findByName",
+                        query = "SELECT p FROM Product p WHERE p.name = :name"
+                )
+        }
+)
 public class Product implements Serializable {
 
     @Id
