@@ -48,8 +48,7 @@ public class Service implements Serializable {
     public Service() {
     }
 
-    public Service(int idService, String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga, Collection<Package> packages, Collection<Schedule> schedules) {
-        this.idService = idService;
+    public Service(String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga) {
         this.type = type;
         this.minutes = minutes;
         this.extraMinutes = extraMinutes;
@@ -57,8 +56,6 @@ public class Service implements Serializable {
         this.extraSms = extraSms;
         this.giga = giga;
         this.extraGiga = extraGiga;
-        this.packages = packages;
-        this.schedules = schedules;
     }
 
     public int getIdService() {

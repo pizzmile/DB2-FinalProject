@@ -32,7 +32,7 @@ public class Schedule implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ScheduledProducts",
             joinColumns = @JoinColumn(name = "idSchedule"),
-            inverseJoinColumns = @JoinColumn(name = "nameProduct"))
+            inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private Collection<Product> products;
 
     // REL: ScheduledServices
@@ -46,13 +46,9 @@ public class Schedule implements Serializable {
     public Schedule() {
     }
 
-    public Schedule(int idSchedule, LocalDate activationDate, LocalDate deactivationDate, Customer customer, Collection<Product> products, Collection<Service> services) {
-        this.idSchedule = idSchedule;
+    public Schedule(LocalDate activationDate, LocalDate deactivationDate) {
         this.activationDate = activationDate;
         this.deactivationDate = deactivationDate;
-        this.customer = customer;
-        this.products = products;
-        this.services = services;
     }
 
     public int getIdSchedule() {

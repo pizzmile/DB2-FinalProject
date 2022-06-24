@@ -69,6 +69,14 @@ public class Customer implements Serializable {
         this.failedPayments = failedPayments;
     }
 
+    public int getIdCustomer() {
+        return idCustomer;
+    }
+
+    public void setIdCustomer(int idCustomer) {
+        this.idCustomer = idCustomer;
+    }
+
     public String getUsername() {
         return username;
     }

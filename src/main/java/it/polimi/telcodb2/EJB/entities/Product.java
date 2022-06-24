@@ -11,6 +11,9 @@ public class Product implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idProduct", nullable = false)
+    private int idProduct;
+
     @Column(name="name", nullable = true)
     private String name;
 
@@ -32,12 +35,17 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(String name, float fee, Collection<Package> packages, Collection<Schedule> schedules, Collection<Order> orders) {
+    public Product(String name, float fee) {
         this.name = name;
         this.fee = fee;
-        this.packages = packages;
-        this.schedules = schedules;
-        this.orders = orders;
+    }
+
+    public int getIdProduct() {
+        return idProduct;
+    }
+
+    public void setIdProduct(int idProduct) {
+        this.idProduct = idProduct;
     }
 
     public String getName() {

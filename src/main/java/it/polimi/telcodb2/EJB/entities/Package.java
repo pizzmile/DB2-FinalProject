@@ -45,7 +45,7 @@ public class Package implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "CompatibleProducts",
             joinColumns = @JoinColumn(name = "namePackage"),
-            inverseJoinColumns = @JoinColumn(name = "nameProduct"))
+            inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private Collection<Product> products;
 
     public Package() {

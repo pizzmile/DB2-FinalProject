@@ -39,7 +39,7 @@ public class Order implements Serializable {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "ChosenProduct",
             joinColumns = @JoinColumn(name = "idOrder"),
-            inverseJoinColumns = @JoinColumn(name = "nameProduct"))
+            inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private Collection<Product> products;
 
     // REL: About
