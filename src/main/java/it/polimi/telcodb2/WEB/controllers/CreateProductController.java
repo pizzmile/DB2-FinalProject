@@ -3,7 +3,6 @@ package it.polimi.telcodb2.WEB.controllers;
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.services.ProductService;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -16,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "CreateProduct", value = "/create-product")
-public class CreateProduct extends HttpServlet {
+public class CreateProductController extends HttpServlet {
 
     @EJB
     private ProductService productService;
 
 
-    public CreateProduct() {
+    public CreateProductController() {
         super();
     }
 
@@ -46,26 +45,22 @@ public class CreateProduct extends HttpServlet {
         float fee = Float.parseFloat(request.getParameter("fee"));
 
         if (name == null || name.isEmpty() || fee <= 0) {
-            // TODO: change (not for this project)
-            response.sendRedirect(getServletContext().getContextPath() + "/registration?missing=true");
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Empty field!");
             return;
         }
 
         if (!productService.findByName(name).isEmpty()) {
-            // TODO: change (not for this project)
-            response.sendRedirect(getServletContext().getContextPath() + "/registration?duplicated=true");
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Already existing product!");
             return;
         }
 
         Product product = productService.createProduct(name, fee);
-        System.out.println(product);
         if (product == null) {
-            // TODO: add to context that the operation was not successful
-            response.sendRedirect(getServletContext().getContextPath() + "/employee-home.html");
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=An unexpected error occurred! Try again.");
             return;
         }
-        // TODO: add to context that the operation was successful
-        response.sendRedirect(getServletContext().getContextPath() + "/employee-home.html");
+        // TODO: add to context that the operation was successful (redirect ot servlet)
+        response.sendRedirect(getServletContext().getContextPath() + "/employee-home?success=True");
 
     }
 }

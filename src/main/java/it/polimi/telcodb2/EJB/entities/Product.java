@@ -1,5 +1,6 @@
 package it.polimi.telcodb2.EJB.entities;
 
+import javax.inject.Named;
 import javax.persistence.*;
 
 import java.io.Serializable;
@@ -12,6 +13,10 @@ import java.util.Collection;
                 @NamedQuery(
                         name = "Product.findByName",
                         query = "SELECT p FROM Product p WHERE p.name = :name"
+                ),
+                @NamedQuery(
+                        name = "Product.findAll",
+                        query = "SELECT p FROM Product p"
                 )
         }
 )

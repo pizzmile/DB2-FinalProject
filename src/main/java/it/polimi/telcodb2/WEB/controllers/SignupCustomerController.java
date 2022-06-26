@@ -3,7 +3,6 @@ package it.polimi.telcodb2.WEB.controllers;
 import it.polimi.telcodb2.EJB.entities.Customer;
 import it.polimi.telcodb2.EJB.services.CustomerService;
 import org.apache.commons.lang.StringEscapeUtils;
-import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -16,13 +15,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "SignupCustomer", value = "/signup-customer")
-public class SignupCustomer extends HttpServlet {
+public class SignupCustomerController extends HttpServlet {
 
     @EJB
     private CustomerService customerService;
 
 
-    public SignupCustomer() {
+    public SignupCustomerController() {
         super();
     }
 
@@ -61,10 +60,10 @@ public class SignupCustomer extends HttpServlet {
         Customer customer = customerService.createCustomer(username, password, email);
         System.out.println(customer);
         if (customer == null) {
-            response.sendRedirect(getServletContext().getContextPath() + "/signup.html");
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup.html");
             return;
         }
-        response.sendRedirect(getServletContext().getContextPath() + "/customer-login.html");
+        response.sendRedirect(getServletContext().getContextPath() + "/customer-employee-login.html");
 
     }
 }

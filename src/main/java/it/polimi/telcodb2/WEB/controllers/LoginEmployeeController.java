@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "LoginEmployee", value = "/login-employee")
-public class LoginEmployee extends HttpServlet {
+public class LoginEmployeeController extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
@@ -29,7 +29,7 @@ public class LoginEmployee extends HttpServlet {
     @EJB(name = "it.polimi.telcodb2.EJB.services/EmployeeService")
     private EmployeeService employeeService;
 
-    public LoginEmployee() {
+    public LoginEmployeeController() {
         super();
     }
 
@@ -45,26 +45,18 @@ public class LoginEmployee extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // obtain and escape params
-        String username = null;
-        String password = null;
-        try {
-            username = StringEscapeUtils.escapeJava(request.getParameter("username"));
-            password = StringEscapeUtils.escapeJava(request.getParameter("password"));
-            if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-                throw new Exception("Missing or empty credential value");
-            }
-        } catch (Exception e) {
-            // for debugging only e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing credential value");
+        String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
+        String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
             return;
         }
 
         Employee employee;
         try {
-            // query db to authenticate for user
             employee = employeeService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
             return;
         }
@@ -75,14 +67,17 @@ public class LoginEmployee extends HttpServlet {
         if (employee == null) {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-            ctx.setVariable("errorMsg", "Incorrect username or password");
-            ctx.setVariable("usernameVal", username);
-            ctx.setVariable("passwordVal", password);
-            path = "/employee-login.html";
-            templateEngine.process(path, ctx, response.getWriter());
+//            ctx.setVariable("errorMsg", "Wrong username or password.");
+//            ctx.setVariable("usernameVal", username);
+//            ctx.setVariable("passwordVal", password);
+//            path = "/employee-login.html";
+//            templateEngine.process(path, ctx, response.getWriter());
+            path = getServletContext().getContextPath() + "/employee-login?error=Wrong username or password";
+            response.sendRedirect(path);
         } else{
             request.getSession().setAttribute("user", employee);
-            path = getServletContext().getContextPath() + "/employee-home.html";
+            path = getServletContext().getContextPath() + "/employee-home";
+//            path = getServletContext().getContextPath() + "/customer-employee-home.html";
             response.sendRedirect(path);
         }
     }

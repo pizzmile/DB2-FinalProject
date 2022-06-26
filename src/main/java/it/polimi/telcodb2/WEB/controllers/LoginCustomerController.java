@@ -12,7 +12,6 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import javax.ejb.EJB;
 import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,14 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "LoginCustomer", value = "/login-customer")
-public class LoginCustomer extends HttpServlet {
+public class LoginCustomerController extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
     @EJB(name = "it.polimi.telcodb2.EJB.services/CustomerService")
     private CustomerService customerService;
 
-    public LoginCustomer() {
+    public LoginCustomerController() {
         super();
     }
 
@@ -50,16 +49,9 @@ public class LoginCustomer extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // Read parameters from request
-        String username = null;
-        String password = null;
-        try {
-            username = StringEscapeUtils.escapeJava(request.getParameter("username"));
-            password = StringEscapeUtils.escapeJava(request.getParameter("password"));
-            if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-                throw new Exception("Missing or empty credentials");
-            }
-
-        } catch (Exception e) {
+        String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
+        String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
+        if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
             return;
         }
@@ -68,8 +60,7 @@ public class LoginCustomer extends HttpServlet {
         try {
             customer = customerService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
-            //e.printStackTrace();
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Wrong username or password");
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
             return;
         }
 
@@ -77,17 +68,20 @@ public class LoginCustomer extends HttpServlet {
         // else show login page with error message
         String path;
         if (customer != null) {
+            // TODO: change with servlet
             request.getSession().setAttribute("user", customer);
             path = getServletContext().getContextPath() + "/customer-home.html";
             response.sendRedirect(path);
         } else {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-            ctx.setVariable("errorMsg", "Wrong username or password");
-            ctx.setVariable("usernameVal", username);
-            ctx.setVariable("passwordVal", password);
-            path = "/customer-login.html";
-            templateEngine.process(path, ctx, response.getWriter());
+//            path = "/customer-login.html";
+//            ctx.setVariable("error", "Wrong username or password.");
+//            ctx.setVariable("usernameVal", username);
+//            ctx.setVariable("passwordVal", password);
+//            templateEngine.process(path, ctx, response.getWriter());
+            path = getServletContext().getContextPath() + "/customer-login?error=Wrong username or password";
+            response.sendRedirect(path);
         }
     }
 

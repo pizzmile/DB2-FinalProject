@@ -11,6 +11,12 @@ import java.util.Collection;
                 @UniqueConstraint(columnNames = {"name", "duration"}),
                 @UniqueConstraint(columnNames = {"name", "fee"})
         })
+@NamedQueries(
+        @NamedQuery(
+                name = "Package.findByName",
+                query = "SELECT p FROM Package p WHERE p.name = :name"
+        )
+)
 public class Package implements Serializable {
 
     @Id

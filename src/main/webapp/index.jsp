@@ -4,7 +4,7 @@
 <head>
     <title>Redirect...</title>
 </head>
-<jsp:forward page="/customer-login.html"/>
+<jsp:forward page="/customer-login"/>
 <body>
 <p>Redirect...</p>
 </html>

@@ -15,6 +15,15 @@ public class ProductService {
     private EntityManager em;
 
     /**
+     * Fetch all the products available in the database
+     * @return the list containing all the products in the database
+     */
+    public List<Product> findAll() {
+        return em.createNamedQuery("Product.findAll", Product.class)
+                .getResultList();
+    }
+
+    /**
      * Fetch products by name
      * @param name name of the product to look for
      * @return the list containing the products matching the name
