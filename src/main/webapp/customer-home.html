@@ -1,12 +1,32 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TelcoDB</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>Customer Home Page</h1>
-</body>
+    <!-- Navbar -->
+    <header class="navbar row aln-center jst-center w100">
+        <div class="row aln-center jst-space-between w100">
+            <div class="row aln-center jst-start">
+                <a class="nav-link" href="customer-home">Customer Portal</a>
+            </div>
+            <div class="row aln-center jst-start">
+                <a class="nav-link" href="customer-login">Log In</a>
+                <a class="nav-link" href="customer-signup">Sing Up</a>
+            </div>
+        </div>
+    </header>
+    <section class="centered">
+        <h1>Customer Home Page</h1> <br>
+        <section>
+            <p th:text="${'Nice to see you again ' + session.user}"></p>
+        </section>
+    </section>
+    </body>
 </html>
