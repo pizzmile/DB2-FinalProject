@@ -46,22 +46,19 @@ public class SignupCustomerController extends HttpServlet {
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            // TODO: change (not for this project)
-            response.sendRedirect(getServletContext().getContextPath() + "/registration?missing=true");
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup?error=Missing or empty field.");
             return;
         }
 
         if (!customerService.findByEmail(email).isEmpty() || !customerService.findByUsername(username).isEmpty()) {
-            // TODO: change (not for this project)
-            response.sendRedirect(getServletContext().getContextPath() + "/registration?duplicated=true");
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup?error=Username already exists.");
             return;
         }
 
         Customer customer = customerService.createCustomer(username, password, email);
-        System.out.println(customer);
         if (customer == null) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup.html");
-            return;
+            String path = getServletContext().getContextPath() + "/customer-signup?error=Ops! Something went wrong.";
+            response.sendRedirect(path);
         }
         response.sendRedirect(getServletContext().getContextPath() + "/customer-login");
 

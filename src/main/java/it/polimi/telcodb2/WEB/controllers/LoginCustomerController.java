@@ -52,7 +52,9 @@ public class LoginCustomerController extends HttpServlet {
         String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
+            String path = getServletContext().getContextPath() + "/customer-login?error=Missing or empty credentials.";
+            response.sendRedirect(path);
             return;
         }
 
@@ -60,7 +62,9 @@ public class LoginCustomerController extends HttpServlet {
         try {
             customer = customerService.checkCredentials(username, password);
         } catch (CredentialsException | NonUniqueResultException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+            String path = getServletContext().getContextPath() + "/customer-login?error=Could not check credentials.";
+            response.sendRedirect(path);
             return;
         }
 
@@ -80,7 +84,7 @@ public class LoginCustomerController extends HttpServlet {
 //            ctx.setVariable("usernameVal", username);
 //            ctx.setVariable("passwordVal", password);
 //            templateEngine.process(path, ctx, response.getWriter());
-            path = getServletContext().getContextPath() + "/customer-login?error=Wrong username or password";
+            path = getServletContext().getContextPath() + "/customer-login?error=Wrong username or password.";
             response.sendRedirect(path);
         }
     }
