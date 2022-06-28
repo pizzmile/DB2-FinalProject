@@ -63,7 +63,7 @@ public class SignupCustomerController extends HttpServlet {
             response.sendRedirect(getServletContext().getContextPath() + "/customer-signup.html");
             return;
         }
-        response.sendRedirect(getServletContext().getContextPath() + "/customer-employee-login.html");
+        response.sendRedirect(getServletContext().getContextPath() + "/customer-login");
 
     }
 }
