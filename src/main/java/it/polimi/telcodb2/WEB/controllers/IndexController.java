@@ -48,7 +48,7 @@ public class IndexController extends HttpServlet {
         String action = StringEscapeUtils.escapeJava(request.getParameter("page"));
         String path;
         if (action.equals("customer")){
-            request.getSession().setAttribute("user", false);
+            request.getSession().setAttribute("user", "tabo");
             path = getServletContext().getContextPath() + "/customer-home.html";
             response.sendRedirect(path);
         } else {
