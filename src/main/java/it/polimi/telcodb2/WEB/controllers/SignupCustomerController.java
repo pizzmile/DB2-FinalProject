@@ -46,21 +46,25 @@ public class SignupCustomerController extends HttpServlet {
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup?error=Missing or empty field.");
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=Missing or empty field.");
             return;
         }
 
-        if (!customerService.findByEmail(email).isEmpty() || !customerService.findByUsername(username).isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-signup?error=Username already exists.");
+        if (!customerService.findByEmail(email).isEmpty()) {
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=There is already another user for this email.");
+            return;
+        }
+        if (!customerService.findByUsername(username).isEmpty()) {
+            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=There is already another user with this username.");
             return;
         }
 
         Customer customer = customerService.createCustomer(username, password, email);
         if (customer == null) {
-            String path = getServletContext().getContextPath() + "/customer-signup?error=Ops! Something went wrong.";
+            String path = getServletContext().getContextPath() + "/customer-landing?error=Ops! Something went wrong.";
             response.sendRedirect(path);
         }
-        response.sendRedirect(getServletContext().getContextPath() + "/customer-login");
+        response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?success=True");
 
     }
 }

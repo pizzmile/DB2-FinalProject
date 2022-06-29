@@ -88,13 +88,6 @@ form.login-form {
     min-width: 320px;
     margin: 1rem 0;
 }
-.login-container a {
-    text-decoration: none;
-    color: dodgerblue;
-}
-.login-container a:active {
-    color: dodgerblue;
-}
 .login-container p {
     margin-top: 0.25rem;
 }
@@ -263,7 +256,7 @@ a.nav-link:active {
     min-height: 40%;
 }
 .h50 {
-    height: 50%;
+    min-height: 50%;
 }
 .h60 {
     min-height: 60%;
@@ -285,4 +278,83 @@ a.nav-link:active {
 }
 .h-half {
     height: 50vw;
+}
+
+
+div.round-box {
+    border: 1px solid gray;
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+div.form-wrapper {
+    padding: 2rem;
+}
+
+.submit-btn {
+    padding: .25rem .5rem;
+}
+
+.form-title {
+    color: dodgerblue;
+    font-size: 1.75rem;
+    font-weight: bold;
+    letter-spacing: .1rem;
+    margin: .5rem 0;
+}
+
+.border-left {
+    border-left: 2px solid gray;
+}
+
+.margin-top-children-1 > * {
+    margin-top: 0.25rem;
+}
+.margin-top-children-2 > * {
+    margin-top: 0.5rem;
+}
+.margin-top-children-3 > * {
+    margin-top: 1rem;
+}
+.margin-bottom-children-1 > * {
+    margin-bottom: 0.25rem;
+}
+.margin-bottom-children-2 > * {
+    margin-bottom: 0.5rem;
+}
+.margin-bottom-children-3 > * {
+    margin-bottom: 1rem;
+}
+.margin-left-children-1 > * {
+    margin-left: 0.25rem;
+}
+.margin-left-children-2 > * {
+    margin-left: 0.5rem;
+}
+.margin-left-children-3 > * {
+    margin-left: 1rem;
+}
+.margin-right-children-1 > * {
+    margin-right: 0.25rem;
+}
+.margin-right-children-2 > * {
+    margin-right: 0.5rem;
+}
+.margin-right-children-3 > * {
+    margin-right: 1rem;
+}
+
+.outlined {
+    background: none;
+    border: 2px solid dodgerblue;
+    color: dodgerblue;
+}
+
+.clean {
+    text-decoration: none;
+    color: dodgerblue;
+}
+.clean:active {
+    text-decoration: none;
+    color: dodgerblue;
 }
