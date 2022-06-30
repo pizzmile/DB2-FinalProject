@@ -118,7 +118,7 @@
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="addValidityOptionFields()">+</a>
+                    <a href="#" class="submit-btn w100" onclick="addValidityOptionInput()">+</a>
                   </div>
                 </div>
                 <!-- Validity insertion fields -->
@@ -135,7 +135,7 @@
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionFields(2)">-</a>
+                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionInput(2)">-</a>
                   </div>
                 </div>
                 <!-- Validity insertion fields -->
@@ -152,7 +152,7 @@
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionFields(3)">-</a>
+                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionInput(3)">-</a>
                   </div>
                 </div>
               </div>
@@ -166,27 +166,20 @@
                 <div class="w100 row aln-end jst-center margin-bottom-children-1" id="service-insertion-1">
                   <div class="col aln-start jst-center w90 pr-1">
                     <!-- Type selection -->
-                    <div class="row aln-center jst-space-between w100">
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Phone</label>
-                        <input type="radio" value="0" name="type-1">
+                    <div class="row w100 aln-center jst-start">
+                      <div class="pr-2">
+                        <label for="type-1">Service type: </label>
                       </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Internet</label>
-                        <input type="radio" value="2" name="type-1">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label>Mobile <br> Phone</label>
-                        <input type="radio" value="1" name="type-1">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Mobile <br> Internet</label>
-                        <input type="radio" value="3" name="type-1">
-                      </div>
+                      <select name="type-1" id="type-1" onchange="updateServiceAttributes(1)">
+                        <option value="0">Fixed Phone</option>
+                        <option value="1">Fixed Internet</option>
+                        <option value="2">Mobile Phone</option>
+                        <option value="3">Mobile Internet</option>
+                      </select>
                     </div>
                     <!-- Params selection -->
                     <div class="col w100 aln-center jst-center">
-                      <div class="row w100 aln-center jst-center">
+                      <div class="row w100 aln-center jst-center hidden" id="minutes-wrapper-1">
                         <div class="w50 pr-1">
                           <input type="number" min="0" step="1" name="minutes-1" placeholder="minutes" required
                                  class="input-fld w100">
@@ -196,7 +189,7 @@
                                  class="input-fld w100">
                         </div>
                       </div>
-                      <div class="row w100 aln-center jst-center">
+                      <div class="row w100 aln-center jst-center hidden" id="sms-wrapper-1">
                         <div class="w50 pr-1">
                           <input type="number" min="0" step="1" name="sms-1" placeholder="SMSs" required
                                  class="input-fld w100">
@@ -206,7 +199,7 @@
                                  class="input-fld w100">
                         </div>
                       </div>
-                      <div class="row w100 aln-center jst-center">
+                      <div class="row w100 aln-center jst-center hidden" id="giga-wrapper-1">
                         <div class="w50 pr-1">
                           <input type="number" min="0" step="1" name="giga-1" placeholder="GIGAs" required
                                  class="input-fld w100">
@@ -220,129 +213,7 @@
                   </div>
                   <!-- Add/remove insertion fields -->
                   <div class="col aln-start jst-end w10 pb-1 pl-1">
-                    <a href="#" class="submit-btn w100" onclick="addServiceFields()">+</a>
-                  </div>
-                </div>
-                <!-- Service insertion fields -->
-                <div class="w100 row aln-end jst-center margin-bottom-children-1 hidden" id="service-insertion-2">
-                  <div class="col aln-start jst-center w90 pr-1">
-                    <!-- Type selection -->
-                    <div class="row aln-center jst-space-between w100">
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Phone</label>
-                        <input type="radio" value="0" name="type-2">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Internet</label>
-                        <input type="radio" value="2" name="type-2">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label>Mobile <br> Phone</label>
-                        <input type="radio" value="1" name="type-2">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Mobile <br> Internet</label>
-                        <input type="radio" value="3" name="type-2">
-                      </div>
-                    </div>
-                    <!-- Params selection -->
-                    <div class="col w100 aln-center jst-center">
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="minutes-2" placeholder="minutes" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-minutes-2" placeholder="extra minutes" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="sms-2" placeholder="SMSs" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-sms-2" placeholder="extra SMSs" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="giga-2" placeholder="GIGAs" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-giga-2" placeholder="extra GIGAs" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Add/remove insertion fields -->
-                  <div class="col aln-start jst-end w10 pb-1 pl-1">
-                    <a href="#" class="submit-btn w100" onclick="removeServiceFields(2)">-</a>
-                  </div>
-                </div>
-                <!-- Service insertion fields -->
-                <div class="w100 row aln-end jst-center margin-bottom-children-1 hidden" id="service-insertion-3">
-                  <div class="col aln-start jst-center w90 pr-1">
-                    <!-- Type selection -->
-                    <div class="row aln-center jst-space-between w100">
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Phone</label>
-                        <input type="radio" value="0" name="type-3">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Fixed <br> Internet</label>
-                        <input type="radio" value="2" name="type-3">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label>Mobile <br> Phone</label>
-                        <input type="radio" value="1" name="type-3">
-                      </div>
-                      <div class="row aln-center jst-center">
-                        <label class="pr-2">Mobile <br> Internet</label>
-                        <input type="radio" value="3" name="type-3">
-                      </div>
-                    </div>
-                    <!-- Params selection -->
-                    <div class="col w100 aln-center jst-center">
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="minutes-3" placeholder="minutes" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-minutes-3" placeholder="extra minutes" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="sms-3" placeholder="SMSs" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-sms-3" placeholder="extra SMSs" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                      <div class="row w100 aln-center jst-center">
-                        <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="giga-3" placeholder="GIGAs" required
-                                 class="input-fld w100">
-                        </div>
-                        <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-giga-3" placeholder="extra GIGAs" required
-                                 class="input-fld w100">
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Add/remove insertion fields -->
-                  <div class="col aln-start jst-end w10 pb-1 pl-1">
-                    <a href="#" class="submit-btn w100" onclick="removeServiceFields(3)">-</a>
+                    <a href="#" class="submit-btn w100" onclick="addServiceInput()">+</a>
                   </div>
                 </div>
               </div>
@@ -352,7 +223,7 @@
       </div>
     </section>
 
-    <script src="dynamic-forms.js"></script>
+    <script src="js/dynamic-forms.js"></script>
   </body>
 
 </html>
