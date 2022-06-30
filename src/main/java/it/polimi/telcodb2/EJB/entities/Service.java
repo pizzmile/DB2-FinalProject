@@ -7,7 +7,7 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"type", "minutes", "extraMinutes", "sms", "extraSms", "giga", "extraGiga"})
+        @UniqueConstraint(columnNames = {"type", "minutes", "extraMinutesFee", "sms", "extraSmsFee", "giga", "extraGigaFee"})
 })
 public class Service implements Serializable {
 
@@ -22,20 +22,20 @@ public class Service implements Serializable {
     @Column(name="minutes")
     private int minutes;
 
-    @Column(name="extraMinutes")
-    private int extraMinutes;
+    @Column(name="extraMinutesFee")
+    private float extraMinutesFee;
 
     @Column(name="sms")
     private int sms;
 
-    @Column(name="extraSms")
-    private int extraSms;
+    @Column(name="extraSmsFee")
+    private float extraSmsFee;
 
     @Column(name="giga")
     private int giga;
 
-    @Column(name="extraGiga")
-    private int extraGiga;
+    @Column(name="extraGigaFee")
+    private float extraGigaFee;
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
@@ -48,14 +48,14 @@ public class Service implements Serializable {
     public Service() {
     }
 
-    public Service(int type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga) {
+    public Service(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee, int giga, float extraGigaFee) {
         this.type = type;
         this.minutes = minutes;
-        this.extraMinutes = extraMinutes;
+        this.extraMinutesFee = extraMinutesFee;
         this.sms = sms;
-        this.extraSms = extraSms;
+        this.extraSmsFee = extraSmsFee;
         this.giga = giga;
-        this.extraGiga = extraGiga;
+        this.extraGigaFee = extraGigaFee;
     }
 
     public int getIdService() {
@@ -82,12 +82,12 @@ public class Service implements Serializable {
         this.minutes = minutes;
     }
 
-    public int getExtraMinutes() {
-        return extraMinutes;
+    public float getExtraMinutesFee() {
+        return extraMinutesFee;
     }
 
-    public void setExtraMinutes(int extraMinutes) {
-        this.extraMinutes = extraMinutes;
+    public void setExtraMinutesFee(float extraMinutesFee) {
+        this.extraMinutesFee = extraMinutesFee;
     }
 
     public int getSms() {
@@ -98,12 +98,12 @@ public class Service implements Serializable {
         this.sms = sms;
     }
 
-    public int getExtraSms() {
-        return extraSms;
+    public float getExtraSmsFee() {
+        return extraSmsFee;
     }
 
-    public void setExtraSms(int extraSms) {
-        this.extraSms = extraSms;
+    public void setExtraSmsFee(float extraSmsFee) {
+        this.extraSmsFee = extraSmsFee;
     }
 
     public int getGiga() {
@@ -114,12 +114,10 @@ public class Service implements Serializable {
         this.giga = giga;
     }
 
-    public int getExtraGiga() {
-        return extraGiga;
-    }
+    public float getExtraGigaFee() {return extraGigaFee;}
 
-    public void setExtraGiga(int extraGiga) {
-        this.extraGiga = extraGiga;
+    public void setExtraGigaFee(float extraGigaFee) {
+        this.extraGigaFee = extraGigaFee;
     }
 
     public Collection<Package> getPackages() {

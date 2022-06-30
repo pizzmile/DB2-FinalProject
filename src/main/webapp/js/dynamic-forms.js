@@ -17,27 +17,51 @@ function updateIncrementalId(node, id, idValue) {
 
 // Handle validity options
 function addValidityOptionInput() {
+    let addValidityButton = document.getElementById("add-validity");
     let validityOption2Input = document.getElementById("validity-insertion-2");
     let validityOption3Input = document.getElementById("validity-insertion-3");
     if (validityOption2Input.classList.contains('hidden') && validityOption3Input.classList.contains('hidden')) {
+        // Show option 2
         validityOption2Input.classList.remove("hidden");
+        // Set inputs as required
+        document.getElementById('duration-2').required = true;
+        document.getElementById('fee-2').required = true;
+        // Set button active/inactive style
+        safeRemove(addValidityButton, 'inactive-btn');
+        safeAdd(addValidityButton, 'active-btn');
+        addValidityButton.disabled = false;
     }
     else if (!validityOption2Input.classList.contains('hidden') && validityOption3Input.classList.contains('hidden')) {
+        // Show option 3
         validityOption3Input.classList.remove("hidden");
+        // Set inputs as required
+        document.getElementById('duration-3').required = true;
+        document.getElementById('fee-3').required = true;
+        // Set add button active/inactive style
+        safeAdd(addValidityButton, 'inactive-btn');
+        safeRemove(addValidityButton, 'active-btn');
+        addValidityButton.disabled = true;
     }
 
 }
 function removeValidityOptionInput(idx) {
+    let addValidityButton = document.getElementById("add-validity");
     let validityOptionInput = document.getElementById("validity-insertion-" + idx);
+
     if (!validityOptionInput.classList.contains('hidden')) {
+        // Hide option
         validityOptionInput.classList.add('hidden');
+        // Set inputs as not required
+        document.getElementById('duration-' + idx).required = false;
+        document.getElementById('fee-' + idx).required = false;
+        // Set add button active/inactive style
+        safeRemove(addValidityButton, 'inactive-btn');
+        safeAdd(addValidityButton, 'active-btn');
+        addValidityButton.disabled = false;
     }
 }
 
 // Handle service type
-// const serviceTypeSelector = document.getElementById('type-1');
-// serviceTypeSelector.addEventListener("change", updateAttributes);
-
 function updateServiceAttributes(idx) {
     let serviceTypeSelector = document.getElementById('type-' + idx);
     let selectedValue = serviceTypeSelector.value;
@@ -100,9 +124,10 @@ function updateServiceAttributes(idx) {
 var numOfServices = 1;
 
 function addServiceInput() {
-    let serviceInputsWrapper = document.getElementById('services-wrapper');
-    let node = new DOMParser().parseFromString(string, 'text/html').body.firstChild;
+    let serviceInputsWrapper = document.getElementById('services-wrapper');         // get parent wrapper
+    let node = new DOMParser().parseFromString(string, 'text/html').body.firstChild;    // create new node
 
+    // Update incremental identifiers
     numOfServices += 1;
     node.id = node.id += numOfServices;
 
@@ -130,6 +155,7 @@ function addServiceInput() {
     let removeButton = updateIncrementalId(node, 'remove-button-', numOfServices)
     removeButton.setAttribute('onclick', 'removeServiceInput(' + numOfServices + ')');
 
+    // Append new node
     serviceInputsWrapper.appendChild(node);
 }
 
@@ -140,14 +166,14 @@ function removeServiceInput(idx) {
 }
 
 
-string = '<div class="w100 row aln-end jst-center margin-bottom-children-1" id="service-insertion-">\n' +
+string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst-center margin-bottom-children-1" id="service-insertion-">\n' +
     '                  <div class="col aln-start jst-center w90 pr-1">\n' +
     '                    <!-- Type selection -->\n' +
     '                    <div class="row w100 aln-center jst-start">\n' +
     '                      <div class="pr-2">\n' +
     '                        <label>Service type: </label>\n' +
     '                      </div>\n' +
-    '                      <select name="type-" id="type-">\n' + // HERE ****
+    '                      <select name="type-" id="type-" required>\n' + // HERE ****
     '                        <option value="0">Fixed Phone</option>\n' +
     '                        <option value="1">Fixed Internet</option>\n' +
     '                        <option value="2">Mobile Phone</option>\n' +
@@ -190,6 +216,6 @@ string = '<div class="w100 row aln-end jst-center margin-bottom-children-1" id="
     '                  </div>\n' +
     '                  <!-- Add/remove insertion fields -->\n' +
     '                  <div class="col aln-start jst-end w10 pb-1 pl-1">\n' +
-    '                    <a href="#" class="submit-btn w100" onclick="addServiceFields()" id="remove-button-">-</a>\n' + // HERE ****
+    '                    <a href="#" class="submit-btn w100 active-btn" onclick="addServiceFields()" id="remove-button-">-</a>\n' + // HERE ****
     '                  </div>\n' +
     '                </div>';

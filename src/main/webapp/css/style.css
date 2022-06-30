@@ -418,3 +418,10 @@ a.submit-btn:active {
 .hidden {
     display: none !important;
 }
+
+.active-btn:active {
+    transform: translateY(1px);
+}
+.inactive-btn {
+    background: gray;
+}

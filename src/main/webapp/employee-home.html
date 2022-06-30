@@ -89,7 +89,7 @@
                      class="input-fld w100">
             </div>
             <input type="submit" value="Create"
-                   class="submit-btn w100">
+                   class="submit-btn w100 active-btn">
           </form>
         </div>
 
@@ -108,51 +108,51 @@
                 <div class="w100 row aln-center jst-center" id="validity-insertion-1">
                   <div class="row aln-center jst-center w90 pr-1">
                     <div class="pr-1 w50">
-                      <input type="number" min="12" max="36" step="12" name="duration-1" placeholder="duration" required
+                      <input type="number" min="12" max="36" step="12" name="duration-1" id="duration-1" placeholder="duration" required
                              class="input-fld w100">
                     </div>
                     <div class="pl-1 w50">
-                      <input type="number" min="0" step="0.01" name="fee-1" placeholder="fee" required
+                      <input type="number" min="0" step="0.01" name="fee-1" id="fee-1" placeholder="fee" required
                              class="input-fld w100">
                     </div>
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="addValidityOptionInput()">+</a>
+                    <a href="#" class="submit-btn w100 active-btn" onclick="addValidityOptionInput()" id="add-validity">+</a>
                   </div>
                 </div>
                 <!-- Validity insertion fields -->
                 <div class="w100 row aln-center jst-center hidden" id="validity-insertion-2">
                   <div class="row aln-center jst-center w90 pr-1">
                     <div class="pr-1 w50">
-                      <input type="number" min="12" max="36" step="12" name="duration-2" placeholder="duration" required
+                      <input type="number" min="12" max="36" step="12" name="duration-2" id="duration-2" placeholder="duration"
                              class="input-fld w100">
                     </div>
                     <div class="pl-1 w50">
-                      <input type="number" min="0" step="0.01" name="fee-2" placeholder="fee" required
+                      <input type="number" min="0" step="0.01" name="fee-2" id="fee-2" placeholder="fee"
                              class="input-fld w100">
                     </div>
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionInput(2)">-</a>
+                    <a href="#" class="submit-btn w100 active-btn" onclick="removeValidityOptionInput(2)">-</a>
                   </div>
                 </div>
                 <!-- Validity insertion fields -->
                 <div class="w100 row aln-center jst-center hidden" id="validity-insertion-3">
                   <div class="row aln-center jst-center w90 pr-1">
                     <div class="pr-1 w50">
-                      <input type="number" min="12" max="36" step="12" name="duration-3" placeholder="duration" required
+                      <input type="number" min="12" max="36" step="12" name="duration-3" id="duration-3" placeholder="duration"
                              class="input-fld w100">
                     </div>
                     <div class="pl-1 w50">
-                      <input type="number" min="0" step="0.01" name="fee-3" placeholder="fee" required
+                      <input type="number" min="0" step="0.01" name="fee-3" id="fee-3" placeholder="fee"
                              class="input-fld w100">
                     </div>
                   </div>
                   <!-- Add/Remove button -->
                   <div class="pl-1 w10">
-                    <a href="#" class="submit-btn w100" onclick="removeValidityOptionInput(3)">-</a>
+                    <a href="#" class="submit-btn w100 active-btn" onclick="removeValidityOptionInput(3)">-</a>
                   </div>
                 </div>
               </div>
@@ -170,7 +170,7 @@
                       <div class="pr-2">
                         <label for="type-1">Service type: </label>
                       </div>
-                      <select name="type-1" id="type-1" onchange="updateServiceAttributes(1)">
+                      <select name="type-1" id="type-1" onchange="updateServiceAttributes(1)" required>
                         <option value="0">Fixed Phone</option>
                         <option value="1">Fixed Internet</option>
                         <option value="2">Mobile Phone</option>
@@ -213,11 +213,23 @@
                   </div>
                   <!-- Add/remove insertion fields -->
                   <div class="col aln-start jst-end w10 pb-1 pl-1">
-                    <a href="#" class="submit-btn w100" onclick="addServiceInput()">+</a>
+                    <a href="#" class="submit-btn w100 active-btn" onclick="addServiceInput()">+</a>
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Products -->
+            <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
+              <h5>Optional products</h5>
+              <select name="opt-products" id="opt-products" multiple class="w100">
+                <option th:each="product : ${products}" th:value="${product.getIdProduct()}">
+                  <p th:text="${product.getName()} + ' ~ (' + ${product.getFee()} + ')'"></p>
+                </option>
+              </select>
+            </div>
+            <input type="submit" value="Create"
+                   class="submit-btn w100 active-btn">
           </form>
         </div>
       </div>
