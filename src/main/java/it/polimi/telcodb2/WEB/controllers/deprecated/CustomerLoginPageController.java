@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.WEB.controllers;
+package it.polimi.telcodb2.WEB.controllers.deprecated;
 
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.services.ProductService;
@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(name = "CustomerSignupPageController", value = "/customer-signup")
-public class CustomerSignupPageController extends HttpServlet {
+@WebServlet(name = "CustomerLoginPageController", value = "/customer-login")
+public class CustomerLoginPageController extends HttpServlet {
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
@@ -26,9 +26,9 @@ public class CustomerSignupPageController extends HttpServlet {
     protected TemplateEngine templateEngine;
 
 
-    public CustomerSignupPageController() {
+    public CustomerLoginPageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "customer-signup";
+        this.templatePath = "customer-login";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";

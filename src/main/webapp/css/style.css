@@ -36,6 +36,9 @@ h4 {
     font-size: 1.5rem;
     font-weight: lighter;
 }
+h5 {
+    margin: 0;
+}
 p {
     margin: 0;
 }
@@ -204,6 +207,10 @@ a.nav-link:active {
     align-items: center !important;
 }
 
+.row.aln-end, .col.aln-end {
+    align-items: end !important;
+}
+
 
 /** Dimensions **/
 .w10 {
@@ -303,8 +310,41 @@ div.form-wrapper {
     margin: .5rem 0;
 }
 
+.border-left-strong {
+    border-left: 3px solid gray;
+}
+.border-right-strong {
+    border-right: 3px solid gray;
+}
+.border-top-strong {
+    border-top: 3px solid gray;
+}
+.border-bottom-strong {
+    border-bottom: 3px solid gray;
+}
 .border-left {
     border-left: 2px solid gray;
+}
+.border-right {
+    border-right: 2px solid gray;
+}
+.border-top {
+    border-top: 2px solid gray;
+}
+.border-bottom {
+    border-bottom: 2px solid gray;
+}
+.border-left-light {
+    border-left: 1px solid gray;
+}
+.border-right-light {
+    border-right: 1px solid gray;
+}
+.border-top-light {
+    border-top: 1px solid gray;
+}
+.border-bottom-light {
+    border-bottom: 1px solid gray;
 }
 
 .margin-top-children-1 > * {
@@ -357,4 +397,24 @@ div.form-wrapper {
 .clean:active {
     text-decoration: none;
     color: dodgerblue;
+}
+
+a.submit-btn {
+    display: inline-block;
+    text-decoration: none;
+    text-align: center;
+}
+a.submit-btn:active {
+    text-decoration: none;
+}
+
+.bg-success {
+    background: limegreen;
+}
+.bg-danger {
+    background: red;
+}
+
+.hidden {
+    display: none !important;
 }

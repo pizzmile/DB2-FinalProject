@@ -17,7 +17,7 @@ public class Service implements Serializable {
     private int idService;
 
     @Column(name="type", nullable = false)
-    private String type;
+    private int type;
 
     @Column(name="minutes")
     private int minutes;
@@ -48,7 +48,7 @@ public class Service implements Serializable {
     public Service() {
     }
 
-    public Service(String type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga) {
+    public Service(int type, int minutes, int extraMinutes, int sms, int extraSms, int giga, int extraGiga) {
         this.type = type;
         this.minutes = minutes;
         this.extraMinutes = extraMinutes;
@@ -66,11 +66,11 @@ public class Service implements Serializable {
         this.idService = idService;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 
