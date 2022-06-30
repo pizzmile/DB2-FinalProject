@@ -184,31 +184,31 @@ string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst
     '                    <div class="col w100 aln-center jst-center">\n' +
     '                      <div class="row w100 aln-center jst-center hidden" id="minutes-wrapper-">\n' + // HERE ***
     '                        <div class="w50 pr-1">\n' +
-    '                          <input type="number" min="0" step="1" name="minutes-" id="minutes-" placeholder="minutes" required\n' +
+    '                          <input type="number" min="0" step="1" name="minutes-" id="minutes-" placeholder="minutes"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-minutes-" id="extra-minutes-" placeholder="extra minutes" required\n' +
+    '                          <input type="number" min="0" step="1" name="extra-minutes-" id="extra-minutes-" placeholder="extra minutes"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +
     '                      <div class="row w100 aln-center jst-center hidden" id="sms-wrapper-">\n' + // HERE ****
     '                        <div class="w50 pr-1">\n' +
-    '                          <input type="number" min="0" step="1" name="sms-" id="sms-" placeholder="SMSs" required\n' +
+    '                          <input type="number" min="0" step="1" name="sms-" id="sms-" placeholder="SMSs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-sms-" id="extra-sms-" placeholder="extra SMSs" required\n' +
+    '                          <input type="number" min="0" step="1" name="extra-sms-" id="extra-sms-" placeholder="extra SMSs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +
     '                      <div class="row w100 aln-center jst-center hidden" id="giga-wrapper-">\n' +
     '                        <div class="w50 pr-1">\n' +
-    '                          <input type="number" min="0" step="1" name="giga-" id="giga-" placeholder="GIGAs" required\n' +
+    '                          <input type="number" min="0" step="1" name="giga-" id="giga-" placeholder="GIGAs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-giga-" id="extra-giga-" placeholder="extra GIGAs" required\n' +
+    '                          <input type="number" min="0" step="1" name="extra-giga-" id="extra-giga-" placeholder="extra GIGAs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +

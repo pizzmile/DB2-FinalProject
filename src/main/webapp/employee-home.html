@@ -95,7 +95,7 @@
 
         <div class="form-wrapper w100 col aln-center jst-center margin-bottom-children-3">
           <h4>Create Package</h4>
-          <form action="create-package" method="POST" class="w100 col aln-center jst-start margin-bottom-children-3">
+          <form action="create-product" method="POST" class="w100 col aln-center jst-start margin-bottom-children-3">
             <!-- Name -->
             <input type="text" name="name" placeholder="name" required
                    class="input-fld w100">
@@ -181,31 +181,31 @@
                     <div class="col w100 aln-center jst-center">
                       <div class="row w100 aln-center jst-center hidden" id="minutes-wrapper-1">
                         <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="minutes-1" placeholder="minutes" required
+                          <input type="number" min="0" step="1" name="minutes-1" placeholder="minutes"
                                  class="input-fld w100">
                         </div>
                         <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-minutes-1" placeholder="extra minutes" required
+                          <input type="number" min="0" step="1" name="extra-minutes-1" placeholder="extra minutes"
                                  class="input-fld w100">
                         </div>
                       </div>
                       <div class="row w100 aln-center jst-center hidden" id="sms-wrapper-1">
                         <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="sms-1" placeholder="SMSs" required
+                          <input type="number" min="0" step="1" name="sms-1" placeholder="SMSs"
                                  class="input-fld w100">
                         </div>
                         <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-sms-1" placeholder="extra SMSs" required
+                          <input type="number" min="0" step="1" name="extra-sms-1" placeholder="extra SMSs"
                                  class="input-fld w100">
                         </div>
                       </div>
                       <div class="row w100 aln-center jst-center hidden" id="giga-wrapper-1">
                         <div class="w50 pr-1">
-                          <input type="number" min="0" step="1" name="giga-1" placeholder="GIGAs" required
+                          <input type="number" min="0" step="1" name="giga-1" placeholder="GIGAs"
                                  class="input-fld w100">
                         </div>
                         <div class="w50 pl-1">
-                          <input type="number" min="0" step="1" name="extra-giga-1" placeholder="extra GIGAs" required
+                          <input type="number" min="0" step="1" name="extra-giga-1" placeholder="extra GIGAs"
                                  class="input-fld w100">
                         </div>
                       </div>
@@ -222,12 +222,18 @@
             <!-- Products -->
             <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
               <h5>Optional products</h5>
-              <select name="opt-products" id="opt-products" multiple class="w100">
-                <option th:each="product : ${products}" th:value="${product.getIdProduct()}">
-                  <p th:text="${product.getName()} + ' ~ (' + ${product.getFee()} + ')'"></p>
-                </option>
-              </select>
+              <div class="row w100 aln-center jst-start" th:each="product : ${products}" th:value="${product.getIdProduct()}">
+                <input type="checkbox" name="opt-product" th:value="${product.getIdProduct()}">
+                <label th:text="${product.getName()} + ' ~ ' + ${product.getFee()}"></label>
+              </div>
+<!--              <select name="opt-products" id="opt-products" multiple class="w100">-->
+<!--                <option th:each="product : ${products}" th:value="${product.getIdProduct()}">-->
+<!--                    <p th:text="${product.getName()} + ' ~ (' + ${product.getFee()} + ')'"></p>-->
+<!--                </option>-->
+<!--              </select>-->
             </div>
+
+            <!-- Submit -->
             <input type="submit" value="Create"
                    class="submit-btn w100 active-btn">
           </form>

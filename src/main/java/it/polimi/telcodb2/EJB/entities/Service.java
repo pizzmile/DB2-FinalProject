@@ -57,6 +57,21 @@ public class Service implements Serializable {
         this.giga = giga;
         this.extraGigaFee = extraGigaFee;
     }
+    public Service(int type) {
+        this.type = type;
+    }
+    public Service(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
+        this.type = type;
+        this.minutes = minutes;
+        this.extraMinutesFee = extraMinutesFee;
+        this.sms = sms;
+        this.extraSmsFee = extraSmsFee;
+    }
+    public Service(int type, int giga, float extraGigaFee) {
+        this.type = type;
+        this.giga = giga;
+        this.extraGigaFee = extraGigaFee;
+    }
 
     public int getIdService() {
         return idService;
