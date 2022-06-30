@@ -68,10 +68,9 @@ public class EmployeeHomePageController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
-        // TODO: if session is not valid redirect to BAD_REQUEST
-//        if (session.getAttribute('username') == null) {
-//
-//        }
+        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
+        }
 
         HashMap<String, Object> context = new HashMap<>();
 
