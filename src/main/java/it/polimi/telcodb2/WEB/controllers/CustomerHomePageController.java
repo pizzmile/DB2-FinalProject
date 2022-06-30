@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(name = "EmployeeLoginPageController", value = "/employee-login")
-public class EmployeeLoginPageController extends HttpServlet {
+@WebServlet(name = "CustomerHomePageController", value = "/customer-home")
+public class CustomerHomePageController extends HttpServlet {
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
@@ -24,9 +24,9 @@ public class EmployeeLoginPageController extends HttpServlet {
     protected TemplateEngine templateEngine;
 
 
-    public EmployeeLoginPageController() {
+    public CustomerHomePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "employee-login";
+        this.templatePath = "customer-home";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";

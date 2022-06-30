@@ -14,9 +14,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 
 @WebServlet(name = "LoginEmployee", value = "/login-employee")
@@ -71,17 +69,13 @@ public class LoginEmployeeController extends HttpServlet {
         if (employee == null) {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//            ctx.setVariable("errorMsg", "Wrong username or password.");
-//            ctx.setVariable("usernameVal", username);
-//            ctx.setVariable("passwordVal", password);
-//            path = "/employee-login.html";
-//            templateEngine.process(path, ctx, response.getWriter());
             path = getServletContext().getContextPath() + "/employee-login?error=Wrong username or password.";
             response.sendRedirect(path);
         } else{
-            request.getSession().setAttribute("user", employee);
+            HttpSession session = request.getSession();
+            session.setAttribute("username", employee.getUsername());
+            session.setAttribute("userid", employee.getIdEmployee());
             path = getServletContext().getContextPath() + "/employee-home";
-//            path = getServletContext().getContextPath() + "/customer-employee-home.html";
             response.sendRedirect(path);
         }
     }

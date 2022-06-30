@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "LoginCustomer", value = "/login-customer")
@@ -72,18 +73,14 @@ public class LoginCustomerController extends HttpServlet {
         // else show login page with error message
         String path;
         if (customer != null) {
-            // TODO: change with servlet
-            request.getSession().setAttribute("user", customer);
-            path = getServletContext().getContextPath() + "/customer-home.html";
+            HttpSession session = request.getSession();
+            session.setAttribute("username", customer.getUsername());
+            session.setAttribute("userid", customer.getIdCustomer());
+            path = getServletContext().getContextPath() + "/customer-home";
             response.sendRedirect(path);
         } else {
             ServletContext servletContext = getServletContext();
             final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-//            path = "/customer-login.html";
-//            ctx.setVariable("error", "Wrong username or password.");
-//            ctx.setVariable("usernameVal", username);
-//            ctx.setVariable("passwordVal", password);
-//            templateEngine.process(path, ctx, response.getWriter());
             path = getServletContext().getContextPath() + "/customer-landing?error=Wrong username or password.";
             response.sendRedirect(path);
         }

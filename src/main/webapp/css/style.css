@@ -153,12 +153,12 @@ form .input-container {
     padding: 1rem 0.5rem;
     background-color: dodgerblue;
 }
-a.nav-link {
+.nav-link {
     margin: 0 1rem;
     color: white;
     text-decoration: none;
 }
-a.nav-link:active {
+.nav-link:active {
     color: white;
 }
 

@@ -8,6 +8,7 @@
     <title>TelcoDB</title>
 
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/fe9e631225.js" crossorigin="anonymous"></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -16,16 +17,26 @@
             <div class="row aln-center jst-start">
                 <a class="nav-link" href="customer-home">Customer Portal</a>
             </div>
-            <div class="row aln-center jst-start">
-                <a class="nav-link" href="customer-login">Log In</a>
-                <a class="nav-link" href="customer-signup">Sing Up</a>
+            <div class="row aln-center jst-start margin-right-children-1" th:if="${session.userid != null && session.username != null}">
+                <div class="nav-link row aln-center" style="color: white;">
+                    <div class="pr-2">
+                        <i class="fa-solid fa-circle-user"></i>
+                    </div>
+                    <div class="pl-2">
+                        <span th:text="${session.username}" class="nav-link"></span>
+                    </div>
+                </div>
+                <a class="nav-link" href="logout-employee"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+            </div>
+            <div class="row aln-center jst-start" th:unless="${session.userid != null && session.username != null}">
+                <a class="nav-link" href="customer-landing">Log In</a>
             </div>
         </div>
     </header>
     <section class="centered">
         <h1>Customer Home Page</h1> <br>
         <section>
-            <p th:text="${'Nice to see you again ' + session.user}"></p>
+            <p th:text="${'Nice to see you again ' + session.username}"></p>
         </section>
     </section>
     </body>
