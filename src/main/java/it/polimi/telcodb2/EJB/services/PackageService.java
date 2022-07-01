@@ -2,6 +2,7 @@ package it.polimi.telcodb2.EJB.services;
 
 import it.polimi.telcodb2.EJB.entities.Package;
 import it.polimi.telcodb2.EJB.entities.Product;
+import it.polimi.telcodb2.EJB.entities.Validity;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,16 +26,15 @@ public class PackageService {
                 .getResultList();
     }
 
-    // TODO: implementing package insertion
     /**
      * Create new package and insert it into the database
      * @param name name of the package
-     * @param fee fee of the product
+     * @param validityList list of compatible validities for the product
      * @return the product if everything went good, else null
      */
-    public Package createPackage(String name, int duration, float fee, List<Product> optionalProducts) {
+    public Package createPackage(String name, List<Validity> validityList, List<Product> optionalProducts) {
         // Create new customer entity object
-        Package aPackage = new Package(name, duration, fee);
+        Package aPackage = new Package(name, validityList);
 
         // Try to store the new customer into the database
         try {

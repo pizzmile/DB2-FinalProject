@@ -95,7 +95,8 @@
 
         <div class="form-wrapper w100 col aln-center jst-center margin-bottom-children-3">
           <h4>Create Package</h4>
-          <form action="create-product" method="POST" class="w100 col aln-center jst-start margin-bottom-children-3">
+          <form action="create-package" method="POST"
+                class="w100 col aln-center jst-start margin-bottom-children-3">
             <!-- Name -->
             <input type="text" name="name" placeholder="name" required
                    class="input-fld w100">
@@ -223,14 +224,9 @@
             <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
               <h5>Optional products</h5>
               <div class="row w100 aln-center jst-start" th:each="product : ${products}" th:value="${product.getIdProduct()}">
-                <input type="checkbox" name="opt-product" th:value="${product.getIdProduct()}">
+                <input type="checkbox" name="opt-products" th:value="${product.getIdProduct()}">
                 <label th:text="${product.getName()} + ' ~ ' + ${product.getFee()}"></label>
               </div>
-<!--              <select name="opt-products" id="opt-products" multiple class="w100">-->
-<!--                <option th:each="product : ${products}" th:value="${product.getIdProduct()}">-->
-<!--                    <p th:text="${product.getName()} + ' ~ (' + ${product.getFee()} + ')'"></p>-->
-<!--                </option>-->
-<!--              </select>-->
             </div>
 
             <!-- Submit -->

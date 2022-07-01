@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "CreateProduct", value = "/create-product")
@@ -41,25 +42,32 @@ public class CreateProductController extends HttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Check if session is valid
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
+        }
+
+        // Parse parameters
         String name = StringEscapeUtils.escapeJava(request.getParameter("name"));
         float fee = Float.parseFloat(request.getParameter("fee"));
 
+        // Check if parameters are valid
         if (name == null || name.isEmpty() || fee <= 0) {
             response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Empty field!");
             return;
         }
-
         if (!productService.findByName(name).isEmpty()) {
             response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Already existing product!");
             return;
         }
 
+        // Create product
         Product product = productService.createProduct(name, fee);
         if (product == null) {
             response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=An unexpected error occurred! Try again.");
             return;
         }
-        // TODO: add to context that the operation was successful (redirect ot servlet)
         response.sendRedirect(getServletContext().getContextPath() + "/employee-home?success=True");
 
     }

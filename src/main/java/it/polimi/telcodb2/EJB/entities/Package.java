@@ -4,6 +4,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Package", schema = "TelcoDB",
@@ -27,12 +28,6 @@ public class Package implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "duration", nullable = false)
-    private int duration;
-
-    @Column(name = "fee", nullable = false)
-    private float fee;
-
     // REL: About
     // Relationship between an order (owner) and its included package
     @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL)
@@ -50,17 +45,24 @@ public class Package implements Serializable {
     // Relationship between package (owner) and its compatible products
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "CompatibleProducts",
-            joinColumns = @JoinColumn(name = "namePackage"),
+            joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private Collection<Product> products;
+
+    // REL: CompatibleValidities
+    // Relationship between package (owner) and its compatible validities
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "compatibleValidities",
+            joinColumns = @JoinColumn(name = "idPackage"),
+            inverseJoinColumns = @JoinColumn(name = "idValidity"))
+    private Collection<Validity> validities;
 
     public Package() {
     }
 
-    public Package(String name, int duration, float fee) {
+    public Package(String name, List<Validity> validityList) {
         this.name = name;
-        this.duration = duration;
-        this.fee = fee;
+        this.validities = validityList;
     }
 
     public int getIdPackage() {
@@ -77,22 +79,6 @@ public class Package implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getDuration() {
-        return duration;
-    }
-
-    public void setDuration(int duration) {
-        this.duration = duration;
-    }
-
-    public float getFee() {
-        return fee;
-    }
-
-    public void setFee(float fee) {
-        this.fee = fee;
     }
 
     public Collection<Order> getOrders() {

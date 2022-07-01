@@ -48,6 +48,12 @@ public class Order implements Serializable {
     @JoinColumn(name = "idPackage")
     private Package aPackage;
 
+    // REL: With
+    // Relationship between an order (owner) and its included package
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idValidity")
+    private Validity validity;
+
     public Order() {
     }
 
