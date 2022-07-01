@@ -1,24 +1,22 @@
-package it.polimi.telcodb2.WEB.controllers.deprecated;
+package it.polimi.telcodb2.WEB.controllers.customer;
 
-import it.polimi.telcodb2.EJB.entities.Product;
-import it.polimi.telcodb2.EJB.services.ProductService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
-import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(name = "CustomerLoginPageController", value = "/customer-login")
-public class CustomerLoginPageController extends HttpServlet {
+@WebServlet(name = "CustomerHomePageController", value = "/customer-home")
+public class CustomerHomePageController extends HttpServlet {
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
@@ -26,9 +24,9 @@ public class CustomerLoginPageController extends HttpServlet {
     protected TemplateEngine templateEngine;
 
 
-    public CustomerLoginPageController() {
+    public CustomerHomePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "customer-login";
+        this.templatePath = "customer-home";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";

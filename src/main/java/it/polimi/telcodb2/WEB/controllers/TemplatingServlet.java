@@ -6,30 +6,35 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
+import java.util.Map;
 
-@WebServlet(name = "CustomerHomePageController", value = "/customer-home")
-public class CustomerHomePageController extends HttpServlet {
+public abstract class TemplatingServlet extends HttpServlet {
+
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
     protected TemplateMode templateMode;
     protected TemplateEngine templateEngine;
 
-
-    public CustomerHomePageController() {
+    // If you have sub-path
+    public TemplatingServlet(String templatePath, TemplateMode templateMode, String pathPrefix, String pathSuffix) {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "customer-home";
-        this.templateMode = TemplateMode.HTML;
+        this.templatePath = templatePath;
+        this.templateMode = templateMode;
+        this.pathPrefix = pathPrefix;
+        this.pathSuffix = pathSuffix;
+    }
+    // Else
+    public TemplatingServlet(String templatePath, TemplateMode templateMode, String pathSuffix) {
+        this.templateEngine = new TemplateEngine();
+        this.templatePath = templatePath;
+        this.templateMode = templateMode;
         this.pathPrefix = "";
-        this.pathSuffix = ".html";
+        this.pathSuffix = pathSuffix;
     }
 
     @Override
@@ -59,12 +64,4 @@ public class CustomerHomePageController extends HttpServlet {
 
         templateEngine.process(templatePath, webCtx, response.getWriter());
     }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HashMap<String, Object> context = new HashMap<>();
-
-        this.processTemplate(request, response, context);
-    }
-
 }

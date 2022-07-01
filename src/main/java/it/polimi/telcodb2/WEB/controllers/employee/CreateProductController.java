@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.WEB.controllers;
+package it.polimi.telcodb2.WEB.controllers.employee;
 
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.services.ProductService;

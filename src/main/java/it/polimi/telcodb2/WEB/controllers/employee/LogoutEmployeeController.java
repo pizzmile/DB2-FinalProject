@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.WEB.controllers;
+package it.polimi.telcodb2.WEB.controllers.employee;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -13,12 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-@WebServlet(name = "CustomerLogout", value = "/logout-customer")
-public class LogoutCustomerController extends HttpServlet {
+@WebServlet(name = "EmployeeLogout", value = "/logout-employee")
+public class LogoutEmployeeController extends HttpServlet {
 
     private TemplateEngine templateEngine;
 
-    public LogoutCustomerController() {
+    public LogoutEmployeeController() {
         super();
     }
 
@@ -36,7 +36,7 @@ public class LogoutCustomerController extends HttpServlet {
         HttpSession session = request.getSession();
         session.invalidate();
 
-        String path = getServletContext().getContextPath() + "/customer-landing";
+        String path = getServletContext().getContextPath() + "/employee-login";
         response.sendRedirect(path);
     }
 

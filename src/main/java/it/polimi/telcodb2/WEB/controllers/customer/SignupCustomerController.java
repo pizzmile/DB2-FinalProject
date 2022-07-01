@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.WEB.controllers;
+package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Customer;
 import it.polimi.telcodb2.EJB.services.CustomerService;

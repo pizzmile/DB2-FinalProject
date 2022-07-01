@@ -1,4 +1,4 @@
-package it.polimi.telcodb2.WEB.controllers.deprecated;
+package it.polimi.telcodb2.WEB.controllers.employee;
 
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.services.ProductService;
@@ -14,21 +14,24 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
 
-@WebServlet(name = "CustomerSignupPageController", value = "/customer-signup")
-public class CustomerSignupPageController extends HttpServlet {
+@WebServlet(name = "EmployeeHomePageController", value = "/employee-home")
+public class EmployeeHomePageController extends HttpServlet {
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
     protected TemplateMode templateMode;
     protected TemplateEngine templateEngine;
 
+    @EJB
+    private ProductService productService;
 
-    public CustomerSignupPageController() {
+    public EmployeeHomePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "customer-signup";
+        this.templatePath = "employee-home";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";
@@ -64,7 +67,15 @@ public class CustomerSignupPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
+        }
+
         HashMap<String, Object> context = new HashMap<>();
+
+        List<Product> products = productService.findAll();
+        context.put("products", products);
 
         this.processTemplate(request, response, context);
     }
