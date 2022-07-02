@@ -188,7 +188,7 @@ string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-minutes-" id="extra-minutes-" placeholder="extra minutes"\n' +
+    '                          <input type="number" min="0" step="0.01" name="extra-minutes-" id="extra-minutes-" placeholder="extra minutes"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +
@@ -198,7 +198,7 @@ string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-sms-" id="extra-sms-" placeholder="extra SMSs"\n' +
+    '                          <input type="number" min="0" step="0.01" name="extra-sms-" id="extra-sms-" placeholder="extra SMSs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +
@@ -208,7 +208,7 @@ string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                        <div class="w50 pl-1">\n' +
-    '                          <input type="number" min="0" step="1" name="extra-giga-" id="extra-giga-" placeholder="extra GIGAs"\n' +
+    '                          <input type="number" min="0" step="0.01" name="extra-giga-" id="extra-giga-" placeholder="extra GIGAs"\n' +
     '                                 class="input-fld w100">\n' + // HERE ****
     '                        </div>\n' +
     '                      </div>\n' +

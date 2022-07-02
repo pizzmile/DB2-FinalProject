@@ -6,7 +6,14 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Validity", schema = "TelcoDB")
+@Table(name = "Validity", schema = "TelcoDB", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"duration", "fee"})
+})
+@NamedQueries(
+        @NamedQuery(
+                name = "Validity.findByDurationFee",
+                query = "SELECT v FROM Validity v WHERE v.duration = :duration AND v.fee = :fee")
+)
 public class Validity {
 
     @Id
@@ -30,8 +37,7 @@ public class Validity {
     private List<Order> orders = new ArrayList<Order>();
 
     public Validity() {}
-    public Validity(int idValidity, int duration, float fee) {
-        this.idValidity = idValidity;
+    public Validity(int duration, float fee) {
         this.duration = duration;
         this.fee = fee;
     }

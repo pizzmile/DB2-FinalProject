@@ -7,11 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "Package", schema = "TelcoDB",
-        uniqueConstraints = {   // TODO: chiedere se va bene
-                @UniqueConstraint(columnNames = {"name", "duration"}),
-                @UniqueConstraint(columnNames = {"name", "fee"})
-        })
+@Table(name = "Package", schema = "TelcoDB")
 @NamedQueries(
         @NamedQuery(
                 name = "Package.findByName",
@@ -60,9 +56,11 @@ public class Package implements Serializable {
     public Package() {
     }
 
-    public Package(String name, List<Validity> validityList) {
+    public Package(String name, List<Validity> validityList, List<Service> serviceList, List<Product> productList) {
         this.name = name;
         this.validities = validityList;
+        this.services = serviceList;
+        this.products = productList;
     }
 
     public int getIdPackage() {

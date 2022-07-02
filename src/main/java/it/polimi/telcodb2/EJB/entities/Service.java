@@ -9,6 +9,17 @@ import java.util.Collection;
 @Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"type", "minutes", "extraMinutesFee", "sms", "extraSmsFee", "giga", "extraGigaFee"})
 })
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Service.findEquivalent",
+                        query = "SELECT s FROM Service s WHERE s.type = :type " +
+                                "AND s.minutes = :minutes AND s.extraMinutesFee = :extraMinutesFee " +
+                                "AND s.sms = :sms AND s.extraSmsFee = :extraSmsFee " +
+                                "AND s.giga = :giga AND s.extraGigaFee = :extraGigaFee"
+                )
+        }
+)
 public class Service implements Serializable {
 
     @Id
@@ -20,22 +31,22 @@ public class Service implements Serializable {
     private int type;
 
     @Column(name="minutes")
-    private int minutes;
+    private Integer minutes = null;
 
     @Column(name="extraMinutesFee")
-    private float extraMinutesFee;
+    private Float extraMinutesFee = null;
 
     @Column(name="sms")
-    private int sms;
+    private Integer sms = null;
 
     @Column(name="extraSmsFee")
-    private float extraSmsFee;
+    private Float extraSmsFee = null;
 
     @Column(name="giga")
-    private int giga;
+    private Integer giga = null;
 
     @Column(name="extraGigaFee")
-    private float extraGigaFee;
+    private Float extraGigaFee = null;
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)

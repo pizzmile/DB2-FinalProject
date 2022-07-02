@@ -5,6 +5,8 @@ import it.polimi.telcodb2.EJB.entities.Service;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 @Stateless
 public class ServiceService {
@@ -12,18 +14,50 @@ public class ServiceService {
     @PersistenceContext
     private EntityManager em;
 
-    public Service createService(int type) {
-        Service service = new Service(type);
-        return service;
+    /**
+     * Find all equivalent services (matches each given attributes)
+     * @param type type of the service
+     * @param minutes minutes of phone calls included
+     * @param extraMinutesFee fee for each extra minute
+     * @param sms SMS included
+     * @param extraSmsFee fee for each extra SMS
+     * @param giga GB of Internet traffic included
+     * @param extraGigaFee fee for each extra GB
+     * @return the list of matching services
+     */
+    public List<Service> findEquivalents(int type, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+        return em.createNamedQuery("Service.findEquivalent", Service.class)
+                .setParameter("type", type)
+                .setParameter("minutes", minutes)
+                .setParameter("extraMinutesFee", extraMinutesFee)
+                .setParameter("sms", sms)
+                .setParameter("extraSmsFee", extraSmsFee)
+                .setParameter("giga", giga)
+                .setParameter("extraGigaFee", extraGigaFee)
+                .getResultList();
     }
 
-    public Service createService(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
-        Service service = new Service(type, minutes, extraMinutesFee, sms, extraSmsFee);
-        return service;
-    }
+    /**
+     * Create new service and add it to the database
+     * @param type type of the service
+     * @param minutes minutes included in the service
+     * @param extraMinutesFee fee for each extra minute
+     * @param sms SMS included in the service
+     * @param extraSmsFee fee for each extra SMS
+     * @param giga GB of internet traffic included in the service
+     * @param extraGigaFee fee for each extra GB of internet traffic
+     * @return the service if everything went right, else null
+     */
+    public Service createService(int type, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+        Service newService = new Service(type, minutes, extraMinutesFee, sms, extraSmsFee, giga, extraGigaFee);
 
-    public Service createService(int type, int giga, float extraGigaFee) {
-        Service service = new Service(type, giga, extraGigaFee);
-        return service;
+        try {
+            em.persist(newService);
+            em.flush();
+            return newService;
+        } catch (ConstraintViolationException e) {
+            return null;
+        }
     }
 }
+

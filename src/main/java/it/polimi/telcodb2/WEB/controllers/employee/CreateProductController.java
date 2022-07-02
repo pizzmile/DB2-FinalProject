@@ -54,11 +54,11 @@ public class CreateProductController extends HttpServlet {
 
         // Check if parameters are valid
         if (name == null || name.isEmpty() || fee <= 0) {
-            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Empty field!");
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Empty field");
             return;
         }
         if (!productService.findByName(name).isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Already existing product!");
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Already existing product");
             return;
         }
 
