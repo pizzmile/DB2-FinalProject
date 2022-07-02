@@ -425,3 +425,10 @@ a.submit-btn:active {
 .inactive-btn {
     background: gray;
 }
+
+.even-tbl-col {
+    background: white;
+}
+.odd-tbl-col {
+    background: whitesmoke;
+}

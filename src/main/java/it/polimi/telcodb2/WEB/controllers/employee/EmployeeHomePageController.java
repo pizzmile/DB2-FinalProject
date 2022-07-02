@@ -1,7 +1,9 @@
 package it.polimi.telcodb2.WEB.controllers.employee;
 
 import it.polimi.telcodb2.EJB.entities.Product;
+import it.polimi.telcodb2.EJB.entities.Service;
 import it.polimi.telcodb2.EJB.services.ProductService;
+import it.polimi.telcodb2.EJB.services.ServiceService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -28,10 +30,12 @@ public class EmployeeHomePageController extends HttpServlet {
 
     @EJB
     private ProductService productService;
+    @EJB
+    private ServiceService serviceService;
 
     public EmployeeHomePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "employee-home";
+        this.templatePath = "employee-home-2";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";
@@ -76,6 +80,8 @@ public class EmployeeHomePageController extends HttpServlet {
 
         List<Product> products = productService.findAll();
         context.put("products", products);
+        List<Service> services = serviceService.findAll();
+        context.put("services", services);
 
         this.processTemplate(request, response, context);
     }

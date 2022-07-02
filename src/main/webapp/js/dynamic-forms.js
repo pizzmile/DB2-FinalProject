@@ -66,53 +66,102 @@ function updateServiceAttributes(idx) {
     let serviceTypeSelector = document.getElementById('type-' + idx);
     let selectedValue = serviceTypeSelector.value;
 
-    let minutesInput = document.getElementById('minutes-wrapper-' + idx);
-    let smsInput = document.getElementById('sms-wrapper-' + idx);
-    let gigaInput = document.getElementById('giga-wrapper-' + idx);
+    let minutesInputWrapper = document.getElementById('minutes-wrapper-' + idx);
+    let smsInputWrapper = document.getElementById('sms-wrapper-' + idx);
+    let gigaInputWrapper = document.getElementById('giga-wrapper-' + idx);
 
     switch (selectedValue) {
         case "0": // Fixed phone
-            if (!minutesInput.classList.contains('hidden')) {
-                minutesInput.classList.add('hidden');
+            if (!minutesInputWrapper.classList.contains('hidden')) {
+                minutesInputWrapper.classList.add('hidden');
+                let inputList = minutesInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
+                console.log(inputList);
             }
-            if (!smsInput.classList.contains('hidden')) {
-                smsInput.classList.add('hidden');
+            if (!smsInputWrapper.classList.contains('hidden')) {
+                smsInputWrapper.classList.add('hidden');
+                let inputList = smsInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
-            if (!gigaInput.classList.contains('hidden')) {
-                gigaInput.classList.add('hidden');
+            if (!gigaInputWrapper.classList.contains('hidden')) {
+                gigaInputWrapper.classList.add('hidden');
+                let inputList = gigaInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
             break;
         case "1": // Fixed internet
-            if (!minutesInput.classList.contains('hidden')) {
-                minutesInput.classList.add('hidden');
+            if (!minutesInputWrapper.classList.contains('hidden')) {
+                minutesInputWrapper.classList.add('hidden');
+                let inputList = minutesInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
-            if (!smsInput.classList.contains('hidden')) {
-                smsInput.classList.add('hidden');
+            if (!smsInputWrapper.classList.contains('hidden')) {
+                smsInputWrapper.classList.add('hidden');
+                let inputList = smsInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
-            if (gigaInput.classList.contains('hidden')) {
-                gigaInput.classList.remove('hidden');
+            if (gigaInputWrapper.classList.contains('hidden')) {
+                gigaInputWrapper.classList.remove('hidden');
+                let inputList = gigaInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = true;
+                }
             }
             break;
         case "2": // Mobile phone
-            if (minutesInput.classList.contains('hidden')) {
-                minutesInput.classList.remove('hidden');
+            if (minutesInputWrapper.classList.contains('hidden')) {
+                minutesInputWrapper.classList.remove('hidden');
+                let inputList = minutesInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = true;
+                }
             }
-            if (smsInput.classList.contains('hidden')) {
-                smsInput.classList.remove('hidden');
+            if (smsInputWrapper.classList.contains('hidden')) {
+                smsInputWrapper.classList.remove('hidden');
+                let inputList = smsInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = true;
+                }
             }
-            if (!gigaInput.classList.contains('hidden')) {
-                gigaInput.classList.add('hidden');
+            if (!gigaInputWrapper.classList.contains('hidden')) {
+                gigaInputWrapper.classList.add('hidden');
+                let inputList = gigaInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
             break;
         case "3": // Mobile internet
-            if (!minutesInput.classList.contains('hidden')) {
-                minutesInput.classList.add('hidden');
+            if (!minutesInputWrapper.classList.contains('hidden')) {
+                minutesInputWrapper.classList.add('hidden');
+                let inputList = minutesInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
-            if (!smsInput.classList.contains('hidden')) {
-                smsInput.classList.add('hidden');
+            if (!smsInputWrapper.classList.contains('hidden')) {
+                smsInputWrapper.classList.add('hidden');
+                let inputList = smsInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = false;
+                }
             }
-            if (gigaInput.classList.contains('hidden')) {
-                gigaInput.classList.remove('hidden');
+            if (gigaInputWrapper.classList.contains('hidden')) {
+                gigaInputWrapper.classList.remove('hidden');
+                let inputList = gigaInputWrapper.getElementsByTagName('input');
+                for (let i=0; i<inputList.length; i++) {
+                    inputList[i].required = true;
+                }
             }
             break;
         default:

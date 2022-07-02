@@ -14,7 +14,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import javax.ejb.EJB;
-import javax.persistence.EntityManager;
 import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,11 +27,12 @@ import java.util.*;
 public class CreatePackageController extends HttpServlet {
 
     @EJB
-    private EntityManager em;
-
     private PackageService packageService;
+    @EJB
     private ProductService productService;
+    @EJB
     private ServiceService serviceService;
+    @EJB
     private ValidityService validityService;
 
 
@@ -55,6 +55,7 @@ public class CreatePackageController extends HttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // TODO: implement according to employee-home-2
         // Check if session is valid
         HttpSession session = request.getSession();
         if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
@@ -106,44 +107,22 @@ public class CreatePackageController extends HttpServlet {
         *   Every service is represented by an HashMap containing <key, parameter> and every service is contained in
         *   the services ArrayList.
         */
-        Map<String, String[]> params = request.getParameterMap();
+        Set<String> paramsKeySet = request.getParameterMap().keySet();
         ArrayList<ServiceDataHandler> serviceDataList = new ArrayList<ServiceDataHandler>();
-        for (String key: params.keySet()) {
+        for (String key: paramsKeySet) {
             if (key.contains("type")) {
                 HashMap<String, String> service = new HashMap<String, String>();
                 String index = key.split("-")[1];
-                String serviceType = params.get(key)[0];
-                ServiceDataHandler serviceData;
-                switch (serviceType) {
-                    case "0":   // FIXED PHONE => type
-                        serviceDataList.add(
-                                ServiceDataHandler.parseServiceData(serviceType)
-                        );
-                        break;
-                    case "1":   // FIXED INTERNET => type, giga, extra-giga
-                    case "3":   // MOBILE INTERNET => type, giga, extra-giga
-                        serviceDataList.add(
-                                ServiceDataHandler.parseServiceData(
-                                        serviceType,
-                                        request.getParameter("giga-" + index),
-                                        request.getParameter("extra-giga-" + index)
-                                )
-                        );
-                        break;
-                    case "2":   // MOBILE PHONE => type, minutes, extra-minutes, sms, extra-sms
-                        serviceDataList.add(
-                                ServiceDataHandler.parseServiceData(
-                                        serviceType,
-                                        request.getParameter("minutes-" + index),
-                                        request.getParameter("extra-minutes-" + index),
-                                        request.getParameter("sms-" + index),
-                                        request.getParameter("extra-sms-" + index)
-                                )
-                        );
-                        break;
-                    default:
-                        break;
-                }
+                ServiceDataHandler serviceData = ServiceDataHandler.parseServiceData(
+                        request.getParameter(key),
+                        request.getParameter("minutes-" + index),
+                        request.getParameter("extra-minutes-" + index),
+                        request.getParameter("sms-" + index),
+                        request.getParameter("extra-sms-" + index),
+                        request.getParameter("giga-" + index),
+                        request.getParameter("extra-giga-" + index)
+                );
+                serviceDataList.add(serviceData);
             }
         }
         if (serviceDataList.isEmpty()) {
@@ -162,11 +141,20 @@ public class CreatePackageController extends HttpServlet {
         // Build validity list
         List<Validity> validityList = new ArrayList<Validity>();
         for (ValidityDataHandler dataHandler : validityDataList) {
+            System.out.println(dataHandler.getDuration());
+            System.out.println(dataHandler.getFee());
             validityList.add(safeCreateValidity(dataHandler));
         }
         // Build service list
         List<Service> serviceList =  new ArrayList<Service>();
         for (ServiceDataHandler dataHandler : serviceDataList) {
+            System.out.println(dataHandler.getType());
+            System.out.println(dataHandler.getMinutes());
+            System.out.println(dataHandler.getExtraMinutesFee());
+            System.out.println(dataHandler.getSms());
+            System.out.println(dataHandler.getExtraSmsFee());
+            System.out.println(dataHandler.getGiga());
+            System.out.println(dataHandler.getExtraGigaFee());
             serviceList.add(safeCreateService(dataHandler));
         }
         // Build package

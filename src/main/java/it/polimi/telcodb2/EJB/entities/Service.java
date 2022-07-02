@@ -7,16 +7,20 @@ import java.util.Collection;
 
 @Entity
 @Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"type", "minutes", "extraMinutesFee", "sms", "extraSmsFee", "giga", "extraGigaFee"})
+        @UniqueConstraint(columnNames = {"serviceType", "minutes", "extraMinutesFee", "sms", "extraSmsFee", "giga", "extraGigaFee"})
 })
 @NamedQueries(
         {
                 @NamedQuery(
                         name = "Service.findEquivalent",
-                        query = "SELECT s FROM Service s WHERE s.type = :type " +
+                        query = "SELECT s FROM Service s WHERE s.serviceType = :serviceType " +
                                 "AND s.minutes = :minutes AND s.extraMinutesFee = :extraMinutesFee " +
                                 "AND s.sms = :sms AND s.extraSmsFee = :extraSmsFee " +
                                 "AND s.giga = :giga AND s.extraGigaFee = :extraGigaFee"
+                ),
+                @NamedQuery(
+                        name = "Service.findAll",
+                        query = "SELECT s FROM Service s"
                 )
         }
 )
@@ -27,26 +31,26 @@ public class Service implements Serializable {
     @Column(name="idService", nullable = false)
     private int idService;
 
-    @Column(name="type", nullable = false)
-    private int type;
+    @Column(name= "serviceType", nullable = false)
+    private int serviceType;
 
     @Column(name="minutes")
-    private Integer minutes = null;
+    private int minutes = 0;
 
     @Column(name="extraMinutesFee")
-    private Float extraMinutesFee = null;
+    private float extraMinutesFee = 0;
 
     @Column(name="sms")
-    private Integer sms = null;
+    private int sms = 0;
 
     @Column(name="extraSmsFee")
-    private Float extraSmsFee = null;
+    private float extraSmsFee = 0;
 
     @Column(name="giga")
-    private Integer giga = null;
+    private int giga = 0;
 
     @Column(name="extraGigaFee")
-    private Float extraGigaFee = null;
+    private float extraGigaFee = 0;
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
@@ -59,27 +63,27 @@ public class Service implements Serializable {
     public Service() {
     }
 
-    public Service(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee, int giga, float extraGigaFee) {
-        this.type = type;
+    public Service(int serviceType, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+        this.serviceType = serviceType;
+        this.minutes = minutes != null ? minutes : 0;
+        this.extraMinutesFee = extraMinutesFee!= null ? extraMinutesFee : 0;
+        this.sms = sms != null ? sms : 0;
+        this.extraSmsFee = extraSmsFee != null ? extraSmsFee : 0;
+        this.giga = giga != null ? giga : 0;
+        this.extraGigaFee = extraGigaFee != null ? extraGigaFee : 0;
+    }
+    public Service(int serviceType) {
+        this.serviceType = serviceType;
+    }
+    public Service(int serviceType, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
+        this.serviceType = serviceType;
         this.minutes = minutes;
         this.extraMinutesFee = extraMinutesFee;
         this.sms = sms;
         this.extraSmsFee = extraSmsFee;
-        this.giga = giga;
-        this.extraGigaFee = extraGigaFee;
     }
-    public Service(int type) {
-        this.type = type;
-    }
-    public Service(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
-        this.type = type;
-        this.minutes = minutes;
-        this.extraMinutesFee = extraMinutesFee;
-        this.sms = sms;
-        this.extraSmsFee = extraSmsFee;
-    }
-    public Service(int type, int giga, float extraGigaFee) {
-        this.type = type;
+    public Service(int serviceType, int giga, float extraGigaFee) {
+        this.serviceType = serviceType;
         this.giga = giga;
         this.extraGigaFee = extraGigaFee;
     }
@@ -92,12 +96,12 @@ public class Service implements Serializable {
         this.idService = idService;
     }
 
-    public int getType() {
-        return type;
+    public int getServiceType() {
+        return serviceType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setServiceType(int serviceType) {
+        this.serviceType = serviceType;
     }
 
     public int getMinutes() {

@@ -16,7 +16,7 @@ public class ServiceService {
 
     /**
      * Find all equivalent services (matches each given attributes)
-     * @param type type of the service
+     * @param serviceType type of the service
      * @param minutes minutes of phone calls included
      * @param extraMinutesFee fee for each extra minute
      * @param sms SMS included
@@ -25,9 +25,9 @@ public class ServiceService {
      * @param extraGigaFee fee for each extra GB
      * @return the list of matching services
      */
-    public List<Service> findEquivalents(int type, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+    public List<Service> findEquivalents(int serviceType, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
         return em.createNamedQuery("Service.findEquivalent", Service.class)
-                .setParameter("type", type)
+                .setParameter("serviceType", serviceType)
                 .setParameter("minutes", minutes)
                 .setParameter("extraMinutesFee", extraMinutesFee)
                 .setParameter("sms", sms)
@@ -37,9 +37,14 @@ public class ServiceService {
                 .getResultList();
     }
 
+    public List<Service> findAll() {
+        return em.createNamedQuery("Service.findAll", Service.class)
+                .getResultList();
+    }
+
     /**
      * Create new service and add it to the database
-     * @param type type of the service
+     * @param serviceType type of the service
      * @param minutes minutes included in the service
      * @param extraMinutesFee fee for each extra minute
      * @param sms SMS included in the service
@@ -48,8 +53,16 @@ public class ServiceService {
      * @param extraGigaFee fee for each extra GB of internet traffic
      * @return the service if everything went right, else null
      */
-    public Service createService(int type, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
-        Service newService = new Service(type, minutes, extraMinutesFee, sms, extraSmsFee, giga, extraGigaFee);
+    public Service createService(int serviceType, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+        Service newService = new Service(serviceType, minutes, extraMinutesFee, sms, extraSmsFee, giga, extraGigaFee);
+        System.out.println(newService.getServiceType());
+        System.out.println(newService.getMinutes());
+        System.out.println(newService.getExtraMinutesFee());
+        System.out.println(newService.getSms());
+        System.out.println(newService.getExtraSmsFee());
+        System.out.println(newService.getGiga());
+        System.out.println(newService.getExtraGigaFee());
+
 
         try {
             em.persist(newService);

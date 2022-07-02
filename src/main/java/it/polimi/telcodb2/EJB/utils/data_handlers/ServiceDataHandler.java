@@ -22,18 +22,23 @@ public class ServiceDataHandler {
         this.type = Integer.parseInt(type);
     }
 
-    public ServiceDataHandler(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
+    public ServiceDataHandler(int type, int minutes, float extraMinutesFee, int sms, float extraSmsFee, int giga, float extraGigaFee) {
         this.type = type;
         this.minutes = minutes;
         this.extraMinutesFee = extraMinutesFee;
         this.sms = sms;
         this.extraSmsFee = extraSmsFee;
-    }
-
-    public ServiceDataHandler(int type, int giga, float extraGigaFee) {
-        this.type = type;
         this.giga = giga;
         this.extraGigaFee = extraGigaFee;
+    }
+    public ServiceDataHandler(Integer type, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
+        this.type = type != null ? type : 0;
+        this.minutes = minutes != null ? minutes : 0;
+        this.extraMinutesFee = extraMinutesFee != null ? extraMinutesFee : 0;
+        this.sms = sms != null ? sms : 0;
+        this.extraSmsFee = extraSmsFee != null ? extraSmsFee : 0;
+        this.giga = giga != null ? giga : 0;
+        this.extraGigaFee = extraGigaFee != null ? extraGigaFee : 0;
     }
 
     public Service toService() {
@@ -100,48 +105,43 @@ public class ServiceDataHandler {
         this.extraGigaFee = extraGigaFee;
     }
 
-    /**
-     * Parse string values into a service data handler
-     * @param type raw type string
-     * @param minutes raw minutes string
-     * @param extraMinutesFee raw extra minutes fee string
-     * @param sms raw sms string
-     * @param extraSmsFee raw extra sms fee string
-     * @return the service data handler
-     */
-    public static ServiceDataHandler parseServiceData(String type, String minutes, String extraMinutesFee, String sms, String extraSmsFee) {
-        return new ServiceDataHandler(
-                Integer.parseInt(type),
-                Integer.parseInt(minutes),
-                Float.parseFloat(extraMinutesFee),
-                Integer.parseInt(sms),
-                Float.parseFloat(extraSmsFee)
-        );
+    public static ServiceDataHandler parseServiceData(String type, String minutes, String extraMinutes, String sms, String extraSms, String giga, String extraGiga) {
+        if (type == null || type.isEmpty()) {
+            return null;
+        }
+        switch (type) {
+            case "0":
+                return new ServiceDataHandler(0, 0, 0, 0, 0, 0, 0);
+            case "1":
+            case "3":
+                if (giga == null || giga.isEmpty() || extraGiga == null || extraGiga.isEmpty()) {
+                    return null;
+                }
+                return new ServiceDataHandler(
+                        Integer.parseInt(type), 0, 0, 0, 0, Integer.parseInt(giga), Float.parseFloat(extraGiga)
+                );
+            case "2":
+                if (minutes == null || minutes.isEmpty() || extraMinutes == null || extraMinutes.isEmpty() || sms == null || sms.isEmpty() || extraSms == null || extraSms.isEmpty()) {
+                    return null;
+                }
+                return new ServiceDataHandler(Integer.parseInt(type), Integer.parseInt(minutes), Float.parseFloat(extraMinutes), Integer.parseInt(sms), Float.parseFloat(extraSms), 0, 0);
+            default:
+                return null;
+        }
     }
 
     /**
-     * Parse string values into a service data handler
-     * @param type raw type string
-     * @param giga raw giga string
-     * @param extraGigaFee raw extra giga fee string
-     * @return the service data handler
+     * Check if data contained in the data handler are valid with respect to the business logic
+     * @return true if the data are valid, else false
      */
-    public static ServiceDataHandler parseServiceData(String type, String giga, String extraGigaFee) {
-        return new ServiceDataHandler(
-                Integer.parseInt(type),
-                Integer.parseInt(giga),
-                Float.parseFloat(extraGigaFee)
-        );
-    }
-
-    /**
-     * Parse string values into a service data handler
-     * @param type raw type string
-     * @return the service data handler
-     */
-    public static ServiceDataHandler parseServiceData(String type) {
-        return new ServiceDataHandler(
-                Integer.parseInt(type)
-        );
+    public boolean isValid() {
+        if (type == 0) {
+            return minutes == 0 && extraMinutesFee == 0 && sms == 0 && extraSmsFee == 0 && giga == 0 && extraGigaFee == 0;
+        } else if (type == 1 || type == 3) {
+            return minutes == 0 && extraMinutesFee == 0 && sms == 0 && extraSmsFee == 0 && giga != 0 && extraGigaFee != 0;
+        } else if (type == 2) {
+            return minutes != 0 && extraMinutesFee != 0 && sms != 0 && extraSmsFee != 0 && giga == 0 && extraGigaFee == 0;
+        }
+        return false;
     }
 }
