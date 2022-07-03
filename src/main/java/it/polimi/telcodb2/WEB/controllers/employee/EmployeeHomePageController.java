@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @WebServlet(name = "EmployeeHomePageController", value = "/employee-home")
 public class EmployeeHomePageController extends HttpServlet {
@@ -35,7 +36,7 @@ public class EmployeeHomePageController extends HttpServlet {
 
     public EmployeeHomePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "employee-home-2";
+        this.templatePath = "employee-home";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";
@@ -81,7 +82,10 @@ public class EmployeeHomePageController extends HttpServlet {
         List<Product> products = productService.findAll();
         context.put("products", products);
         List<Service> services = serviceService.findAll();
-        context.put("services", services);
+        context.put("fixedPhoneServices", services.stream().filter(elem -> elem.getServiceType() == 0).collect(Collectors.toList()));
+        context.put("fixedInternetServices", services.stream().filter(elem -> elem.getServiceType() == 1).collect(Collectors.toList()));
+        context.put("mobilePhoneServices", services.stream().filter(elem -> elem.getServiceType() == 2).collect(Collectors.toList()));
+        context.put("mobileInternetServices", services.stream().filter(elem -> elem.getServiceType() == 3).collect(Collectors.toList()));
 
         this.processTemplate(request, response, context);
     }

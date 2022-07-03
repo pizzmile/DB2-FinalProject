@@ -33,7 +33,7 @@ public class Package implements Serializable {
     // Relationship between package (owner) and its included services
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "IncludedServices",
-            joinColumns = @JoinColumn(name = "namePackage"),
+            joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
     private Collection<Service> services;
 

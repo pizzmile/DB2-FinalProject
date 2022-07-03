@@ -1,4 +1,5 @@
 package it.polimi.telcodb2.EJB.entities;
+import it.polimi.telcodb2.EJB.enums.ServiceType;
 
 import javax.persistence.*;
 
@@ -34,22 +35,22 @@ public class Service implements Serializable {
     @Column(name= "serviceType", nullable = false)
     private int serviceType;
 
-    @Column(name="minutes")
+    @Column(name="minutes", nullable = false)
     private int minutes = 0;
 
-    @Column(name="extraMinutesFee")
+    @Column(name="extraMinutesFee", nullable = false)
     private float extraMinutesFee = 0;
 
-    @Column(name="sms")
+    @Column(name="sms", nullable = false)
     private int sms = 0;
 
-    @Column(name="extraSmsFee")
+    @Column(name="extraSmsFee", nullable = false)
     private float extraSmsFee = 0;
 
-    @Column(name="giga")
+    @Column(name="giga", nullable = false)
     private int giga = 0;
 
-    @Column(name="extraGigaFee")
+    @Column(name="extraGigaFee", nullable = false)
     private float extraGigaFee = 0;
 
     // Relationship between package (owner) and its services
@@ -98,6 +99,21 @@ public class Service implements Serializable {
 
     public int getServiceType() {
         return serviceType;
+    }
+
+    public String getServiceTypeHumanReadable() {
+        switch (serviceType) {
+            case 0:
+                return "Fixed Phone";
+            case 1:
+                return "Fixed Internet";
+            case 2:
+                return "Mobile Phone";
+            case 3:
+                return "Mobile Internet";
+            default:
+                return "";
+        }
     }
 
     public void setServiceType(int serviceType) {

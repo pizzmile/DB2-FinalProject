@@ -2,7 +2,8 @@ package it.polimi.telcodb2.WEB.controllers.employee;
 
 import it.polimi.telcodb2.EJB.entities.Service;
 import it.polimi.telcodb2.EJB.services.ServiceService;
-import it.polimi.telcodb2.EJB.utils.data_handlers.ServiceDataHandler;
+import it.polimi.telcodb2.EJB.utils.Pair;
+import it.polimi.telcodb2.EJB.utils.ParseUtils;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -43,38 +44,65 @@ public class CreateServiceController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
         }
 
-        ServiceDataHandler serviceData = ServiceDataHandler.parseServiceData(
-                request.getParameter("type"),
-                request.getParameter("minutes"),
-                request.getParameter("extra-minutes"),
-                request.getParameter("sms"),
-                request.getParameter("extra-sms"),
-                request.getParameter("giga"),
-                request.getParameter("extra-giga")
+        // Parse data
+        Integer type = ParseUtils.toInteger(request.getParameter("type"), null);
+        Pair<Integer, Float> minutesData = new Pair<Integer, Float>(
+                ParseUtils.toInteger(request.getParameter("minutes"), 0),
+                ParseUtils.toFloat(request.getParameter("extra-minutes"), 0)
         );
-        if (serviceData == null) {
-            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Empty service field");
+        Pair<Integer, Float> smsData = new Pair<Integer, Float>(
+                ParseUtils.toInteger(request.getParameter("sms"), 0),
+                ParseUtils.toFloat(request.getParameter("extra-sms"), 0)
+        );
+        Pair<Integer, Float> gigaData = new Pair<Integer, Float>(
+                ParseUtils.toInteger(request.getParameter("giga"), 0),
+                ParseUtils.toFloat(request.getParameter("extra-giga"), 0)
+        );
+        // Check if every necessary data has been passed
+        if(type == null) {
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Missing or illegal field");
             return;
+        }
+        switch(type) {
+            case 0:
+                if (minutesData.getX() > 0 || minutesData.getY() > 0 || smsData.getX() > 0 || smsData.getY() > 0 || gigaData.getX() > 0 || gigaData.getY() > 0) {
+                    response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Missing or illegal field");
+                    return;
+                }
+                break;
+            case 1:
+            case 3:
+                if (minutesData.getX() > 0 || minutesData.getY() > 0 || smsData.getX() > 0 || smsData.getY() > 0 || gigaData.getX() <= 0 || gigaData.getY() <= 0) {
+                    response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Missing or illegal field");
+                    return;
+                }
+                break;
+            case 2:
+                if (minutesData.getX() <= 0 || minutesData.getY() <= 0 || smsData.getX() <= 0 || smsData.getY() <= 0 || gigaData.getX() > 0 || gigaData.getY() > 0) {
+                    response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Missing or illegal field");
+                    return;
+                }
+                break;
         }
 
         List<Service> serviceList = serviceService.findEquivalents(
-                serviceData.getType(),
-                serviceData.getMinutes(),
-                serviceData.getExtraMinutesFee(),
-                serviceData.getSms(),
-                serviceData.getExtraSmsFee(),
-                serviceData.getGiga(),
-                serviceData.getExtraGigaFee()
+                type,
+                minutesData.getX(),
+                minutesData.getY(),
+                smsData.getX(),
+                smsData.getY(),
+                gigaData.getX(),
+                gigaData.getY()
         );
         if (serviceList.isEmpty()) {
             Service service = serviceService.createService(
-                    serviceData.getType(),
-                    serviceData.getMinutes(),
-                    serviceData.getExtraMinutesFee(),
-                    serviceData.getSms(),
-                    serviceData.getExtraSmsFee(),
-                    serviceData.getGiga(),
-                    serviceData.getExtraGigaFee()
+                    type,
+                    minutesData.getX(),
+                    minutesData.getY(),
+                    smsData.getX(),
+                    smsData.getY(),
+                    gigaData.getX(),
+                    gigaData.getY()
             );
             if (service == null) {
                 response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=An unexpected error occurred! Try again.");

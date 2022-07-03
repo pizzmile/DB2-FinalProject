@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Stateless
 public class PackageService {
@@ -36,18 +37,18 @@ public class PackageService {
      * @param productIdList list of optional products
      * @return the product if everything went good, else null
      */
-    public Package createPackage(String name, List<Validity> validityList, List<Service> serviceList, List<Integer> productIdList) {
-        // Get optional products entity objects
-        List<Product> productList = new ArrayList<Product>();
-        for (int productId : productIdList) {
-            productList.add(
-                    em.find(Product.class, productId)
-            );
-        }
+    public Package createPackage(String name, List<Validity> validityList, List<Integer> serviceIdList, List<Integer> productIdList) {
+        // Get optional product entity objects
+        List<Product> productList = productIdList.stream()
+                .map(id -> em.find(Product.class, id))
+                .collect(Collectors.toList());
+        // Get included service entity objects
+        List<Service> serviceList = serviceIdList.stream()
+                .map(id -> em.find(Service.class, id))
+                .collect(Collectors.toList());
 
         // Create new customer entity object
         Package aPackage = new Package(name, validityList, serviceList, productList);
-
         // Try to store the new customer into the database
         try {
             em.persist(aPackage);

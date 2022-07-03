@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>Employee Home</title>
+
+    <style>
+      #content-wrapper {
+        min-width: 640px;
+        width: 100%;
+        max-width: 720px;
+      }
+      .pr-1 {
+        padding-right: 0.25rem;
+      }
+      .pr-2 {
+        padding-right: 0.5rem;
+      }
+      .pr-3 {
+        padding-right: 1rem;
+      }
+      .pl-1 {
+        padding-left: 0.25rem;
+      }
+      .pl-2 {
+        padding-left: 0.5rem;
+      }
+      .pl-3 {
+        padding-left: 1rem;
+      }
+      .pt-1 {
+        padding-top: 0.25rem;
+      }
+      .pt-2 {
+        padding-top: 0.5rem;
+      }
+      .pt-3 {
+        padding-top: 1rem;
+      }
+      .pb-1 {
+        padding-bottom: 0.25rem;
+      }
+      .pb-2 {
+        padding-bottom: 0.5rem;
+      }
+      .pb-3 {
+        padding-bottom: 1rem;
+      }
+    </style>
+
+  </head>
+
+  <body>
+
+    <!-- Navbar -->
+    <header class="navbar row aln-center jst-center w100">
+      <div class="row aln-center jst-space-between w100">
+        <div class="row aln-center jst-start">
+          <a class="nav-link" href="employee-home">Home</a>
+          <a class="nav-link" href="employee-sales-report.html">Sales Report</a>
+        </div>
+        <a class="nav-link" href="logout-employee">Log Out</a>
+      </div>
+    </header>
+
+    <section class="error-prompt w100" th:if="${param.error != null}">
+      <p th:text="${param.error}">Error prompt</p>
+    </section>
+    <section class="success-prompt w100" th:if="${param.success != null}">
+      <p th:text="'Operation successful!'">Success prompt</p>
+    </section>
+
+    <!-- Content -->
+    <section class="col aln-center jst-center w100">
+      <div id="content-wrapper">
+        <div class="form-wrapper w100 col aln-center jst-center margin-bottom-children-3">
+          <h4>Create Product</h4>
+          <form action="create-product" method="POST" class="w100 col aln-center jst-start margin-bottom-children-2">
+            <div class="w100 col aln-center jst-start">
+              <input type="text" name="name" placeholder="name" required
+                     class="input-fld w100">
+              <input type="number" min="0" step="0.01" name="fee" placeholder="fee" required
+                     class="input-fld w100">
+            </div>
+            <input type="submit" value="Create"
+                   class="submit-btn w100 active-btn">
+          </form>
+        </div>
+
+        <div class="form-wrapper w100 col aln-center jst-center margin-bottom-children-3">
+          <h4>Create Package</h4>
+          <form action="create-package" method="POST"
+                class="w100 col aln-center jst-start margin-bottom-children-3">
+            <!-- Name -->
+            <input type="text" name="name" placeholder="name" required
+                   class="input-fld w100">
+
+            <!-- Validity -->
+            <div class="form-section col aln-start jst-start w100 margin-bottom-children-1">
+              <h5>Validity options</h5>
+              <div class="col w100 aln-center jst-center">
+                <!-- Validity insertion fields -->
+                <div class="w100 row aln-center jst-center" id="validity-insertion-1">
+                  <div class="row aln-center jst-center w90 pr-1">
+                    <div class="pr-1 w50">
+                      <input type="number" min="12" max="36" step="12" name="duration-1" id="duration-1" placeholder="duration" required
+                             class="input-fld w100">
+                    </div>
+                    <div class="pl-1 w50">
+                      <input type="number" min="0" step="0.01" name="fee-1" id="fee-1" placeholder="fee" required
+                             class="input-fld w100">
+                    </div>
+                  </div>
+                  <!-- Add/Remove button -->
+                  <div class="pl-1 w10">
+                    <a href="#" class="submit-btn w100 active-btn" onclick="addValidityOptionInput()" id="add-validity">+</a>
+                  </div>
+                </div>
+                <!-- Validity insertion fields -->
+                <div class="w100 row aln-center jst-center hidden" id="validity-insertion-2">
+                  <div class="row aln-center jst-center w90 pr-1">
+                    <div class="pr-1 w50">
+                      <input type="number" min="12" max="36" step="12" name="duration-2" id="duration-2" placeholder="duration"
+                             class="input-fld w100">
+                    </div>
+                    <div class="pl-1 w50">
+                      <input type="number" min="0" step="0.01" name="fee-2" id="fee-2" placeholder="fee"
+                             class="input-fld w100">
+                    </div>
+                  </div>
+                  <!-- Add/Remove button -->
+                  <div class="pl-1 w10">
+                    <a href="#" class="submit-btn w100 active-btn" onclick="removeValidityOptionInput(2)">-</a>
+                  </div>
+                </div>
+                <!-- Validity insertion fields -->
+                <div class="w100 row aln-center jst-center hidden" id="validity-insertion-3">
+                  <div class="row aln-center jst-center w90 pr-1">
+                    <div class="pr-1 w50">
+                      <input type="number" min="12" max="36" step="12" name="duration-3" id="duration-3" placeholder="duration"
+                             class="input-fld w100">
+                    </div>
+                    <div class="pl-1 w50">
+                      <input type="number" min="0" step="0.01" name="fee-3" id="fee-3" placeholder="fee"
+                             class="input-fld w100">
+                    </div>
+                  </div>
+                  <!-- Add/Remove button -->
+                  <div class="pl-1 w10">
+                    <a href="#" class="submit-btn w100 active-btn" onclick="removeValidityOptionInput(3)">-</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Services -->
+            <div class="form-section col aln-start jst-start w100 margin-bottom-children-1">
+              <h5>Included services</h5>
+              <div class="col w100 aln-center jst-center margin-bottom-children-2" id="services-wrapper">
+                <!-- Service insertion fields -->
+                <div class="w100 row aln-end jst-center margin-bottom-children-1" id="service-insertion-1">
+                  <div class="col aln-start jst-center w90 pr-1">
+                    <!-- Type selection -->
+                    <div class="row w100 aln-center jst-start">
+                      <div class="pr-2">
+                        <label for="type-1">Service type: </label>
+                      </div>
+                      <select name="type-1" id="type-1" onchange="updateServiceAttributes(1)" required>
+                        <option value="0">Fixed Phone</option>
+                        <option value="1">Fixed Internet</option>
+                        <option value="2">Mobile Phone</option>
+                        <option value="3">Mobile Internet</option>
+                      </select>
+                    </div>
+                    <!-- Params selection -->
+                    <div class="col w100 aln-center jst-center">
+                      <div class="row w100 aln-center jst-center hidden" id="minutes-wrapper-1">
+                        <div class="w50 pr-1">
+                          <input type="number" min="0" step="1" name="minutes-1" placeholder="minutes"
+                                 class="input-fld w100">
+                        </div>
+                        <div class="w50 pl-1">
+                          <input type="number" min="0" step="0.01" name="extra-minutes-1" placeholder="extra minutes"
+                                 class="input-fld w100">
+                        </div>
+                      </div>
+                      <div class="row w100 aln-center jst-center hidden" id="sms-wrapper-1">
+                        <div class="w50 pr-1">
+                          <input type="number" min="0" step="0.01" name="sms-1" placeholder="SMSs"
+                                 class="input-fld w100">
+                        </div>
+                        <div class="w50 pl-1">
+                          <input type="number" min="0" step="1" name="extra-sms-1" placeholder="extra SMSs"
+                                 class="input-fld w100">
+                        </div>
+                      </div>
+                      <div class="row w100 aln-center jst-center hidden" id="giga-wrapper-1">
+                        <div class="w50 pr-1">
+                          <input type="number" min="0" step="1" name="giga-1" placeholder="GIGAs"
+                                 class="input-fld w100">
+                        </div>
+                        <div class="w50 pl-1">
+                          <input type="number" min="0" step="0.01" name="extra-giga-1" placeholder="extra GIGAs"
+                                 class="input-fld w100">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Add/remove insertion fields -->
+                  <div class="col aln-start jst-end w10 pb-1 pl-1">
+                    <a href="#" class="submit-btn w100 active-btn" onclick="addServiceInput()">+</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Products -->
+            <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
+              <h5>Optional products</h5>
+              <div class="row w100 aln-center jst-start" th:each="product : ${products}" th:value="${product.getIdProduct()}">
+                <input type="checkbox" name="opt-products" th:value="${product.getIdProduct()}">
+                <label th:text="${product.getName()} + ' ~ ' + ${product.getFee()}"></label>
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <input type="submit" value="Create"
+                   class="submit-btn w100 active-btn">
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <script src="js/dynamic-forms.js"></script>
+  </body>
+
+</html>
