@@ -9,10 +9,16 @@ import java.util.List;
 @Entity
 @Table(name = "Package", schema = "TelcoDB")
 @NamedQueries(
-        @NamedQuery(
-                name = "Package.findByName",
-                query = "SELECT p FROM Package p WHERE p.name = :name"
-        )
+        {
+                @NamedQuery(
+                        name = "Package.findByName",
+                        query = "SELECT p FROM Package p WHERE p.name = :name"
+                ),
+                @NamedQuery(
+                        name = "Package.findAll",
+                        query = "SELECT p FROM Package p"
+                )
+        }
 )
 public class Package implements Serializable {
 
@@ -101,5 +107,13 @@ public class Package implements Serializable {
 
     public void setProducts(Collection<Product> products) {
         this.products = products;
+    }
+
+    public Collection<Validity> getValidities() {
+        return validities;
+    }
+
+    public void setValidities(Collection<Validity> validities) {
+        this.validities = validities;
     }
 }

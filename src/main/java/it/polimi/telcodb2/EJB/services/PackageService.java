@@ -58,4 +58,13 @@ public class PackageService {
             return null;
         }
     }
+
+    /**
+     * Fetch all packages in database
+     * @return the list of all packages
+     */
+    public List<Package> findAll() {
+        return em.createNamedQuery("Package.findAll", Package.class)
+                .getResultList();
+    }
 }

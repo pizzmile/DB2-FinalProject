@@ -1,10 +1,13 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
+import it.polimi.telcodb2.EJB.entities.Package;
+import it.polimi.telcodb2.EJB.services.PackageService;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
+import javax.ejb.EJB;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -17,6 +20,10 @@ import java.util.*;
 
 @WebServlet(name = "CustomerHomePageController", value = "/customer-home")
 public class CustomerHomePageController extends HttpServlet {
+
+    @EJB
+    private PackageService packageService;
+
     private final String templatePath;
     private final String pathPrefix;
     private final String pathSuffix;
@@ -62,7 +69,16 @@ public class CustomerHomePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Check if session is valid, else redirect to bad request
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
+        }
+
+        // Get list of packages and add it to the context
         HashMap<String, Object> context = new HashMap<>();
+        List<Package> packageList = packageService.findAll();
+        context.put("packages", packageList);
 
         this.processTemplate(request, response, context);
     }
