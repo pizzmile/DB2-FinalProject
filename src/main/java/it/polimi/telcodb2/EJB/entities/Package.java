@@ -3,6 +3,7 @@ package it.polimi.telcodb2.EJB.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,31 +34,31 @@ public class Package implements Serializable {
     // REL: About
     // Relationship between an order (owner) and its included package
     @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL)
-    private Collection<Order> orders;
+    private List<Order> orders;
 
     // REL: IncludedServices
     // Relationship between package (owner) and its included services
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "IncludedServices",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "IncludedServices", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
-    private Collection<Service> services;
+    private List<Service> services = new ArrayList<>();
 
     // REL: CompatibleProducts
     // Relationship between package (owner) and its compatible products
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "CompatibleProducts",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "CompatibleProducts", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
-    private Collection<Product> products;
+    private List<Product> products = new ArrayList<>();
 
     // REL: CompatibleValidities
     // Relationship between package (owner) and its compatible validities
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "compatibleValidities",
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "compatibleValidities", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idValidity"))
-    private Collection<Validity> validities;
+    private List<Validity> validities = new ArrayList<>();
 
     public Package() {
     }
@@ -85,35 +86,35 @@ public class Package implements Serializable {
         this.name = name;
     }
 
-    public Collection<Order> getOrders() {
+    public List<Order> getOrders() {
         return orders;
     }
 
-    public void setOrders(Collection<Order> orders) {
+    public void setOrders(List<Order> orders) {
         this.orders = orders;
     }
 
-    public Collection<Service> getServices() {
+    public List<Service> getServices() {
         return services;
     }
 
-    public void setServices(Collection<Service> services) {
+    public void setServices(List<Service> services) {
         this.services = services;
     }
 
-    public Collection<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 
-    public Collection<Validity> getValidities() {
+    public List<Validity> getValidities() {
         return validities;
     }
 
-    public void setValidities(Collection<Validity> validities) {
+    public void setValidities(List<Validity> validities) {
         this.validities = validities;
     }
 }

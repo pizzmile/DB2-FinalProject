@@ -53,10 +53,16 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                     <div class="row w100 aln-center jst-start" th:each="package : ${packages}">
-                        <a th:href="'package?id=' + ${package.getIdPackage()}" class="row w100 aln-center jst-start table-link">
-                            <div class="w40 row aln-center jst-start table-cell"><span th:text="${package.getName()}"> Package name </span></div>
-                            <div class="w30 row aln-center jst-start table-cell"><span th:text="${service.getValidities()}"> Validity options </span></div>
-                            <div class="w30 row aln-center jst-start table-cell"><span th:text="${service.getServices()}"> Included services </span></div>
+                        <a th:href="'package-page?id=' + ${package.getIdPackage()}" class="row w100 aln-center jst-start table-link">
+                            <div class="w40 row aln-center jst-start table-cell">
+                                <span th:text="${package.getName()}"> Package name </span>
+                            </div>
+                            <div class="w30 row aln-center jst-start table-cell">
+                                <span th:each="validity : ${package.getValidities()}" th:text="${validity.getDuration()} + ${validity.getFee()}"> Validity options </span>
+                            </div>
+                            <div class="w30 row aln-center jst-start table-cell">
+                                <span th:each="service : ${package.getServices()}" th:text="service.getServiceType()"> Included services </span>
+                            </div>
                         </a>
                     </div>
                 </div>

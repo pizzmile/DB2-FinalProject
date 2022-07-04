@@ -1,9 +1,9 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Package;
-import it.polimi.telcodb2.EJB.entities.Service;
-import it.polimi.telcodb2.EJB.entities.Validity;
 import it.polimi.telcodb2.EJB.services.PackageService;
+import it.polimi.telcodb2.EJB.utils.ParseUtils;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -18,10 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-@WebServlet(name = "CustomerHomePageController", value = "/customer-home")
-public class CustomerHomePageController extends HttpServlet {
+@WebServlet(name = "CustomerPackagePage", value = "/package-page")
+public class CustomerPackagePageController extends HttpServlet {
 
     @EJB
     private PackageService packageService;
@@ -33,9 +35,9 @@ public class CustomerHomePageController extends HttpServlet {
     protected TemplateEngine templateEngine;
 
 
-    public CustomerHomePageController() {
+    public CustomerPackagePageController() {
         this.templateEngine = new TemplateEngine();
-        this.templatePath = "customer-home";
+        this.templatePath = "customer-package";
         this.templateMode = TemplateMode.HTML;
         this.pathPrefix = "";
         this.pathSuffix = ".html";
@@ -77,14 +79,18 @@ public class CustomerHomePageController extends HttpServlet {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
         }
 
+        // Parse package id
+        Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);
+        if (packageId == null) {
+            // TODO: redirect with error
+            return;
+        }
+
         // Get list of packages and add it to the context
         HashMap<String, Object> context = new HashMap<>();
-        List<Package> packageList = packageService.findAll();
-        context.put("packages", packageList);
-        List<Service> services = packageList.get(0).getServices();
-        // TODO: fix Package.findAll() reutrn packages with null relationships
+        Package currentPackage = packageService.find(packageId);
+        context.put("package", currentPackage);
 
         this.processTemplate(request, response, context);
     }
-
 }

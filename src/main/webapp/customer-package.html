@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="'TelcoDB | ' + ${package.getName()}"> TelcoDB | Package</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://kit.fontawesome.com/fe9e631225.js" crossorigin="anonymous"></script>
+
+    <style>
+        #content-wrapper {
+            min-width: 540px;
+            width: 80%;
+            max-width: 1080px;
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<header class="navbar row aln-center jst-center w100">
+    <div class="row aln-center jst-space-between w100">
+        <div class="row aln-center jst-start">
+            <a class="nav-link" href="customer-home">Home</a>
+<!--            <a class="nav-link" href="buy-package">Buy Package</a>-->
+        </div>
+        <div class="row aln-center jst-start margin-right-children-1" th:if="${session.userid != null && session.username != null}">
+            <div class="nav-link row aln-center" style="color: white;">
+                <div>
+                    <i class="fa-solid fa-circle-user"></i>
+                </div>
+                <div>
+                    <span th:text="${session.username}" class="nav-link"></span>
+                </div>
+            </div>
+            <a class="nav-link" href="logout-customer"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
+        </div>
+        <div class="row aln-center jst-start" th:unless="${session.userid != null && session.username != null}">
+            <a class="nav-link" href="customer-landing">Log In</a>
+        </div>
+    </div>
+</header>
+
+<section class="centered w100">
+    <div class="col w100 aln-center jst-center" id="content-wrapper">
+        <!-- Package details -->
+        <div class="col w100 aln-start jst-start">
+            <div class="row w100 aln-center jst-start">
+                <h3><span th:text="${package.getName()}">Package name</span></h3>
+            </div>
+            <div class="col w100 aln-start jst-start pt-3">
+                <h5>Included Services</h5>
+                <div class="col w100 aln-start jst-start pt-1" th:each="index, service : ${package.getServices()}">
+                    <p th:text="'Service ' + ${index}">Service index</p>
+                    <p>Type: <span th:text="${service.getServiceType()}">Service type</span></p>
+                    <div class="col w100 aln-center jst-space-between pt-1">
+                        <div class="row w100 aln-start jst-start">
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Minutes:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Number of minutes</p>
+                                </div>
+                            </div>
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Extra minutes fee:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Extra minutes fee</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w100 aln-start jst-start">
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>SMS:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Number of SMS</p>
+                                </div>
+                            </div>
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Extra SMS fee:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Extra SMS fee</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row w100 aln-start jst-start">
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>GIGA:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Number of GIGA</p>
+                                </div>
+                            </div>
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Extra GIGA fee:</p>
+                                </div>
+                                <div class="row w40 aln-center jst-start">
+                                    <p th:text="${service.getServiceType()}">Extra GIGA fee</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form action="purchase-package">
+            <!-- Validity selection -->
+            <!-- Products selection -->
+            <!-- Start date selection -->
+            <!-- Confirm button -->
+            <!-- Consider enrichment with js -->
+        </form>
+    </div>
+</section>
+</body>
+</html>

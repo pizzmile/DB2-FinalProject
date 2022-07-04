@@ -67,4 +67,13 @@ public class PackageService {
         return em.createNamedQuery("Package.findAll", Package.class)
                 .getResultList();
     }
+
+    /**
+     * Fetch package by id
+     * @param id package id
+     * @return the package entity object or null
+     */
+    public Package find(int id) {
+        return em.find(Package.class, id);
+    }
 }
