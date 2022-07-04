@@ -12,7 +12,7 @@
 
     <style>
         #content-wrapper {
-            min-width: 540px;
+            min-width: 480px;
             width: 80%;
             max-width: 1080px;
         }
@@ -51,146 +51,142 @@
                 <h3><span th:text="${package.getName()}">Package name</span></h3>
             </div>
             <div class="col w100 aln-start jst-start pt-3">
-                <h5>Included Services</h5>
-                <div class="col w100 aln-start jst-start pt-1" th:each="service : ${package.getServices()}">
-                    <p>Type: <span th:text="${service.getServiceType()}">Service type</span></p>
+                <h4>Included Services</h4>
+                <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${package.getServices()}">
+                    <p>Type: <span th:text="${service.getServiceTypeHumanReadable()}" style="text-transform: uppercase">Service type</span></p>
+                    <div class="row w100 aln-center jst-space-between pt-1">
+                        <div class="row w50 aln-center jst-start">
+                            <div class="col aln-start jst-start" style="margin-right: 2rem">
+                                <div class="row w100 aln-center jst-start"><p>Minutes:</p></div>
+                                <div class="row w100 aln-center jst-start"><p>SMS:</p></div>
+                                <div class="row w100 aln-center jst-start"><p>GIGA:</p></div>
+                            </div>
+                            <div class="col aln-start jst-start">
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getMinutes() > 0 ? service.getMinutes() : '-'}">Minutes</p></div>
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getSms() > 0 ? service.getSms() : '-'}">SMS</p></div>
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getGiga() > 0 ? service.getGiga() : '-'}">GIGA</p></div>
+                            </div>
+                        </div>
+                        <div class="row w50 aln-start jst-start">
+                            <div class="col aln-start jst-start" style="margin-right: 2rem">
+                                <div class="row w100 aln-center jst-start"><p>Extra minutes fee:</p></div>
+                                <div class="row w100 aln-center jst-start"><p>Extra SMS fee:</p></div>
+                                <div class="row w100 aln-center jst-start"><p>Extra GIGA fee:</p></div>
+                            </div>
+                            <div class="col aln-start jst-start">
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraMinutesFee() > 0 ? service.getExtraMinutesFee() : '-'}">Extra minutes fee</p></div>
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraSmsFee() > 0 ? service.getExtraSmsFee() : '-'}">Extra SMS fee</p></div>
+                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraGigaFee() > 0 ? service.getExtraGigaFee() : '-'}">Extra GIGA fee</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <div class="col w100 aln-start jst-start pt-3">
+                <h4>Validity Option</h4>
+                <div class="col w100 aln-start jst-start pt-1" th:each="validity : ${package.getValidities()}">
                     <div class="col w100 aln-center jst-space-between pt-1">
                         <div class="row w100 aln-start jst-start">
                             <div class="row w50 aln-start jst-start">
                                 <div class="row w50 aln-center jst-start">
-                                    <p>Minutes:</p>
+                                    <p>Duration:</p>
                                 </div>
                                 <div class="row w50 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Number of minutes</p>
+                                    <p th:text="${validity.getDuration()}">Months</p>
                                 </div>
                             </div>
                             <div class="row w50 aln-start jst-start">
                                 <div class="row w50 aln-center jst-start">
-                                    <p>Extra minutes fee:</p>
+                                    <p>Cost per Month</p>
                                 </div>
                                 <div class="row w50 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Extra minutes fee</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row w100 aln-start jst-start">
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>SMS:</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Number of SMS</p>
-                                </div>
-                            </div>
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Extra SMS fee:</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Extra SMS fee</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row w100 aln-start jst-start">
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>GIGA:</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Number of GIGA</p>
-                                </div>
-                            </div>
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Extra GIGA fee:</p>
-                                </div>
-                                <div class="row w40 aln-center jst-start">
-                                    <p th:text="${service.getServiceType()}">Extra GIGA fee</p>
+                                    <p th:text="${validity.getFee()}">Euros</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col w100 aln-start jst-start pt-3">
+                <h4>Validity Option</h4>
+                <div class="col w100 aln-start jst-start pt-1" th:each="product : ${package.getProducts()}">
+                    <div class="col w100 aln-center jst-space-between pt-1">
+                        <div class="row w100 aln-start jst-start">
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Name:</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${product.getName()}">Months</p>
+                                </div>
+                            </div>
+                            <div class="row w50 aln-start jst-start">
+                                <div class="row w50 aln-center jst-start">
+                                    <p>Cost per Month</p>
+                                </div>
+                                <div class="row w50 aln-center jst-start">
+                                    <p th:text="${product.getFee()}">Euros</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
         </div>
-        <!-- Showing validities -->
-        <section class="centered w100">
-            <div class="col w100 aln-center jst-center" id="content-wrapper">
-                <!-- Package details -->
-                <div class="col w100 aln-start jst-start">
-                    <div class="row w100 aln-center jst-start">
-                        <h3>Validity Option</h3>
-                    </div>
-                    <div class="col w100 aln-start jst-start pt-3">
-                        <div class="col w100 aln-start jst-start pt-1" th:each="validity : ${package.getValidities()}">
-                            <div class="col w100 aln-center jst-space-between pt-1">
-                                <div class="row w100 aln-start jst-start">
-                                    <div class="row w50 aln-start jst-start">
-                                        <div class="row w50 aln-center jst-start">
-                                            <p>Duration:</p>
-                                        </div>
-                                        <div class="row w50 aln-center jst-start">
-                                            <p th:text="${validity.getDuration}">Months</p>
-                                        </div>
-                                    </div>
-                                    <div class="row w50 aln-start jst-start">
-                                        <div class="row w50 aln-center jst-start">
-                                            <p>Cost per Month</p>
-                                        </div>
-                                        <div class="row w50 aln-center jst-start">
-                                            <p th:text="${validity.getFee()}">Euros</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <!-- Showing validities -->
-        <section class="centered w100">
-            <div class="col w100 aln-center jst-center" id="content-wrapper">
-                <!-- Package details -->
-                <div class="col w100 aln-start jst-start">
-                    <div class="row w100 aln-center jst-start">
-                        <h3>Validity Option</h3>
-                    </div>
-                    <div class="col w100 aln-start jst-start pt-3">
-                        <div class="col w100 aln-start jst-start pt-1" th:each="product : ${package.getProducts()}">
-                            <div class="col w100 aln-center jst-space-between pt-1">
-                                <div class="row w100 aln-start jst-start">
-                                    <div class="row w50 aln-start jst-start">
-                                        <div class="row w50 aln-center jst-start">
-                                            <p>Name:</p>
-                                        </div>
-                                        <div class="row w50 aln-center jst-start">
-                                            <p th:text="${product.getName()}">Months</p>
-                                        </div>
-                                    </div>
-                                    <div class="row w50 aln-start jst-start">
-                                        <div class="row w50 aln-center jst-start">
-                                            <p>Cost per Month</p>
-                                        </div>
-                                        <div class="row w50 aln-center jst-start">
-                                            <p th:text="${product.getFee()}">Euros</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
 
-        <form >
-            <!-- Validity selection -->
-            <!-- Products selection -->
-            <!-- Start date selection -->
-            <!-- Confirm button -->
-            <!-- Consider enrichment with js -->
-        </form>
+        <div class="col w100 aln-start jst-start pt-3">
+            <h4>Customize the package</h4>
+            <form class="w100 col aln-start jst-start pt-2" action="buy-package" method="POST">
+                <!-- Validity selection -->
+                <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
+                    <h5>Validity options</h5>
+                    <div class="col w100 aln-center jst-start pb-1">
+                        <div class="row w100 aln-center jst-end table-heading">
+                            <div class="w10"> </div>
+                            <div class="w70 row aln-center jst-start">Duration</div>
+                            <div class="w20 row aln-center jst-start">Fee</div>
+                        </div>
+                        <div class="w100 vertical-scroll table-body">
+                            <div class="row w100 aln-center jst-start" th:each="validity : ${package.getValidities()}">
+                                <div class="row w10 aln-center jst-center odd-tbl-col table-cell"><input type="checkbox" name="products" th:value="${validity.getIdValidity()}"></div>
+                                <div class="row w70 aln-center jst-start even-tbl-col table-cell"><span th:text="${validity.getDuration()}">Duration</span></div>
+                                <div class="row w20 aln-center jst-start odd-tbl-col table-cell"><span th:text="${validity.getFee()}">Fee</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Products selection -->
+                <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
+                    <h5>Optional products</h5>
+                    <div class="col w100 aln-center jst-start pb-1">
+                        <div class="row w100 aln-center jst-end table-heading">
+                            <div class="w10"> </div>
+                            <div class="w70 row aln-center jst-start">Name</div>
+                            <div class="w20 row aln-center jst-start">Fee</div>
+                        </div>
+                        <div class="w100 vertical-scroll table-body">
+                            <div class="row w100 aln-center jst-start" th:each="product : ${package.getProducts()}">
+                                <div class="row w10 aln-center jst-center odd-tbl-col table-cell"><input type="checkbox" name="products" th:value="${product.getIdProduct()}"></div>
+                                <div class="row w70 aln-center jst-start even-tbl-col table-cell"><span th:text="${product.getName()}">Name</span></div>
+                                <div class="row w20 aln-center jst-start odd-tbl-col table-cell"><span th:text="${product.getFee()}">Fee</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Start date selection -->
+                <div class="row w100 aln-center jst-start margin-right-children-2">
+                    <label>Start subscription from:</label>
+                    <input type="date" name="start-date" class="input-fld">
+                </div>
+                <!-- Confirm button -->
+                <div class="col w100 aln-end jst-start pt-2">
+                    <input type="submit" class="submit-btn w30" value="Order">
+                </div>
+                <!-- Consider enrichment with js -->
+            </form>
+        </div>
     </div>
 </section>
 </body>

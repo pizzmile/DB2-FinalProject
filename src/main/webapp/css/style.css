@@ -394,6 +394,9 @@ div.form-wrapper {
     background: none;
     border: 2px solid dodgerblue;
     color: dodgerblue;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
 }
 
 .clean {
