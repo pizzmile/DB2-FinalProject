@@ -4,10 +4,12 @@ import it.polimi.telcodb2.EJB.entities.Package;
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.entities.Service;
 import it.polimi.telcodb2.EJB.entities.Validity;
+import it.polimi.telcodb2.EJB.utils.Pair;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +34,12 @@ public class PackageService {
     /**
      * Create new package and insert it into the database
      * @param name name of the package
-     * @param validityList list of compatible validities
-     * @param serviceList lis of included service
-     * @param productIdList list of optional products
+     * @param validityIdList list of ids of compatible validities
+     * @param serviceIdList lis of ids of included service
+     * @param productIdList list of ids of optional products
      * @return the product if everything went good, else null
      */
-    public Package createPackage(String name, List<Validity> validityList, List<Integer> serviceIdList, List<Integer> productIdList) {
+    public Package createOnlyPackage(String name, List<Integer> validityIdList, List<Integer> serviceIdList, List<Integer> productIdList) {
         // Get optional product entity objects
         List<Product> productList = productIdList.stream()
                 .map(id -> em.find(Product.class, id))
@@ -46,6 +48,62 @@ public class PackageService {
         List<Service> serviceList = serviceIdList.stream()
                 .map(id -> em.find(Service.class, id))
                 .collect(Collectors.toList());
+        // Get included validity entity objects
+        List<Validity> validityList = validityIdList.stream()
+                .map(id -> em.find(Validity.class, id))
+                .collect(Collectors.toList());
+
+        // Create new customer entity object
+        Package aPackage = new Package(name, validityList, serviceList, productList);
+        // Try to store the new customer into the database
+        try {
+            em.persist(aPackage);
+            em.flush();
+            return aPackage;
+        } catch (ConstraintViolationException e) {
+            return null;
+        }
+    }
+
+    /**
+     * Create a package and every related entity that does not exist
+     * @param name
+     * @param validityData
+     * @param serviceIds
+     * @param productIds
+     * @return
+     */
+    public Package createPackage(String name, List<Pair<Integer, Float>> validityDataList, List<Integer> serviceIdList, List<Integer> productIdList) {
+        // Get optional product entity objects
+        List<Product> productList = productIdList.stream()
+                .map(id -> em.find(Product.class, id))
+                .collect(Collectors.toList());
+        // Get included service entity objects
+        List<Service> serviceList = serviceIdList.stream()
+                .map(id -> em.find(Service.class, id))
+                .collect(Collectors.toList());
+        // Get or create compatible validity entity objects
+        List<Validity> validityList = validityDataList.stream()
+                .map(data -> {
+                    Validity tmpValidity;
+                    List<Validity> tmpValidityList = em.createNamedQuery("Validity.findEquivalent", Validity.class)
+                            .setParameter("duration", data.getX())
+                            .setParameter("fee", data.getY())
+                            .getResultList();
+                    if (tmpValidityList.isEmpty()) {    // If there are no equivalent validities, create a new one
+                        tmpValidity = new Validity(data.getX(), data.getY());
+                        em.persist(tmpValidity);
+                        em.flush();
+                    } else { // else, take the first (only one)
+                        tmpValidity = tmpValidityList.get(0);
+                    }
+                    return tmpValidity;
+                })
+                .collect(Collectors.toList());
+//        Validity newValidity = new Validity(duration, fee);
+//        List<Validity> validityList = validityIdList.stream()
+//                .map(id -> em.find(Validity.class, id))
+//                .collect(Collectors.toList());
 
         // Create new customer entity object
         Package aPackage = new Package(name, validityList, serviceList, productList);

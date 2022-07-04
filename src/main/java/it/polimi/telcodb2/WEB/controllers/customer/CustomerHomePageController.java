@@ -71,18 +71,10 @@ public class CustomerHomePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Check if session is valid, else redirect to bad request
-        HttpSession session = request.getSession();
-        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
-        }
-
         // Get list of packages and add it to the context
         HashMap<String, Object> context = new HashMap<>();
         List<Package> packageList = packageService.findAll();
         context.put("packages", packageList);
-        List<Service> services = packageList.get(0).getServices();
-        // TODO: fix Package.findAll() reutrn packages with null relationships
 
         this.processTemplate(request, response, context);
     }

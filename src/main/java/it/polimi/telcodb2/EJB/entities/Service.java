@@ -4,7 +4,9 @@ import it.polimi.telcodb2.EJB.enums.ServiceType;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
@@ -55,11 +57,15 @@ public class Service implements Serializable {
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    private Collection<Package> packages;
+//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinTable(name = "IncludedServices", schema = "TelcoDB",
+//            joinColumns = @JoinColumn(name = "idService"),
+//            inverseJoinColumns = @JoinColumn(name = "idPackage"))
+    private List<Package> packages  = new ArrayList<>();
 
     // Relationship between schedule (owner) and the scheduled services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
-    private Collection<Schedule> schedules;
+    private List<Schedule> schedules = new ArrayList<>();
 
     public Service() {
     }
@@ -72,21 +78,6 @@ public class Service implements Serializable {
         this.extraSmsFee = extraSmsFee != null ? extraSmsFee : 0;
         this.giga = giga != null ? giga : 0;
         this.extraGigaFee = extraGigaFee != null ? extraGigaFee : 0;
-    }
-    public Service(int serviceType) {
-        this.serviceType = serviceType;
-    }
-    public Service(int serviceType, int minutes, float extraMinutesFee, int sms, float extraSmsFee) {
-        this.serviceType = serviceType;
-        this.minutes = minutes;
-        this.extraMinutesFee = extraMinutesFee;
-        this.sms = sms;
-        this.extraSmsFee = extraSmsFee;
-    }
-    public Service(int serviceType, int giga, float extraGigaFee) {
-        this.serviceType = serviceType;
-        this.giga = giga;
-        this.extraGigaFee = extraGigaFee;
     }
 
     public int getIdService() {
@@ -166,19 +157,19 @@ public class Service implements Serializable {
         this.extraGigaFee = extraGigaFee;
     }
 
-    public Collection<Package> getPackages() {
+    public List<Package> getPackages() {
         return packages;
     }
 
-    public void setPackages(Collection<Package> packages) {
+    public void setPackages(List<Package> packages) {
         this.packages = packages;
     }
 
-    public Collection<Schedule> getSchedules() {
+    public List<Schedule> getSchedules() {
         return schedules;
     }
 
-    public void setSchedules(Collection<Schedule> schedules) {
+    public void setSchedules(List<Schedule> schedules) {
         this.schedules = schedules;
     }
 }

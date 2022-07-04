@@ -105,22 +105,28 @@ public class CreatePackageController extends HttpServlet {
             return;
         }
 
+        // Check if there are validity options with the same duration
+        if (validityOptions.stream().map(Pair::getX).distinct().count() != validityOptions.size()) {
+            response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Repeated duration in validity options");
+            return;
+        }
+
         // Create the list of compatible validities
-        List<Validity> validityList = new ArrayList<Validity>();
-        validityOptions.forEach(validityOption -> {
-            List<Validity> tmpValidityList = validityService.findEquivalents(validityOption.getX(), validityOption.getY());
-            // Create a new validity and add it to the validity list if tre is not already an equivalent one
-            if (tmpValidityList.isEmpty()) {
-                validityList.add(validityService.createValidity(validityOption.getX(), validityOption.getY()));
-            }
-            // Add an already existing equivalent validity to the validity list
-            else {
-                validityList.add(tmpValidityList.get(0));
-            }
-        });
+//        List<Integer> validityIds = new ArrayList<Integer>();
+//        validityOptions.forEach(validityOption -> {
+//            List<Validity> tmpValidityList = validityService.findEquivalents(validityOption.getX(), validityOption.getY());
+//            // Create a new validity and add it to the validity list if tre is not already an equivalent one
+//            if (tmpValidityList.isEmpty()) {
+//                validityIds.add(validityService.createValidity(validityOption.getX(), validityOption.getY()).getIdValidity());
+//            }
+//            // Add an already existing equivalent validity to the validity list
+//            else {
+//                validityIds.add(tmpValidityList.get(0).getIdValidity());
+//            }
+//        });
 
         // Create package
-        Package newPackage = packageService.createPackage(name, validityList, serviceIds, productIds);
+        Package newPackage = packageService.createPackage(name, validityOptions, serviceIds, productIds);
         if (newPackage == null) {
             response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Ops! Something went wrong");
             return;

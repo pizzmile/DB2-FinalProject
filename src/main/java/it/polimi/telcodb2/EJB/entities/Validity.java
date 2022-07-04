@@ -11,7 +11,7 @@ import java.util.List;
 })
 @NamedQueries(
         @NamedQuery(
-                name = "Validity.findByDurationFee",
+                name = "Validity.findEquivalent",
                 query = "SELECT v FROM Validity v WHERE v.duration = :duration AND v.fee = :fee")
 )
 public class Validity {

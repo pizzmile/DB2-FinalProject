@@ -73,12 +73,6 @@ public class CustomerPackagePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Check if session is valid, else redirect to bad request
-        HttpSession session = request.getSession();
-        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
-        }
-
         // Parse package id
         Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);
         if (packageId == null) {

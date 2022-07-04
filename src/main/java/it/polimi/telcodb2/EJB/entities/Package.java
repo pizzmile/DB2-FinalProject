@@ -38,7 +38,7 @@ public class Package implements Serializable {
 
     // REL: IncludedServices
     // Relationship between package (owner) and its included services
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "IncludedServices", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
@@ -46,7 +46,7 @@ public class Package implements Serializable {
 
     // REL: CompatibleProducts
     // Relationship between package (owner) and its compatible products
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "CompatibleProducts", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
@@ -54,8 +54,8 @@ public class Package implements Serializable {
 
     // REL: CompatibleValidities
     // Relationship between package (owner) and its compatible validities
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "compatibleValidities", schema = "TelcoDB",
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "CompatibleValidities", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idValidity"))
     private List<Validity> validities = new ArrayList<>();

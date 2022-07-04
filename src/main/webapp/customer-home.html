@@ -48,8 +48,12 @@
             <div class="col w100 aln-center jst-start pt-1">
                 <div class="row w100 aln-center jst-end table-heading">
                     <div class="w40 row aln-center jst-start">Name</div>
-                    <div class="w30 row aln-center jst-start">Validity Options</div>
-                    <div class="w30 row aln-center jst-start">Included Services</div>
+                    <div class="w40 row aln-center jst-start">
+                        <div class="w30 row aln-center jst-start">12 Months</div>
+                        <div class="w30 row aln-center jst-start">24 Months</div>
+                        <div class="w30 row aln-center jst-start">36 Months</div>
+                    </div>
+                    <div class="w20 row aln-center jst-start">Included Services</div>
                 </div>
                 <div class="w100 vertical-scroll table-body">
                     <div class="row w100 aln-center jst-start" th:each="package : ${packages}">
@@ -57,11 +61,13 @@
                             <div class="w40 row aln-center jst-start table-cell">
                                 <span th:text="${package.getName()}"> Package name </span>
                             </div>
-                            <div class="w30 row aln-center jst-start table-cell">
-                                <span th:each="validity : ${package.getValidities()}" th:text="${validity.getDuration()} + ${validity.getFee()}"> Validity options </span>
+                            <div class="w40 row aln-center jst-start table-cell">
+                                <div class="w30 row aln-center jst-start" th:each="validity : ${package.getValidities()}" >
+                                    <span th:text="${validity.getFee}"> Fee </span>
+                                </div>
                             </div>
-                            <div class="w30 row aln-center jst-start table-cell">
-                                <span th:each="service : ${package.getServices()}" th:text="service.getServiceType()"> Included services </span>
+                            <div class="w20 row aln-center jst-start table-cell">
+                                <span th:text="${package.getServices().size()}"> Services number </span>
                             </div>
                         </a>
                     </div>

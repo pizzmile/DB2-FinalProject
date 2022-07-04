@@ -52,8 +52,7 @@
             </div>
             <div class="col w100 aln-start jst-start pt-3">
                 <h5>Included Services</h5>
-                <div class="col w100 aln-start jst-start pt-1" th:each="index, service : ${package.getServices()}">
-                    <p th:text="'Service ' + ${index}">Service index</p>
+                <div class="col w100 aln-start jst-start pt-1" th:each="service : ${package.getServices()}">
                     <p>Type: <span th:text="${service.getServiceType()}">Service type</span></p>
                     <div class="col w100 aln-center jst-space-between pt-1">
                         <div class="row w100 aln-start jst-start">
