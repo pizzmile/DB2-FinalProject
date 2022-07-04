@@ -113,7 +113,78 @@
                 </div>
             </div>
         </div>
-        <form action="purchase-package">
+        <!-- Showing validities -->
+        <section class="centered w100">
+            <div class="col w100 aln-center jst-center" id="content-wrapper">
+                <!-- Package details -->
+                <div class="col w100 aln-start jst-start">
+                    <div class="row w100 aln-center jst-start">
+                        <h3>Validity Option</h3>
+                    </div>
+                    <div class="col w100 aln-start jst-start pt-3">
+                        <div class="col w100 aln-start jst-start pt-1" th:each="validity : ${package.getValidities()}">
+                            <div class="col w100 aln-center jst-space-between pt-1">
+                                <div class="row w100 aln-start jst-start">
+                                    <div class="row w50 aln-start jst-start">
+                                        <div class="row w50 aln-center jst-start">
+                                            <p>Duration:</p>
+                                        </div>
+                                        <div class="row w50 aln-center jst-start">
+                                            <p th:text="${validity.getDuration}">Months</p>
+                                        </div>
+                                    </div>
+                                    <div class="row w50 aln-start jst-start">
+                                        <div class="row w50 aln-center jst-start">
+                                            <p>Cost per Month</p>
+                                        </div>
+                                        <div class="row w50 aln-center jst-start">
+                                            <p th:text="${validity.getFee()}">Euros</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Showing validities -->
+        <section class="centered w100">
+            <div class="col w100 aln-center jst-center" id="content-wrapper">
+                <!-- Package details -->
+                <div class="col w100 aln-start jst-start">
+                    <div class="row w100 aln-center jst-start">
+                        <h3>Validity Option</h3>
+                    </div>
+                    <div class="col w100 aln-start jst-start pt-3">
+                        <div class="col w100 aln-start jst-start pt-1" th:each="product : ${package.getProducts()}">
+                            <div class="col w100 aln-center jst-space-between pt-1">
+                                <div class="row w100 aln-start jst-start">
+                                    <div class="row w50 aln-start jst-start">
+                                        <div class="row w50 aln-center jst-start">
+                                            <p>Name:</p>
+                                        </div>
+                                        <div class="row w50 aln-center jst-start">
+                                            <p th:text="${product.getName()}">Months</p>
+                                        </div>
+                                    </div>
+                                    <div class="row w50 aln-start jst-start">
+                                        <div class="row w50 aln-center jst-start">
+                                            <p>Cost per Month</p>
+                                        </div>
+                                        <div class="row w50 aln-center jst-start">
+                                            <p th:text="${product.getFee()}">Euros</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <form >
             <!-- Validity selection -->
             <!-- Products selection -->
             <!-- Start date selection -->
