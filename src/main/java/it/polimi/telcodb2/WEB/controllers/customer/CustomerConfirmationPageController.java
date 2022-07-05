@@ -74,7 +74,7 @@ public class CustomerConfirmationPageController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Parse package id
         Integer packageId = ParseUtils.toInteger(request.getParameter("id"), -1);
         // Parse validity id

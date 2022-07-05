@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet(name = "SignupCustomer", value = "/signup-customer")
@@ -41,30 +42,49 @@ public class SignupCustomerController extends HttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String path;
+
         String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         String email = StringEscapeUtils.escapeJava(request.getParameter("email"));
 
         if (username == null || username.isEmpty() || password == null || password.isEmpty() || email == null || email.isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=Missing or empty field.");
+            path = getServletContext().getContextPath() + "/customer-landing?error=Missing or empty field.";
+            response.sendRedirect(path);
             return;
         }
 
         if (!customerService.findByEmail(email).isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=There is already another user for this email.");
+            path = getServletContext().getContextPath() + "/customer-landing?error=There is already another user for this email.";
+            response.sendRedirect(path);
             return;
         }
         if (!customerService.findByUsername(username).isEmpty()) {
-            response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?error=There is already another user with this username.");
+            path = getServletContext().getContextPath() + "/customer-landing?error=There is already another user with this username.";
+            response.sendRedirect(path);
             return;
         }
 
+        // Create customer
         Customer customer = customerService.createCustomer(username, password, email);
+        // If the returned object is null, then something went wrong while accessing the database
         if (customer == null) {
-            String path = getServletContext().getContextPath() + "/customer-landing?error=Ops! Something went wrong.";
+            path = getServletContext().getContextPath() + "/customer-landing?error=Ops! Something went wrong.";
             response.sendRedirect(path);
+            return;
         }
-        response.sendRedirect(getServletContext().getContextPath() + "/customer-landing?success=True");
+
+        // If everything went good, then proceed
+        HttpSession session = request.getSession();
+        // If there is no order in session, then the user is requesting directly the landing page
+        if (session.getAttribute("order") == null) {
+            path = getServletContext().getContextPath() + "/customer-landing?success=True";
+        }
+        // If there is an order in session, then the user is requesting the landing page from the confirmation form
+        else {
+            path = getServletContext().getContextPath() + "/confirmation-page";
+        }
+        response.sendRedirect(path);
 
     }
 }

@@ -33,7 +33,7 @@
                             <input class="submit-btn w100" type="submit" value="Log In">
                         </div>
                     </form>
-                    <a class="w100 h100" href="customer-home"><button class="submit-btn w100 outlined">Skip Login</button></a>
+                    <a class="w100 h100" href="customer-home" th:if="${session.order == null}"><button class="submit-btn w100 outlined">Skip Login</button></a>
                 </div>
 
                 <!-- Signup -->
@@ -51,7 +51,7 @@
                     </form>
                 </div>
             </div>
-            <div class="row w100 aln-center jst-end">
+            <div class="row w100 aln-center jst-end" th:if="${session.order == null}">
                 <p><a class="clean" href="index.jsp">Back</a></p>
             </div>
         </div>

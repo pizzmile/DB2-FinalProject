@@ -54,7 +54,7 @@
 
         <div class="col w100 aln-start jst-start pt-3">
             <h4>Customize the package</h4>
-            <form class="w100 col aln-start jst-start pt-2" action="confirmation-page" method="POST">
+            <form class="w100 col aln-start jst-start pt-2" action="confirmation-page" method="GET">
                 <input type="number" th:value="${package.getIdPackage()}" hidden required name="id">
                 <!-- Validity selection -->
                 <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
