@@ -1,7 +1,7 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
-import it.polimi.telcodb2.EJB.entities.Package;
-import it.polimi.telcodb2.EJB.services.PackageService;
+import it.polimi.telcodb2.EJB.entities.Order;
+import it.polimi.telcodb2.EJB.services.OrderService;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -16,8 +16,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +28,7 @@ import java.util.Map;
 public class CustomerConfirmationPageController extends HttpServlet {
 
     @EJB
-    private PackageService packageService;
+    private OrderService orderService;
 
     private final String templatePath;
     private final String pathPrefix;
@@ -72,24 +74,33 @@ public class CustomerConfirmationPageController extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Parse package id
-        Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);
-        if (packageId == null) {
+        Integer packageId = ParseUtils.toInteger(request.getParameter("id"), -1);
+        // Parse validity id
+        Integer validityId = ParseUtils.toInteger(request.getParameter("validity"), -1);
+        // Parse product ids
+        List<Integer> productIds = ParseUtils.toIntegerList(
+                ParseUtils.toStringListSafe(request.getParameterValues("products")), true);
+        // Parse date
+        LocalDate startDate = ParseUtils.toDate(request.getParameter("start-date"));
+
+        // Check
+        if (packageId == -1) {
             // TODO: redirect with error
             return;
         }
+        if (validityId == -1) {
+            // TODO: redirect with error
+            return;
+        }
+        // TODO: check product ids
 
-        // TODO: Get order data and add them to the context
-        HashMap<String, Object> context = new HashMap<>();
-        // Getting th id of the selected validity
-        Integer valityId = ParseUtils.toInteger(request.getParameter("validity"), null);
+        // Get order summery
+        Order order = orderService.getSummary(validityId, productIds, packageId, startDate);
+        // Add summary to session
+        request.getSession().setAttribute("order", order);
 
-        List<Integer> productIds = ParseUtils.toIntegerList(
-                ParseUtils.toStringListSafe(request.getParameterValues("products")), false);
-
-
-
-        this.processTemplate(request, response, context);
+        this.processTemplate(request, response, null);
     }
 }

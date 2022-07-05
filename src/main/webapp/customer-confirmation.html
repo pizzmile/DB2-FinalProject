@@ -17,7 +17,7 @@
       <h1>Review order and confirm</h1>
       <div class="col w100 aln-start jst-start pt-3">
         <h4>Included Services</h4>
-        <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${package.getServices()}">
+        <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${session.order.getPackage().getServices()}">
           <p>Type: <span th:text="${service.getServiceTypeHumanReadable()}" style="text-transform: uppercase">Service type</span></p>
           <div class="row w100 aln-center jst-space-between pt-1">
             <div class="row w50 aln-center jst-start">
@@ -55,8 +55,8 @@
             <p>Fee: </p>
           </div>
           <div class="col aln-start jst-start">
-            <p th:text="${validity.getDuration()}">duration</p>
-            <p th:text="${validity.getFee()}">fee</p>
+            <p th:text="${session.order.getValidity().getDuration()}">duration</p>
+            <p th:text="${session.order.getValidity().getFee()}">fee</p>
           </div>
         </div>
       </div>
@@ -67,7 +67,7 @@
             <p>Name: </p>
             <p>Fee: </p>
           </div>
-          <div class="col aln-start jst-start" th:each="product : ${products}">
+          <div class="col aln-start jst-start" th:each="product : ${session.order.getProducts()}">
             <p th:text="${product.getName()}">name</p>
             <p th:text="${product.getFee()}">fee</p>
           </div>
@@ -79,7 +79,7 @@
             <h3>Total cost: </h3>
           </div>
           <div class="col aln-end jst-start">
-            <h3 th:text="${order.getTotalCost()}">total cost</p>
+            <h3 th:text="${session.order.getDecimalTotalCost()}">total cost</h3>
           </div>
         </div>
       </div>

@@ -3,9 +3,12 @@ package it.polimi.telcodb2.EJB.entities;
 import javax.persistence.*;
 
 import java.io.Serializable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Order", schema = "TelcoDB")
@@ -58,11 +61,14 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid) {
+    public Order(LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Validity validity, List<Product> products, Package pkg) {
         this.startDate = startDate;
         this.creationDateTime = creationDateTime;
         this.totalCost = totalCost;
         this.paid = paid;
+        this.validity = validity;
+        this.products = products;
+        this.aPackage = pkg;
     }
 
     public int getIdOrder() {
@@ -127,5 +133,19 @@ public class Order implements Serializable {
 
     public void setPackage(Package aPackage) {
         this.aPackage = aPackage;
+    }
+
+    public Validity getValidity() {
+        return validity;
+    }
+
+    public void setValidity(Validity validity) {
+        this.validity = validity;
+    }
+
+    public String getDecimalTotalCost() {
+        DecimalFormat df = new DecimalFormat("0.00");
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        return df.format(this.totalCost);
     }
 }

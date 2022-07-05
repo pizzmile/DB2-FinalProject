@@ -1,11 +1,7 @@
 package it.polimi.telcodb2.WEB.controllers.employee;
 
 import it.polimi.telcodb2.EJB.entities.Package;
-import it.polimi.telcodb2.EJB.entities.Validity;
-import it.polimi.telcodb2.EJB.services.PackageService;
-import it.polimi.telcodb2.EJB.services.ProductService;
-import it.polimi.telcodb2.EJB.services.ServiceService;
-import it.polimi.telcodb2.EJB.services.ValidityService;
+import it.polimi.telcodb2.EJB.services.*;
 import it.polimi.telcodb2.EJB.utils.Pair;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
 import org.apache.commons.lang.StringEscapeUtils;

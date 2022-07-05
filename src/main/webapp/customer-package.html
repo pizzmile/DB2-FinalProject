@@ -48,65 +48,14 @@
         <!-- Package details -->
         <div class="col w100 aln-start jst-start">
             <div class="row w100 aln-center jst-center">
-                <h1><span th:text="${package.getName()}">Package name</span></h1>
+                <h1>"<span th:text="${package.getName()}">Package name</span>"</h1>
             </div>
-            <!--
-            <div class="col w100 aln-start jst-start pt-3">
-                <h4>Validity Option</h4>
-                <div class="col w100 aln-start jst-start pt-1" th:each="validity : ${package.getValidities()}">
-                    <div class="col w100 aln-center jst-space-between pt-1">
-                        <div class="row w100 aln-start jst-start">
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Duration:</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${validity.getDuration()}">Months</p>
-                                </div>
-                            </div>
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Cost per Month</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${validity.getFee()}">Euros</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col w100 aln-start jst-start pt-3">
-                <h4>Validity Option</h4>
-                <div class="col w100 aln-start jst-start pt-1" th:each="product : ${package.getProducts()}">
-                    <div class="col w100 aln-center jst-space-between pt-1">
-                        <div class="row w100 aln-start jst-start">
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Name:</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${product.getName()}">Months</p>
-                                </div>
-                            </div>
-                            <div class="row w50 aln-start jst-start">
-                                <div class="row w50 aln-center jst-start">
-                                    <p>Cost per Month</p>
-                                </div>
-                                <div class="row w50 aln-center jst-start">
-                                    <p th:text="${product.getFee()}">Euros</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            -->
         </div>
 
         <div class="col w100 aln-start jst-start pt-3">
             <h4>Customize the package</h4>
-            <form class="w100 col aln-start jst-start pt-2" action="buy-package" method="POST">
+            <form class="w100 col aln-start jst-start pt-2" action="confirmation-page" method="POST">
+                <input type="number" th:value="${package.getIdPackage()}" hidden required name="id">
                 <!-- Validity selection -->
                 <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
                     <h5>Validity options</h5>
@@ -159,7 +108,7 @@
                     </div>
                 </div>
                 <!-- Products selection -->
-                <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100">
+                <div class="form-section col aln-start jst-start w100 margin-bottom-children-1 w100" th:if="${!package.getProducts().isEmpty()}">
                     <h5>Optional products</h5>
                     <div class="col w100 aln-center jst-start pb-1">
                         <div class="row w100 aln-center jst-end table-heading">

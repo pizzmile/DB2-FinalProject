@@ -1,9 +1,10 @@
 package it.polimi.telcodb2.EJB.utils;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import javax.swing.text.DateFormatter;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParseUtils {
@@ -42,5 +43,13 @@ public class ParseUtils {
                 (skipNull ? stringList.stream().filter(Objects::nonNull) : stringList.stream())
                         .map(elem -> ParseUtils.toFloat(elem, 0)) // parse elements
                         .collect(Collectors.toList());  // convert string to list
+    }
+
+    // Parse formatted string date into java.util.Date
+    public static LocalDate toDate(String stringDate) {
+        if (stringDate == null || stringDate.isEmpty()) {
+            return null;
+        }
+        return LocalDate.parse(stringDate, DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ITALY));
     }
 }

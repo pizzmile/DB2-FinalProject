@@ -1,9 +1,9 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Package;
+import it.polimi.telcodb2.EJB.services.OrderService;
 import it.polimi.telcodb2.EJB.services.PackageService;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -16,10 +16,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "CustomerPackagePage", value = "/package-page")
