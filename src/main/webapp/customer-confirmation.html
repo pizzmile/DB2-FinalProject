@@ -14,7 +14,7 @@
   <body class="col aln-center jst-center">
     <!-- Order summary -->
     <section class="col w40 aln-center jst-start">
-      <h1>Review order and confirm</h1>
+      <h1 >Package name</h1>
       <div class="col w100 aln-start jst-start pt-3">
         <h4>Included Services</h4>
         <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${session.order.getPackage().getServices()}">
@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col w100 aln-start jst-start pt-3">
+      <div class="col w100 aln-start jst-start pt-3" th:if="${session.order.getProducts().size() > 0}">
         <h4>Optional Products</h4>
         <div class="row w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1">
           <div class="col aln-start jst-start pr-2">
@@ -86,10 +86,12 @@
       <!-- Login / Buy -->
       <div class="row w100 aln-center jst-center pt-3" th:if="${session.userid != null}">
         <div class="w50 pr-2" style="height: 2.25rem">
-          <button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%">CANCEL</button>
+          <a th:href="'package-page?id=' + ${session.order.getPackage().getIdPackage()}"><button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%">CANCEL</button></a>
         </div>
         <div class="w50 pl-2" style="height: 2.25rem">
-          <button class="submit-btn w100 pt-1 pb-1" style="height: 100%">BUY</button>
+          <form action="buy" method="POST">
+            <input type="submit" class="submit-btn w100 pt-1 pb-1" style="height: 100%" value="BUY">
+          </form>
         </div>
       </div>
       <div class="row w100 aln-center jst-center pt-3" th:if="${session.userid == null}">

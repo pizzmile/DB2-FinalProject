@@ -24,13 +24,13 @@ public class Order implements Serializable {
     private LocalDate startDate;
 
     @Column(name="creationDateTime", nullable = false)
-    private LocalDateTime creationDateTime;
+    private LocalDateTime creationDateTime = null;
 
     @Column(name="totalCost", nullable = false)
-    private float totalCost;
+    private float totalCost = 0;
 
     @Column(name="paid", nullable = false)
-    private boolean paid;
+    private boolean paid = false;
 
     // REL: Create
     // Relationship between an order (owner) and its creator customer
@@ -44,7 +44,7 @@ public class Order implements Serializable {
     @JoinTable(name = "ChosenProduct",
             joinColumns = @JoinColumn(name = "idOrder"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
-    private Collection<Product> products;
+    private List<Product> products;
 
     // REL: About
     // Relationship between an order (owner) and its included package
@@ -61,14 +61,25 @@ public class Order implements Serializable {
     public Order() {
     }
 
-    public Order(LocalDate startDate, LocalDateTime creationDateTime, float totalCost, boolean paid, Validity validity, List<Product> products, Package pkg) {
+    public Order(LocalDate startDate, Customer customer, List<Product> products, Package aPackage, Validity validity) {
         this.startDate = startDate;
-        this.creationDateTime = creationDateTime;
-        this.totalCost = totalCost;
-        this.paid = paid;
+        this.creationDateTime = LocalDateTime.now();
+        this.totalCost = products.stream().map(Product::getFee).reduce(validity.getFee(), Float::sum) * validity.getDuration();
+        this.customer = customer;
+        this.products = products;
+        this.aPackage = aPackage;
+        this.validity = validity;
+        this.paid = false;
+    }
+
+    public Order(LocalDate startDate, Validity validity, List<Product> products, Package aPackage) {
+        this.startDate = startDate;
+        // Sum the fees
+        this.totalCost = products.stream().map(Product::getFee).reduce(validity.getFee(), Float::sum) * validity.getDuration();
         this.validity = validity;
         this.products = products;
-        this.aPackage = pkg;
+        this.aPackage = aPackage;
+        this.paid = false;
     }
 
     public int getIdOrder() {
@@ -119,11 +130,11 @@ public class Order implements Serializable {
         this.customer = customer;
     }
 
-    public Collection<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 

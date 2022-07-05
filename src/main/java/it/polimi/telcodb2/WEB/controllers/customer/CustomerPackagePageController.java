@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,6 +72,10 @@ public class CustomerPackagePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Clear order from session if user is coming back from confirmation page
+        HttpSession session = request.getSession();
+        session.setAttribute("order", null);
+
         // Parse package id
         Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);
         if (packageId == null) {

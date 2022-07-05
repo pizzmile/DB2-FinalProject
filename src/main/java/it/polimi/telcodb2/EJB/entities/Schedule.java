@@ -5,6 +5,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Table(name = "Schedule", schema = "TelcoDB")
@@ -33,7 +34,7 @@ public class Schedule implements Serializable {
     @JoinTable(name = "ScheduledProducts",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
-    private Collection<Product> products;
+    private List<Product> products;
 
     // REL: ScheduledServices
     // Relationship between schedule (owner) and the scheduled services
@@ -41,14 +42,17 @@ public class Schedule implements Serializable {
     @JoinTable(name = "ScheduledServices",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
-    private Collection<Service> services;
+    private List<Service> services;
 
     public Schedule() {
     }
 
-    public Schedule(LocalDate activationDate, LocalDate deactivationDate) {
+    public Schedule(LocalDate activationDate, LocalDate deactivationDate, Customer customer, List<Product> products, List<Service> services) {
         this.activationDate = activationDate;
         this.deactivationDate = deactivationDate;
+        this.customer = customer;
+        this.products = products;
+        this.services = services;
     }
 
     public int getIdSchedule() {
@@ -83,19 +87,19 @@ public class Schedule implements Serializable {
         this.customer = customer;
     }
 
-    public Collection<Product> getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(Collection<Product> products) {
+    public void setProducts(List<Product> products) {
         this.products = products;
     }
 
-    public Collection<Service> getServices() {
+    public List<Service> getServices() {
         return services;
     }
 
-    public void setServices(Collection<Service> services) {
+    public void setServices(List<Service> services) {
         this.services = services;
     }
 }

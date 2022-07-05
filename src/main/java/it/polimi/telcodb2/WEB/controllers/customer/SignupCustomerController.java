@@ -82,6 +82,8 @@ public class SignupCustomerController extends HttpServlet {
         }
         // If there is an order in session, then the user is requesting the landing page from the confirmation form
         else {
+            session.setAttribute("userid", customer.getIdCustomer());
+            session.setAttribute("username", customer.getUsername());
             path = getServletContext().getContextPath() + "/confirmation-page";
         }
         response.sendRedirect(path);

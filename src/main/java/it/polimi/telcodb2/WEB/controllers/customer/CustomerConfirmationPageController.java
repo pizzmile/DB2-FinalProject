@@ -16,6 +16,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -75,32 +76,37 @@ public class CustomerConfirmationPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Parse package id
-        Integer packageId = ParseUtils.toInteger(request.getParameter("id"), -1);
-        // Parse validity id
-        Integer validityId = ParseUtils.toInteger(request.getParameter("validity"), -1);
-        // Parse product ids
-        List<Integer> productIds = ParseUtils.toIntegerList(
-                ParseUtils.toStringListSafe(request.getParameterValues("products")), true);
-        // Parse date
-        LocalDate startDate = ParseUtils.toDate(request.getParameter("start-date"));
+        HttpSession session = request.getSession();
 
-        // Check
-        if (packageId == -1) {
-            // TODO: redirect with error
-            return;
+        // If it is the first time loading the page, then create an order object and add it to the session
+        if (session.getAttribute("userid") == null || session.getAttribute("order") == null) {
+            // Parse package id
+            Integer packageId = ParseUtils.toInteger(request.getParameter("id"), -1);
+            // Parse validity id
+            Integer validityId = ParseUtils.toInteger(request.getParameter("validity"), -1);
+            // Parse product ids
+            List<Integer> productIds = ParseUtils.toIntegerList(
+                    ParseUtils.toStringListSafe(request.getParameterValues("products")), true);
+            // Parse date
+            LocalDate startDate = ParseUtils.toDate(request.getParameter("start-date"));
+
+            // Check
+            if (packageId == -1) {
+                // TODO: redirect with error
+                return;
+            }
+            if (validityId == -1) {
+                // TODO: redirect with error
+                return;
+            }
+            // TODO: check product ids
+
+            // Get order summery
+            Order order = orderService.getSummary(validityId, productIds, packageId, startDate);
+            // Add summary to session
+            session.setAttribute("order", order);
         }
-        if (validityId == -1) {
-            // TODO: redirect with error
-            return;
-        }
-        // TODO: check product ids
 
-        // Get order summery
-        Order order = orderService.getSummary(validityId, productIds, packageId, startDate);
-        // Add summary to session
-        request.getSession().setAttribute("order", order);
-
-        this.processTemplate(request, response, null);
+        this.processTemplate(request, response, new HashMap<>());
     }
 }
