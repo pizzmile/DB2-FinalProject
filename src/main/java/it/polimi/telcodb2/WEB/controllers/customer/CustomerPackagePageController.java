@@ -79,7 +79,8 @@ public class CustomerPackagePageController extends HttpServlet {
         // Parse package id
         Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);
         if (packageId == null) {
-            // TODO: redirect with error
+            String path = getServletContext().getContextPath() + "/customer-home?error=Missing package id";
+            response.sendRedirect(path);
             return;
         }
 

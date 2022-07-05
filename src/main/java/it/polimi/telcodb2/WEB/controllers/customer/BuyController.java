@@ -28,6 +28,8 @@ public class BuyController extends HttpServlet {
 
     @EJB
     private OrderService orderService;
+    @EJB
+    private CustomerService customerService;
 
 
     public BuyController() {
@@ -57,7 +59,8 @@ public class BuyController extends HttpServlet {
         Object orderObject = session.getAttribute("order");
         // Check if order is null, else cast it as an order object
         if (orderObject == null) {
-            // TODO: redirect with error
+            path = getServletContext().getContextPath() + "/customer-home?error=Order was empty";
+            response.sendRedirect(path);
             return;
         }
         Order tmpOrder = (Order) orderObject;
@@ -70,7 +73,8 @@ public class BuyController extends HttpServlet {
         // If customer id is in session, then parse it, otherwise redirect with error
         Integer customerId;
         if (session.getAttribute("userid") == null) {
-            // TODO: redirect with error
+            path = getServletContext().getContextPath() + "/customer-home?error=Missing customer id";
+            response.sendRedirect(path);
             return;
         } else {
             customerId = (Integer) session.getAttribute("userid");
@@ -79,22 +83,28 @@ public class BuyController extends HttpServlet {
         // Create order object and add it to the database
         Order newOrder = orderService.createOrder(startDate, customerId, productIds, packageId, validityId);
         if (newOrder == null) {
-            // TODO: redirect with error
+            path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong while creating the order";
+            response.sendRedirect(path);
             return;
         }
 
         // Simulate the payment
         boolean paymentSuccess = PaymentService.pay();
+//        boolean paymentSuccess = false;
+
         // If payment succeed, then update its payment status and create an activations schedule
         if (paymentSuccess) {
             Schedule schedule = orderService.setPaymentSuccess(newOrder.getIdOrder());
-            path = getServletContext().getContextPath() + "/customer-home?success=Order completed";
+            path = getServletContext().getContextPath() + "/customer-home?success=true";
             response.sendRedirect(path);
-            return;
         }
         // If payment failed
         else {
-            return;
+            // Payment status is left false
+            // Flag user as insolvent
+            customerService.increaseFailedPayments(customerId, newOrder.getTotalCost());
+            path = getServletContext().getContextPath() + "/customer-home?warning=Failed payment!";
+            response.sendRedirect(path);
         }
     }
 }

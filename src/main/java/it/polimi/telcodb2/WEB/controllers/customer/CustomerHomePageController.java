@@ -1,6 +1,7 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Package;
+import it.polimi.telcodb2.EJB.services.CustomerService;
 import it.polimi.telcodb2.EJB.services.OrderService;
 import it.polimi.telcodb2.EJB.services.PackageService;
 import org.thymeleaf.TemplateEngine;
@@ -24,6 +25,8 @@ public class CustomerHomePageController extends HttpServlet {
 
     @EJB
     private PackageService packageService;
+    @EJB
+    private CustomerService customerService;
 
     private final String templatePath;
     private final String pathPrefix;
@@ -70,8 +73,18 @@ public class CustomerHomePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Get list of packages and add it to the context
+        HttpSession session = request.getSession();
         HashMap<String, Object> context = new HashMap<>();
+
+        // If user is logged in, then look for his/her pending orders to show
+        if (session.getAttribute("userid") != null) {
+            context.put(
+                    "pendingOrders",
+                    customerService.findPendingOrders((Integer) session.getAttribute("userid"))
+            );
+        }
+
+        // Get list of packages and add it to the context
         List<Package> packageList = packageService.findAll();
         context.put("packages", packageList);
 

@@ -1,7 +1,9 @@
 package it.polimi.telcodb2.EJB.services;
 
+import it.polimi.telcodb2.EJB.entities.Alert;
 import it.polimi.telcodb2.EJB.entities.Customer;
 import it.polimi.telcodb2.EJB.entities.Employee;
+import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.exceptions.CredentialsException;
 
 import javax.ejb.Stateless;
@@ -10,6 +12,7 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
@@ -42,8 +45,7 @@ public class CustomerService {
     public Customer createCustomer(String username, String password, String email) {
         // Create new customer entity object
         Customer customer = new Customer(
-                username, password, email,
-                true, 0);
+                username, password, email);
 
         // Try to store the new customer into the database
         try {
@@ -91,5 +93,80 @@ public class CustomerService {
         } else {
             throw new NonUniqueResultException("More than one user registered with the same credentials");
         }
+    }
+
+    public Integer increaseFailedPayments(int customerId, float amount) {
+        // Check if params are valid
+        if (customerId < 0 || amount < 0) {
+            return null;
+        }
+
+        // Find customer
+        Customer customer = em.find(Customer.class, customerId);
+        // Increment failed payments by 1
+        customer.setFailedPayments(customer.getFailedPayments() + 1);
+        // If customer is solvent, set is as insolvent
+        if (customer.isSolvent()) {
+            customer.setSolvent(false);
+        }
+        // If failed payments reach 3, then create an alert
+        if (customer.getFailedPayments() == 3) {
+            // Create alert
+            Alert alert = new Alert(
+                    LocalDateTime.now(),
+                    amount,
+                    customer.getEmail(),
+                    customer.getUsername(),
+                    customer
+            );
+
+            // Commit changes
+            try {
+                em.merge(customer);
+                em.persist(alert);
+                em.flush();
+                return customer.getFailedPayments();
+            } catch (ConstraintViolationException e) {
+                return null;
+            }
+        }
+        else if (customer.getFailedPayments() > 3) {
+            // Find existing alert
+            Alert alert = em.createNamedQuery("Alert.findByCustomerId", Alert.class)
+                    .setParameter("idCustomer", customer.getIdCustomer())
+                    .getSingleResult();
+            if (alert == null) {
+                return null;
+            }
+
+            alert.setLastPayment(LocalDateTime.now());
+            alert.setAmount(amount);
+
+            // Commit changes
+            try {
+                em.merge(customer);
+                em.merge(alert);
+                em.flush();
+                return customer.getFailedPayments();
+            } catch (ConstraintViolationException e) {
+                return null;
+            }
+        }
+
+        return customer.getFailedPayments();
+    }
+
+    public List<Order> findPendingOrders(int customerId) {
+        // Check if customer is valid
+        if (customerId < 0) {
+            return null;
+        }
+
+        // Find pending orders
+        List<Order> pendingOrders = em.createNamedQuery("Order.findPendingByIdCustomer", Order.class)
+                .setParameter("idCustomer", customerId)
+                .getResultList();
+        pendingOrders.forEach(Order::getPackage);
+        return pendingOrders;
     }
 }

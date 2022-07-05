@@ -38,10 +38,10 @@ public class Customer implements Serializable {
     private String email;
 
     @Column(name="solvent", nullable = false)
-    private boolean solvent;
+    private boolean solvent = true;
 
     @Column(name="failedPayments", nullable = false)
-    private int failedPayments;
+    private int failedPayments = 0;
 
     // REL: Trigger
     // Relationship between an alert (owner) and the customer it refers to
@@ -67,6 +67,13 @@ public class Customer implements Serializable {
         this.email = email;
         this.solvent = solvent;
         this.failedPayments = failedPayments;
+    }
+    public Customer(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.solvent = true;
+        this.failedPayments = 0;
     }
 
     public int getIdCustomer() {

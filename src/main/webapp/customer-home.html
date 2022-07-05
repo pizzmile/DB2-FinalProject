@@ -11,7 +11,7 @@
     <script src="https://kit.fontawesome.com/fe9e631225.js" crossorigin="anonymous"></script>
 
     <style>
-        #content-wrapper {
+        .content-wrapper {
             min-width: 540px;
             width: 80%;
             max-width: 1080px;
@@ -43,8 +43,19 @@
         </div>
     </header>
 
+    <section class="error-prompt w100" th:if="${param.error != null}">
+        <p th:text="${param.error}">Error log</p>
+    </section>
+    <section class="success-prompt w100" th:if="${param.success != null}">
+        <p th:text="'Operation successful!'">Success prompt</p>
+    </section>
+    <section class="warning-prompt w100" th:if="${param.warning != null}">
+        <p th:text="${param.warning}">Warning prompt</p>
+    </section>
+
+    <!-- Packages -->
     <section class="centered w100">
-        <div class="col w100 aln-center jst-center" id="content-wrapper">
+        <div class="col w100 aln-center jst-center content-wrapper">
             <div class="col w100 aln-center jst-start pt-1">
                 <div class="row w100 aln-center jst-end table-heading">
                     <div class="w40 row aln-center jst-start">Name</div>
@@ -68,6 +79,38 @@
                             </div>
                             <div class="w20 row aln-center jst-start table-cell">
                                 <span th:text="${package.getServices().size()}"> Services number </span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Failed orders -->
+    <section class="centered w100" th:if="${pendingOrders != null}">
+        <div class="col w100 aln-center jst-center content-wrapper">
+            <div class="col w100 aln-center jst-start pt-1">
+                <div class="row w100 aln-center jst-start table-heading">
+                    <div class="w30 row aln-center jst-start">Package Name</div>
+                    <div class="w20 row aln-center jst-start">Start Date</div>
+                    <div class="w30 row aln-center jst-start">Create On</div>
+                    <div class="w20 row aln-center jst-start">Amount</div>
+                </div>
+                <div class="w100 vertical-scroll table-body">
+                    <div class="row w100 aln-center jst-start" th:each="order : ${pendingOrders}">
+                        <a th:href="'package-page?id=' + ${order.getIdOrder()}" class="row w100 aln-center jst-start table-link">
+                            <div class="w30 row aln-center jst-start" >
+                                <span th:text="${order.getPackage().getName()}"> Package name </span>
+                            </div>
+                            <div class="w30 row aln-center jst-start" >
+                                <span th:text="${order.getStartDate()}"> Start date </span>
+                            </div>
+                            <div class="w30 row aln-center jst-start" >
+                                <span th:text="${order.getCreationDateTime()}"> Creation datetime </span>
+                            </div>
+                            <div class="w30 row aln-center jst-start" >
+                                <span th:text="${order.getDecimalTotalCost()}"> Amount </span>
                             </div>
                         </a>
                     </div>

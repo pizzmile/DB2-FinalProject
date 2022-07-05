@@ -12,6 +12,15 @@ import java.util.List;
 
 @Entity
 @Table(name = "Order", schema = "TelcoDB")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Order.findPendingByIdCustomer",
+                        query = "SELECT o FROM Order o WHERE o.customer.idCustomer = :idCustomer " +
+                                "AND o.paid = false"
+                )
+        }
+)
 public class Order implements Serializable {
 
     @Id

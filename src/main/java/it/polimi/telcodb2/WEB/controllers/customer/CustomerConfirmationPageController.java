@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @WebServlet(name = "CustomerConfirmationPage", value = "/confirmation-page")
 public class CustomerConfirmationPageController extends HttpServlet {
@@ -91,15 +92,22 @@ public class CustomerConfirmationPageController extends HttpServlet {
             LocalDate startDate = ParseUtils.toDate(request.getParameter("start-date"));
 
             // Check
+            String path;
             if (packageId == -1) {
-                // TODO: redirect with error
+                path = getServletContext().getContextPath() + "/customer-home?error=Missing package id";
+                response.sendRedirect(path);
                 return;
             }
             if (validityId == -1) {
-                // TODO: redirect with error
+                path = getServletContext().getContextPath() + "/customer-home?error=Missing validity id";
+                response.sendRedirect(path);
                 return;
             }
-            // TODO: check product ids
+            if (productIds.stream().anyMatch(Objects::isNull)) {
+                path = getServletContext().getContextPath() + "/customer-home?error=Invalid product id";
+                response.sendRedirect(path);
+                return;
+            }
 
             // Get order summery
             Order order = orderService.getSummary(validityId, productIds, packageId, startDate);

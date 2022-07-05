@@ -6,6 +6,14 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Alert", schema = "TelcoDB")
+@NamedQueries(
+        {
+                @NamedQuery(
+                        name = "Alert.findByCustomerId",
+                        query = "SELECT a FROM Alert a WHERE a.customer.idCustomer = :idCustomer"
+                )
+        }
+)
 public class Alert implements Serializable {
 
     @Id
@@ -19,8 +27,11 @@ public class Alert implements Serializable {
     @Column(name = "amount", nullable = false)
     private float amount;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
 
     // REL: Trigger
     // Relationship between an alert (owner) and the customer it refers to
@@ -31,10 +42,12 @@ public class Alert implements Serializable {
     public Alert() {
     }
 
-    public Alert(LocalDateTime lastPayment, float amount, String email) {
+    public Alert(LocalDateTime lastPayment, float amount, String email, String username, Customer customer) {
         this.lastPayment = lastPayment;
         this.amount = amount;
         this.email = email;
+        this.username = username;
+        this.customer = customer;
     }
 
     public int getIdAlert() {
@@ -67,6 +80,14 @@ public class Alert implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Customer getCustomer() {
