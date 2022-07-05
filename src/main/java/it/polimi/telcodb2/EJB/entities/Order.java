@@ -17,6 +17,7 @@ public class Order implements Serializable {
     private int idOrder;
 
     @Column(name="startDate", nullable = false)
+    @Temporal(TemporalType.DATE)
     private LocalDate startDate;
 
     @Column(name="creationDateTime", nullable = false)

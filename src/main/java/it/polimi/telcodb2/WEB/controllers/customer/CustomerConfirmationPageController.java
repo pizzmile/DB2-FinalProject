@@ -82,6 +82,13 @@ public class CustomerConfirmationPageController extends HttpServlet {
 
         // TODO: Get order data and add them to the context
         HashMap<String, Object> context = new HashMap<>();
+        // Getting th id of the selected validity
+        Integer valityId = ParseUtils.toInteger(request.getParameter("validity"), null);
+
+        List<Integer> productIds = ParseUtils.toIntegerList(
+                ParseUtils.toStringListSafe(request.getParameterValues("products")), false);
+
+
 
         this.processTemplate(request, response, context);
     }

@@ -43,44 +43,12 @@
     </div>
 </header>
 
-<section class="centered w100">
+<section class="centered w100 pt-5">
     <div class="col w100 aln-center jst-center" id="content-wrapper">
         <!-- Package details -->
         <div class="col w100 aln-start jst-start">
-            <div class="row w100 aln-center jst-start">
-                <h3><span th:text="${package.getName()}">Package name</span></h3>
-            </div>
-            <div class="col w100 aln-start jst-start pt-3">
-                <h4>Included Services</h4>
-                <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${package.getServices()}">
-                    <p>Type: <span th:text="${service.getServiceTypeHumanReadable()}" style="text-transform: uppercase">Service type</span></p>
-                    <div class="row w100 aln-center jst-space-between pt-1">
-                        <div class="row w50 aln-center jst-start">
-                            <div class="col aln-start jst-start" style="margin-right: 2rem">
-                                <div class="row w100 aln-center jst-start"><p>Minutes:</p></div>
-                                <div class="row w100 aln-center jst-start"><p>SMS:</p></div>
-                                <div class="row w100 aln-center jst-start"><p>GIGA:</p></div>
-                            </div>
-                            <div class="col aln-start jst-start">
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getMinutes() > 0 ? service.getMinutes() : '-'}">Minutes</p></div>
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getSms() > 0 ? service.getSms() : '-'}">SMS</p></div>
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getGiga() > 0 ? service.getGiga() : '-'}">GIGA</p></div>
-                            </div>
-                        </div>
-                        <div class="row w50 aln-start jst-start">
-                            <div class="col aln-start jst-start" style="margin-right: 2rem">
-                                <div class="row w100 aln-center jst-start"><p>Extra minutes fee:</p></div>
-                                <div class="row w100 aln-center jst-start"><p>Extra SMS fee:</p></div>
-                                <div class="row w100 aln-center jst-start"><p>Extra GIGA fee:</p></div>
-                            </div>
-                            <div class="col aln-start jst-start">
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraMinutesFee() > 0 ? service.getExtraMinutesFee() : '-'}">Extra minutes fee</p></div>
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraSmsFee() > 0 ? service.getExtraSmsFee() : '-'}">Extra SMS fee</p></div>
-                                <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraGigaFee() > 0 ? service.getExtraGigaFee() : '-'}">Extra GIGA fee</p></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="row w100 aln-center jst-center">
+                <h1><span th:text="${package.getName()}">Package name</span></h1>
             </div>
             <!--
             <div class="col w100 aln-start jst-start pt-3">
@@ -150,9 +118,42 @@
                         </div>
                         <div class="w100 vertical-scroll table-body">
                             <div class="row w100 aln-center jst-start" th:each="validity : ${package.getValidities()}">
-                                <div class="row w10 aln-center jst-center odd-tbl-col table-cell"><input type="checkbox" name="products" th:value="${validity.getIdValidity()}"></div>
+                                <div class="row w10 aln-center jst-center odd-tbl-col table-cell"><input type="radio" name="validity" th:value="${validity.getIdValidity()}" required></div>
                                 <div class="row w70 aln-center jst-start even-tbl-col table-cell"><span th:text="${validity.getDuration()}">Duration</span></div>
                                 <div class="row w20 aln-center jst-start odd-tbl-col table-cell"><span th:text="${validity.getFee()}">Fee</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- services selection -->
+                <div class="col w100 aln-start jst-start pt-3">
+                    <h5>Included Services</h5>
+                    <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${package.getServices()}">
+                        <div class="row w100 aln-center jst-start even-tbl-col table-cell"><span th:text="${service.getServiceTypeHumanReadable()}" style="text-transform: uppercase">Service type</span></div>
+                        <div class="row w100 aln-center jst-space-between pt-1">
+                            <div class="row w50 aln-center jst-start">
+                                <div class="col aln-start jst-start" style="margin-right: 2rem">
+                                    <div class="row w100 aln-center jst-start"><p>Minutes:</p></div>
+                                    <div class="row w100 aln-center jst-start"><p>SMS:</p></div>
+                                    <div class="row w100 aln-center jst-start"><p>GIGA:</p></div>
+                                </div>
+                                <div class="col aln-start jst-start">
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getMinutes() > 0 ? service.getMinutes() : '-'}">Minutes</p></div>
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getSms() > 0 ? service.getSms() : '-'}">SMS</p></div>
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getGiga() > 0 ? service.getGiga() : '-'}">GIGA</p></div>
+                                </div>
+                            </div>
+                            <div class="row w50 aln-start jst-start">
+                                <div class="col aln-start jst-start" style="margin-right: 2rem">
+                                    <div class="row w100 aln-center jst-start"><p>Extra minutes fee:</p></div>
+                                    <div class="row w100 aln-center jst-start"><p>Extra SMS fee:</p></div>
+                                    <div class="row w100 aln-center jst-start"><p>Extra GIGA fee:</p></div>
+                                </div>
+                                <div class="col aln-start jst-start">
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraMinutesFee() > 0 ? service.getExtraMinutesFee() : '-'}">Extra minutes fee</p></div>
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraSmsFee() > 0 ? service.getExtraSmsFee() : '-'}">Extra SMS fee</p></div>
+                                    <div class="row w100 aln-center jst-start"><p th:text="${service.getExtraGigaFee() > 0 ? service.getExtraGigaFee() : '-'}">Extra GIGA fee</p></div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -178,7 +179,7 @@
                 <!-- Start date selection -->
                 <div class="row w100 aln-center jst-start margin-right-children-2">
                     <label>Start subscription from:</label>
-                    <input type="date" name="start-date" class="input-fld">
+                    <input type="date" name="start-date" th:min="${#dates.format(#dates.createNow(),'yyyy-MM-dd')}" class="input-fld" required>
                 </div>
                 <!-- Confirm button -->
                 <div class="col w100 aln-end jst-start pt-2">
