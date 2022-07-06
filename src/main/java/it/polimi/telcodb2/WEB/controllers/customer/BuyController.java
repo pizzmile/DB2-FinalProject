@@ -106,8 +106,8 @@ public class BuyController extends HttpServlet {
 
         // Simulate the payment
 //        boolean paymentSuccess = PaymentService.pay();
-//        boolean paymentSuccess = false; // DEBUG
-        boolean paymentSuccess = true;  // DEBUG
+        boolean paymentSuccess = false; // DEBUG
+//        boolean paymentSuccess = true;  // DEBUG
 
         // If payment succeed, then update its payment status and create an activations schedule
         // finally run check this changes the status of the customer to solvent and update alert

@@ -9,6 +9,17 @@
         <title>Employee - Sales Report</title>
 
         <link rel="stylesheet" href="css/style.css">
+        <style>
+            .content-wrapper {
+                min-width: 480px;
+                width: 100%;
+                max-width: 640px;
+                padding: 1rem;
+            }
+            h5 {
+                font-size: 1rem;
+            }
+        </style>
     </head>
 
     <body>
@@ -22,5 +33,120 @@
                 <a class="nav-link" href="logout">Log Out</a>
             </div>
         </header>
+
+        <section class="col aln-center jst-center w100">
+            <!-- AvgProductSold -->
+            <div class="content-wrapper">
+                <div class="col w100 aln-start jst-start margin-bottom-children-2 border-bottom-light">
+                    <h4>Average number of products per package</h4>
+                    <div class="row w100 aln-center jst-start border-bottom-light">
+                        <div class="row w70 jst-start aln-center">
+                            <h5>Package Name</h5>
+                        </div>
+                        <div class="row w30 jst-start aln-center">
+                            <h5>Average products</h5>
+                        </div>
+                    </div>
+                    <div class="row w100 aln-center jst-start" th:each="avgProductSold : ${avgProductSoldList}">
+                        <div class="row w70 jst-start aln-center">
+                            <p th:text="${avgProductSold.getName()}">Package name</p>
+                        </div>
+                        <div class="row w30 jst-start aln-center">
+                            <p th:text="${avgProductSold.getAvgNumOfProducts()}">Average</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BestSellerProduct -->
+            <div class="content-wrapper" th:if="${bestSellerProductView != null}">
+                <div class="col w100 aln-start jst-start margin-bottom-children-2 border-bottom-light">
+                    <h4>Best seller product</h4>
+                    <div class="row w100 aln-center jst-start">
+                        <div class="row w70 jst-start aln-center">
+                            <p th:text="${bestSellerProductView.getProductName()}">Product name</p>
+                        </div>
+                        <div class="row w30 jst-start aln-center">
+                            <p th:text="'(Value of sales: ' + ${bestSellerProductView.getValueOfSales()} + ')'">Value</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- InsolvetCustomersReport -->
+            <div class="content-wrapper">
+                <div class="col w100 aln-start jst-start margin-bottom-children-2 border-bottom-light">
+                    <h4>Insolvent customers report</h4>
+                    <div class="col w100 aln-start jst-start" th:each="report : ${customerReportList}">
+                        <div class="row w100 aln-center jst-start">
+                            <p th:text="${report.getUsername()} + ' - ' + ${report.getEmail()}">Username - Email</p>
+                        </div>
+                        <div th:if="${report.hasAlert()}">
+                            <p th:text="'Last payment at' + ${report.getAlertReport().getLastPayment()} + ' of ' + ${report.getAlertReport().getAmount()}"></p>
+                        </div>
+                        <div class="col w100 aln-start jst-start margin-bottom-children-2">
+                            <div class="row w100 aln-center jst-start border-bottom-light">
+                                <div class="row w10 jst-start aln-center">
+                                    <h5>ID Order</h5>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <h5>Starting on</h5>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <h5>Created at</h5>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <h5>Total Cost</h5>
+                                </div>
+                            </div>
+                            <div class="row w100 aln-center jst-start" th:each="orderReport : ${report.getOrderReportList()}">
+                                <div class="row w10 jst-start aln-center">
+                                    <p th:text="${orderReport.getIdOrder()}">ID Order</p>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <p th:text="${orderReport.getStartDate()}">Starting on</p>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <p th:text="${orderReport.getCreationDateTime()}">Created at</p>
+                                </div>
+                                <div class="row w30 jst-start aln-center">
+                                    <p th:text="${orderReport.getTotalCost()}">Total Cost</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!--
+            <div class="content-wrapper">
+                <div class="col w100 aln-start jst-start">
+                    <div class="row w100 aln-center jst-start" th:each="avgProductSold : ${avgProductSoldList}">
+                        <p th:text="${avgProductSold.getName()}"></p>
+                        <p th:text="${avgProductSold.getAvgNumOfProducts()}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="col w100 aln-start jst-start">
+                    <div class="row w100 aln-center jst-start" th:each="avgProductSold : ${avgProductSoldList}">
+                        <p th:text="${avgProductSold.getName()}"></p>
+                        <p th:text="${avgProductSold.getAvgNumOfProducts()}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-wrapper">
+                <div class="col w100 aln-start jst-start">
+                    <div class="row w100 aln-center jst-start" th:each="avgProductSold : ${avgProductSoldList}">
+                        <p th:text="${avgProductSold.getName()}"></p>
+                        <p th:text="${avgProductSold.getAvgNumOfProducts()}"></p>
+                    </div>
+                </div>
+            </div>
+            -->
+        </section>
+
     </body>
 </html>
