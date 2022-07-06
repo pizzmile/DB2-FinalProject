@@ -53,23 +53,8 @@ public class BuyController extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String path;
-
-        // Parse parameters from session
         HttpSession session = request.getSession();
-        Object orderObject = session.getAttribute("order");
-        // Check if order is null, else cast it as an order object
-        if (orderObject == null) {
-            path = getServletContext().getContextPath() + "/customer-home?error=Order was empty";
-            response.sendRedirect(path);
-            return;
-        }
-        Order tmpOrder = (Order) orderObject;
 
-        // Parse values fo order
-        LocalDate startDate = tmpOrder.getStartDate();
-        List<Integer> productIds = tmpOrder.getProducts().stream().map(Product::getIdProduct).collect(Collectors.toList());
-        Integer packageId = tmpOrder.getPackage().getIdPackage();
-        Integer validityId = tmpOrder.getValidity().getIdValidity();
         // If customer id is in session, then parse it, otherwise redirect with error
         Integer customerId;
         if (session.getAttribute("userid") == null) {
@@ -80,21 +65,58 @@ public class BuyController extends HttpServlet {
             customerId = (Integer) session.getAttribute("userid");
         }
 
-        // Create order object and add it to the database
-        Order newOrder = orderService.createOrder(startDate, customerId, productIds, packageId, validityId);
-        if (newOrder == null) {
-            path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong while creating the order";
+        // Parse parameters from session
+        Object orderObject = session.getAttribute("order");
+        // Check if order is null, else cast it as an order object
+        if (orderObject == null) {
+            path = getServletContext().getContextPath() + "/customer-home?error=Order was empty";
             response.sendRedirect(path);
+            return;
+        }
+        Order orderSummary = (Order) orderObject;
+
+        // If order is new
+        Order order;
+        if (orderSummary.getIdOrder() == -1) {
+            // Parse values for order
+            LocalDate startDate = orderSummary.getStartDate();
+            List<Integer> productIds = orderSummary.getProducts().stream().map(Product::getIdProduct).collect(Collectors.toList());
+            Integer packageId = orderSummary.getPackage().getIdPackage();
+            Integer validityId = orderSummary.getValidity().getIdValidity();
+            // Create order object and add it to the database
+            order = orderService.createOrder(startDate, customerId, productIds, packageId, validityId);
+            if (order == null) {
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong while creating the order";
+                response.sendRedirect(path);
+                return;
+            }
+        }
+        // If order already exists
+        else if (orderSummary.getIdOrder() > 0) {
+            order = orderService.findById(orderSummary.getIdOrder());
+            if (order == null) {
+                // TODO: redirect with error
+                return;
+            }
+        }
+        else {
+            // TODO: redirect with error
             return;
         }
 
         // Simulate the payment
-        boolean paymentSuccess = PaymentService.pay();
-//        boolean paymentSuccess = false;
+//        boolean paymentSuccess = PaymentService.pay();
+//        boolean paymentSuccess = false; // DEBUG
+        boolean paymentSuccess = true;  // DEBUG
 
         // If payment succeed, then update its payment status and create an activations schedule
+        // finally run check this changes the status of the customer to solvent and update alert
         if (paymentSuccess) {
-            Schedule schedule = orderService.setPaymentSuccess(newOrder.getIdOrder());
+            Schedule schedule = orderService.setPaymentSuccess(order.getIdOrder());
+            if (schedule == null) {
+                // TODO: redirect with error
+                return;
+            }
             path = getServletContext().getContextPath() + "/customer-home?success=true";
             response.sendRedirect(path);
         }
@@ -102,7 +124,11 @@ public class BuyController extends HttpServlet {
         else {
             // Payment status is left false
             // Flag user as insolvent
-            customerService.increaseFailedPayments(customerId, newOrder.getTotalCost());
+            Integer numOfFailedPayments = customerService.increaseFailedPayments(customerId, order.getTotalCost());
+            if (numOfFailedPayments == null) {
+                // TODO: redirect with error
+                return;
+            }
             path = getServletContext().getContextPath() + "/customer-home?warning=Failed payment!";
             response.sendRedirect(path);
         }

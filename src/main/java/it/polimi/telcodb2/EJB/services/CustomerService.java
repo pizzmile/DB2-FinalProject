@@ -101,14 +101,15 @@ public class CustomerService {
             return null;
         }
 
-        // Find customer
-        Customer customer = em.find(Customer.class, customerId);
         // Increment failed payments by 1
+        Customer customer = em.find(Customer.class, customerId);
         customer.setFailedPayments(customer.getFailedPayments() + 1);
+
         // If customer is solvent, set is as insolvent
         if (customer.isSolvent()) {
             customer.setSolvent(false);
         }
+
         // If failed payments reach 3, then create an alert
         if (customer.getFailedPayments() == 3) {
             // Create alert
@@ -156,6 +157,11 @@ public class CustomerService {
         return customer.getFailedPayments();
     }
 
+    /**
+     *
+     * @param customerId
+     * @return
+     */
     public List<Order> findPendingOrders(int customerId) {
         // Check if customer is valid
         if (customerId < 0) {

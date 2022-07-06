@@ -81,7 +81,15 @@ public class Order implements Serializable {
         this.paid = false;
     }
 
+    /**
+     * Constructor for order summaries (detached)
+     * @param startDate
+     * @param validity
+     * @param products
+     * @param aPackage
+     */
     public Order(LocalDate startDate, Validity validity, List<Product> products, Package aPackage) {
+        this.idOrder = -1;
         this.startDate = startDate;
         // Sum the fees
         this.totalCost = products.stream().map(Product::getFee).reduce(validity.getFee(), Float::sum) * validity.getDuration();

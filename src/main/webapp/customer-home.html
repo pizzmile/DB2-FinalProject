@@ -88,7 +88,7 @@
     </section>
 
     <!-- Failed orders -->
-    <section class="centered w100" th:if="${pendingOrders != null}">
+    <section class="centered w100" th:if="${pendingOrders != null && !pendingOrders.isEmpty()}">
         <div class="col w100 aln-center jst-center content-wrapper">
             <div class="col w100 aln-center jst-start pt-1">
                 <div class="row w100 aln-center jst-start table-heading">
@@ -99,7 +99,7 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                     <div class="row w100 aln-center jst-start" th:each="order : ${pendingOrders}">
-                        <a th:href="'package-page?id=' + ${order.getIdOrder()}" class="row w100 aln-center jst-start table-link">
+                        <a th:href="'order-retrieval?id=' + ${order.getIdOrder()}" class="row w100 aln-center jst-start table-link">
                             <div class="w30 row aln-center jst-start" >
                                 <span th:text="${order.getPackage().getName()}"> Package name </span>
                             </div>
