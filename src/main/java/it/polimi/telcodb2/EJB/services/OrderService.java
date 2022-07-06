@@ -133,7 +133,6 @@ public class OrderService {
      * @return the order summary object if passed data are valid, else null
      */
     public OrderSummary getSummary(Integer validityId, List<Integer> productIdList, Integer packageId, LocalDate startDate) {
-        // TODO: fetch.LAZY may be better than EAGER
         // Check if there are null parameters
         if (validityId == null || productIdList == null || productIdList.stream().anyMatch(Objects::isNull) || startDate == null) {
             return null;
