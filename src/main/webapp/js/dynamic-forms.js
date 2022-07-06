@@ -11,7 +11,7 @@ function safeRemove(element, className) {
 }
 function updateIncrementalId(node, id, idValue) {
     let element = node.querySelector('#' + id);
-    element.id = element.id += numOfServices;
+    element.id += numOfServices;
     return element;
 }
 
@@ -173,6 +173,7 @@ function updateServiceAttributes(idx) {
 var numOfServices = 1;
 
 function addServiceInput() {
+    console.log("pippo")
     let serviceInputsWrapper = document.getElementById('services-wrapper');         // get parent wrapper
     let node = new DOMParser().parseFromString(string, 'text/html').body.firstChild;    // create new node
 
@@ -204,6 +205,12 @@ function addServiceInput() {
     let removeButton = updateIncrementalId(node, 'remove-button-', numOfServices)
     removeButton.setAttribute('onclick', 'removeServiceInput(' + numOfServices + ')');
 
+    // Update index
+    let hiddenIndexInput = node.querySelector('#hidden-');
+    hiddenIndexInput.id += numOfServices;
+    hiddenIndexInput.setAttribute("value", numOfServices);
+    console.log(hiddenIndexInput);
+
     // Append new node
     serviceInputsWrapper.appendChild(node);
 }
@@ -216,6 +223,7 @@ function removeServiceInput(idx) {
 
 
 string = '<!-- Service insertion fields -->' + '<div class="w100 row aln-end jst-center margin-bottom-children-1" id="service-insertion-">\n' +
+    '                  <input hidden type="number" name="index" value="" id="hidden-">\n' +
     '                  <div class="col aln-start jst-center w90 pr-1">\n' +
     '                    <!-- Type selection -->\n' +
     '                    <div class="row w100 aln-center jst-start">\n' +

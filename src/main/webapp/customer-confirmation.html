@@ -89,14 +89,14 @@
           <a th:href="'package-page?id=' + ${session.orderSummary.getPackage().getIdPackage()}"><button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%">CANCEL</button></a>
         </div>
         <div class="w50 pl-2" style="height: 2.25rem">
-          <form action="buy" method="POST">
+          <form action="buy" method="POST" style="height: 100%">
             <input type="submit" class="submit-btn w100 pt-1 pb-1" style="height: 100%" value="BUY">
           </form>
         </div>
       </div>
       <div class="row w100 aln-center jst-center pt-3" th:if="${session.userid == null}">
         <div class="w50 pr-2" style="height: 2.25rem">
-          <a href="customer-landing">
+          <a href="customer-landing" style="height: 100%">
             <button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%; font-size: 1.25rem">Log in or register to continue</button>
           </a>
         </div>
