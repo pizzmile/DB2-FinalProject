@@ -143,6 +143,7 @@ public class CustomerReport {
         Map<Integer, List<InsolventCustomersReportView>> partitionedList = insolventCustomersReportViewList.stream()
                 .collect(groupingBy(InsolventCustomersReportView::getIdCustomer));
 
+
         // For each list in the partition map create a list of customer reports
         List<CustomerReport> customerReportList = new ArrayList<CustomerReport>();
         for (Integer id : partitionedList.keySet()) {
@@ -155,7 +156,6 @@ public class CustomerReport {
                     reportViewList.get(0).getLastPayment(),
                     reportViewList.get(0).getAmount()
             );
-            // TODO: check why repeat the same order
             customerReport.setOrderReportList(
                     reportViewList.stream()
                             .map(reportView -> new OrderReport(

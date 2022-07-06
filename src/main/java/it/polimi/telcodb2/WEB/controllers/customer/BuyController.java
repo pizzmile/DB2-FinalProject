@@ -1,13 +1,12 @@
 package it.polimi.telcodb2.WEB.controllers.customer;
 
-import it.polimi.telcodb2.EJB.entities.Customer;
 import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.entities.Product;
 import it.polimi.telcodb2.EJB.entities.Schedule;
 import it.polimi.telcodb2.EJB.services.CustomerService;
 import it.polimi.telcodb2.EJB.services.OrderService;
+import it.polimi.telcodb2.EJB.utils.OrderSummary;
 import it.polimi.telcodb2.EJB.utils.PaymentService;
-import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
@@ -66,14 +65,14 @@ public class BuyController extends HttpServlet {
         }
 
         // Parse parameters from session
-        Object orderObject = session.getAttribute("order");
+        Object orderSummaryObject = session.getAttribute("orderSummary");
         // Check if order is null, else cast it as an order object
-        if (orderObject == null) {
+        if (orderSummaryObject == null) {
             path = getServletContext().getContextPath() + "/customer-home?error=Order was empty";
             response.sendRedirect(path);
             return;
         }
-        Order orderSummary = (Order) orderObject;
+        OrderSummary orderSummary = (OrderSummary) orderSummaryObject;
 
         // If order is new
         Order order;
@@ -95,18 +94,20 @@ public class BuyController extends HttpServlet {
         else if (orderSummary.getIdOrder() > 0) {
             order = orderService.findById(orderSummary.getIdOrder());
             if (order == null) {
-                // TODO: redirect with error
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
+                response.sendRedirect(path);
                 return;
             }
         }
         else {
-            // TODO: redirect with error
+            path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
+            response.sendRedirect(path);
             return;
         }
 
         // Simulate the payment
-//        boolean paymentSuccess = PaymentService.pay();
-        boolean paymentSuccess = false; // DEBUG
+        boolean paymentSuccess = PaymentService.pay();
+//        boolean paymentSuccess = false; // DEBUG
 //        boolean paymentSuccess = true;  // DEBUG
 
         // If payment succeed, then update its payment status and create an activations schedule
@@ -114,7 +115,8 @@ public class BuyController extends HttpServlet {
         if (paymentSuccess) {
             Schedule schedule = orderService.setPaymentSuccess(order.getIdOrder());
             if (schedule == null) {
-                // TODO: redirect with error
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
+                response.sendRedirect(path);
                 return;
             }
             path = getServletContext().getContextPath() + "/customer-home?success=true";
@@ -126,7 +128,8 @@ public class BuyController extends HttpServlet {
             // Flag user as insolvent
             Integer numOfFailedPayments = customerService.increaseFailedPayments(customerId, order.getTotalCost());
             if (numOfFailedPayments == null) {
-                // TODO: redirect with error
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
+                response.sendRedirect(path);
                 return;
             }
             path = getServletContext().getContextPath() + "/customer-home?warning=Failed payment!";

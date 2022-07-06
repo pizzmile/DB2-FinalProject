@@ -2,6 +2,7 @@ package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.services.OrderService;
+import it.polimi.telcodb2.EJB.utils.OrderSummary;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -72,13 +73,14 @@ public class OrderRetrievalController extends HttpServlet {
         // Parse order id
         Integer orderId = ParseUtils.toInteger(request.getParameter("id"), -1);
         if (orderId == -1) { // check validity
-            // TODO: redirect with error
+            String path = getServletContext().getContextPath() + "/customer-home?error=Missing order ID";
+            response.sendRedirect(path);
             return;
         }
 
         // Find order by id
-        Order order = orderService.findById(orderId);
-        request.getSession().setAttribute("order", order);
+        OrderSummary orderSummary = orderService.findSummary(orderId);
+        request.getSession().setAttribute("orderSummary", orderSummary);
 
         // Render confirmation page
         this.processTemplate(request, response, new HashMap<>());

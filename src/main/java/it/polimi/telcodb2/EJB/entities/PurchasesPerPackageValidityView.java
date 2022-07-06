@@ -16,10 +16,14 @@ import java.math.BigDecimal;
 )
 public class PurchasesPerPackageValidityView implements Serializable {
     @Id
+    @Column(name = "hashid", nullable = false)
+    private String hash;
+
     @Column(name = "idPackage", nullable = false)
     private int idPackage;
     @Column(name = "name", nullable = false, length = 256)
     private String name;
+
     @Column(name = "idValidity", nullable = false)
     private int idValidity;
     @Column(name = "duration", nullable = false)

@@ -72,6 +72,7 @@ public class EmployeeHomePageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Check if user has logged in
         HttpSession session = request.getSession();
         if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");

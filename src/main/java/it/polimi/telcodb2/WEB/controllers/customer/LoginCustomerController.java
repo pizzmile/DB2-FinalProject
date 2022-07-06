@@ -83,7 +83,7 @@ public class LoginCustomerController extends HttpServlet {
         session.setAttribute("username", customer.getUsername());
         session.setAttribute("userid", customer.getIdCustomer());
         // If there is no order in session, then the user is requesting directly the landing page
-        if (session.getAttribute("order") == null) {
+        if (session.getAttribute("orderSummary") == null) {
             path = getServletContext().getContextPath() + "/customer-home";
         }
         // If there is an order in session, then the user is requesting the landing page from the confirmation form

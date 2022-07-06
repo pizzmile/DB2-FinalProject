@@ -19,13 +19,13 @@ import java.time.LocalDateTime;
         }
 )
 public class InsolventCustomersReportView implements Serializable {
-    @Id
     @Column(name = "idCustomer", nullable = false)
     private int idCustomer;
     @Column(name = "username", nullable = false, length = 256)
     private String username;
     @Column(name = "email", nullable = false, length = 256)
     private String email;
+    @Id
     @Column(name = "idOrder", nullable = false)
     private int idOrder;
     @Temporal(TemporalType.DATE)

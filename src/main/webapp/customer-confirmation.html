@@ -17,7 +17,7 @@
       <h1 >Package name</h1>
       <div class="col w100 aln-start jst-start pt-3">
         <h4>Included Services</h4>
-        <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${session.order.getPackage().getServices()}">
+        <div class="col w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1" th:each="service : ${session.orderSummary.getPackage().getServices()}">
           <p>Type: <span th:text="${service.getServiceTypeHumanReadable()}" style="text-transform: uppercase">Service type</span></p>
           <div class="row w100 aln-center jst-space-between pt-1">
             <div class="row w50 aln-center jst-start">
@@ -55,19 +55,19 @@
             <p>Fee: </p>
           </div>
           <div class="col aln-start jst-start">
-            <p th:text="${session.order.getValidity().getDuration()}">duration</p>
-            <p th:text="${session.order.getValidity().getFee()}">fee</p>
+            <p th:text="${session.orderSummary.getValidity().getDuration()}">duration</p>
+            <p th:text="${session.orderSummary.getValidity().getFee()}">fee</p>
           </div>
         </div>
       </div>
-      <div class="col w100 aln-start jst-start pt-3" th:if="${session.order.getProducts().size() > 0}">
+      <div class="col w100 aln-start jst-start pt-3" th:if="${session.orderSummary.getProducts().size() > 0}">
         <h4>Optional Products</h4>
         <div class="row w100 aln-start jst-start pt-1 border-bottom-light pb-1 pt-1">
           <div class="col aln-start jst-start pr-2">
             <p>Name: </p>
             <p>Fee: </p>
           </div>
-          <div class="col aln-start jst-start" th:each="product : ${session.order.getProducts()}">
+          <div class="col aln-start jst-start" th:each="product : ${session.orderSummary.getProducts()}">
             <p th:text="${product.getName()}">name</p>
             <p th:text="${product.getFee()}">fee</p>
           </div>
@@ -79,14 +79,14 @@
             <h3>Total cost: </h3>
           </div>
           <div class="col aln-end jst-start">
-            <h3 th:text="${session.order.getDecimalTotalCost()}">total cost</h3>
+            <h3 th:text="${session.orderSummary.getDecimalTotalCost()}">total cost</h3>
           </div>
         </div>
       </div>
       <!-- Login / Buy -->
       <div class="row w100 aln-center jst-center pt-3" th:if="${session.userid != null}">
         <div class="w50 pr-2" style="height: 2.25rem">
-          <a th:href="'package-page?id=' + ${session.order.getPackage().getIdPackage()}"><button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%">CANCEL</button></a>
+          <a th:href="'package-page?id=' + ${session.orderSummary.getPackage().getIdPackage()}"><button class="submit-btn outlined w100 pt-1 pb-1" style="height: 100%">CANCEL</button></a>
         </div>
         <div class="w50 pl-2" style="height: 2.25rem">
           <form action="buy" method="POST">

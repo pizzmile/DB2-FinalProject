@@ -77,7 +77,7 @@ public class SignupCustomerController extends HttpServlet {
         // If everything went good, then proceed
         HttpSession session = request.getSession();
         // If there is no order in session, then the user is requesting directly the landing page
-        if (session.getAttribute("order") == null) {
+        if (session.getAttribute("orderSummary") == null) {
             path = getServletContext().getContextPath() + "/customer-landing?success=True";
         }
         // If there is an order in session, then the user is requesting the landing page from the confirmation form

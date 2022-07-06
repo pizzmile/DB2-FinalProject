@@ -15,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -69,22 +70,28 @@ public class SalesReportPageController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        HashMap<String, Object> context = new HashMap<>();
+        // Check if user has logged in
+        HttpSession session = request.getSession();
+        if (session.getAttribute("username") == null || session.getAttribute("userid") == null) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid sessions");
+        }
 
         // Get views
         List<AvgProductSoldView> avgProductSoldViewList = salesReportService.findAvgProductSold();
         BestSellerProductView bestSellerProductView = salesReportService.findBestSellerProduct();
         List<InsolventCustomersReportView> insolventCustomersReportViewList = salesReportService.findInsolventCustomersReport();
-        List<PurchasesPerPackageValidityView> purchasesPerPackageValidityViews = salesReportService.findPurchasePerPackageValidity();
+        List<PurchasesPerPackageValidityView> purchasesPerPackageValidityViewList = salesReportService.findPurchasePerPackageValidity();
         List<PurchasesPerPackageView> purchasesPerPackageViewsList = salesReportService.findPurchasesPerPackage();
         List<TotalSalesValueView> totalSalesValueViewList = salesReportService.findTotalSalesValue();
 
-        // Add views to context
         List<CustomerReport> customerReportList = CustomerReport.fromCustomersReportView(insolventCustomersReportViewList);
+
+        // Add views to context
+        HashMap<String, Object> context = new HashMap<>();
         context.put("avgProductSoldList", avgProductSoldViewList);
         context.put("bestSellerProductView", bestSellerProductView);
         context.put("customerReportList", customerReportList);
-        context.put("purchasesPerPackageValidityViews", purchasesPerPackageValidityViews);
+        context.put("purchasesPerPackageValidityViewList", purchasesPerPackageValidityViewList);
         context.put("purchasesPerPackageViewsList", purchasesPerPackageViewsList);
         context.put("totalSalesValueViewList", totalSalesValueViewList);
 

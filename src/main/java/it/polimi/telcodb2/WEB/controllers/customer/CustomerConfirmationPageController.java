@@ -2,6 +2,7 @@ package it.polimi.telcodb2.WEB.controllers.customer;
 
 import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.services.OrderService;
+import it.polimi.telcodb2.EJB.utils.OrderSummary;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
@@ -80,7 +81,7 @@ public class CustomerConfirmationPageController extends HttpServlet {
         HttpSession session = request.getSession();
 
         // If it is the first time loading the page, then create an order object and add it to the session
-        if (session.getAttribute("userid") == null || session.getAttribute("order") == null) {
+        if (session.getAttribute("userid") == null || session.getAttribute("orderSummary") == null) {
             // Parse package parameters
             Integer packageId = ParseUtils.toInteger(request.getParameter("id"), -1);
             Integer validityId = ParseUtils.toInteger(request.getParameter("validity"), -1);
@@ -107,9 +108,9 @@ public class CustomerConfirmationPageController extends HttpServlet {
             }
 
             // Get order summery
-            Order order = orderService.getSummary(validityId, productIds, packageId, startDate);
+            OrderSummary orderSummary = orderService.getSummary(validityId, productIds, packageId, startDate);
             // Add summary to session
-            session.setAttribute("order", order);
+            session.setAttribute("orderSummary", orderSummary);
         }
 
         this.processTemplate(request, response, new HashMap<>());
