@@ -18,7 +18,7 @@ public class BestSellerProductView implements Serializable {
     @Id
     @Column(name = "idProduct", nullable = false)
     private int idProduct;
-    @Column(name = "productName", nullable = false, length = 256)
+    @Column(name = "name", nullable = false, length = 256)
     private String productName;
     @Column(name = "valueOfSales", nullable = false, precision = 2)
     private BigDecimal valueOfSales;

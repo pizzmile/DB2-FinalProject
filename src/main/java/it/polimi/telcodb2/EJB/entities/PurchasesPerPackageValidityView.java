@@ -30,7 +30,7 @@ public class PurchasesPerPackageValidityView implements Serializable {
     private int duration;
     @Column(name = "fee", nullable = false, precision = 2)
     private BigDecimal fee;
-    @Column(name = "numOfPurchases", nullable = false)
+    @Column(name = "purchases", nullable = false)
     private long numOfPurchases;
 
     public PurchasesPerPackageValidityView(int idPackage, String name, int idValidity, int duration, BigDecimal fee, long numOfPurchases) {

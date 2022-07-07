@@ -20,9 +20,9 @@ public class TotalSalesValueView implements Serializable {
     private int idPackage;
     @Column(name = "name", nullable = false, length = 256)
     private String name;
-    @Column(name = "salesWProducts", nullable = false, precision = 2)
+    @Column(name = "completeValue", nullable = false, precision = 2)
     private BigDecimal salesWProducts;
-    @Column(name = "salesWoutProducts", nullable = false, precision = 2)
+    @Column(name = "partialValue", nullable = false, precision = 2)
     private BigDecimal salesWoutProducts;
 
     public TotalSalesValueView(int idPackage, String name, BigDecimal salesWProducts, BigDecimal salesWoutProducts) {

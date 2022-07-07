@@ -19,7 +19,7 @@ public class PurchasesPerPackageView implements Serializable {
     private int idPackage;
     @Column(name = "name", nullable = false, length = 256)
     private String name;
-    @Column(name = "numOfPurchases", nullable = false)
+    @Column(name = "purchases", nullable = false)
     private long numOfPurchases;
 
     public PurchasesPerPackageView(int idPackage, String name, long numOfPurchases) {
