@@ -194,7 +194,7 @@ public class OrderService {
         // Simulate payment service
         boolean paid = PaymentService.pay();
 //        paid = false;
-//        paid = true;
+        paid = true;
 
         // Check if summary is valid
         if (orderSummary == null || orderSummary.getIdOrder() < 0 && orderSummary.getIdOrder() != -1) {

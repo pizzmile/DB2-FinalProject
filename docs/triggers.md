@@ -77,19 +77,16 @@ BEGIN
     IF (NEW.paid = true) THEN
         /* Update TotalSalesValue */
         CALL updateTotalSalesValue(NEW.idPackage, NEW.idValidity, NEW.totalCost);
-        /* Update AvgProductsSold */
-        CALL updateAvgProductsSold(NEW.idPackage);
         /* Update PurchasesPerPackage */
         CALL updatePurchasesPerPackage(NEW.idPackage);
         /* Update PurchasesPerPackageValidity */
         CALL updatePurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
-        /* BestSellerProduct */
-       CALL updateBestSellerProduct(NEW.idOrder);
     ELSE
         /* InsolventCustomersReport */
         CALL updateInsolventCustomersReport(NEW.idCustomer);
     END IF;
 END;
+
 ````
 
 When an order is created: 
@@ -168,6 +165,28 @@ end;
 ````
 
 When a product is created, if it is the first one, then the trigger adds a default tuple for it in ``BestSellerProduct_mv``.
+
+### ChosenProduct
+
+#### After insert
+
+````
+create trigger update_chosen_product_mv
+    after insert
+    on ChosenProduct
+    for each row
+begin
+    set @idPackage = (select O.idPackage from `Order` O where O.idOrder = NEW.idOrder and O.paid = true);
+    
+    if ((select O.paid from `Order` O where O.idOrder = NEW.idOrder) = true) then
+        call updateAvgProductsSold(@idPackage);
+        call updateBestSellerProduct(NEW.idOrder);
+    end if;
+end;
+````
+
+When an association between a paid order and its chosen product is created, then the trigger updates the statistics that
+involve products.
 
 ## Stored procedures
 

@@ -4,6 +4,7 @@ import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.services.OrderService;
 import it.polimi.telcodb2.EJB.utils.OrderSummary;
 import it.polimi.telcodb2.EJB.utils.ParseUtils;
+import it.polimi.telcodb2.EJB.utils.PaymentService;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;

@@ -7,6 +7,7 @@ import it.polimi.telcodb2.EJB.services.CustomerService;
 import it.polimi.telcodb2.EJB.services.OrderService;
 import it.polimi.telcodb2.EJB.utils.OrderSummary;
 import it.polimi.telcodb2.EJB.utils.PaymentService;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
