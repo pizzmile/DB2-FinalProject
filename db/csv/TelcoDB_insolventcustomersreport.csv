@@ -1,6 +1,0 @@
-#,idCustomer,username,email,idOrder,startDate,creationDateTime,totalCost,idPackage,idValidity,idAlert,lastPayment,amount
-1,1,pluto,pluto@pluto.com,21,2022-08-07,2022-07-07 00:34:43,1055.52,7,13,4,2022-07-07 00:34:43,1055.52
-2,1,pluto,pluto@pluto.com,20,2022-07-06,2022-07-06 23:30:57,539.64,6,11,4,2022-07-07 00:34:43,1055.52
-3,2,minnie,minie@minnie.com,17,2022-07-15,2022-07-06 21:19:31,467.64,5,5,3,2022-07-06 21:19:31,467.64
-4,2,minnie,minie@minnie.com,16,2022-07-15,2022-07-06 21:19:17,467.64,5,5,3,2022-07-06 21:19:31,467.64
-5,2,minnie,minie@minnie.com,15,2022-07-15,2022-07-06 21:18:07,311.76,4,8,3,2022-07-06 21:19:31,467.64

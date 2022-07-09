@@ -74,7 +74,7 @@ public class CustomerPackagePageController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Clear order from session if user is coming back from confirmation page
         HttpSession session = request.getSession();
-        session.setAttribute("order", null);
+        session.setAttribute("orderSummary", null);
 
         // Parse package id
         Integer packageId = ParseUtils.toInteger(request.getParameter("id"), null);

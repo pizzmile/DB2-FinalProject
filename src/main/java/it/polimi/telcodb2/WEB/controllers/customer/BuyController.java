@@ -101,6 +101,7 @@ public class BuyController extends HttpServlet {
                 path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
                 break;
         }
+        session.setAttribute("orderSummary", null);
         response.sendRedirect(path);
     }
 }
