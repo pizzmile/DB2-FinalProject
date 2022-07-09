@@ -51,7 +51,7 @@ create trigger update_chosen_validity_mvs
 BEGIN
     SET @name = (SELECT name FROM Package P WHERE P.idPackage = NEW.idPackage);
     SET @duration = 0;
-    SET @fee = 0;
+    SET @fee = 0.00;
     SELECT duration, fee
     INTO @duration, @fee
     FROM Validity V
@@ -176,17 +176,15 @@ When a product is created, if it is the first one, then the trigger adds a defau
 create procedure updateAvgProductsSold(IN idPkg int)
 BEGIN
     /* Compute average */
-    SET @average = 0;
-    SELECT AVG(DT1.numOfProducts)
-    INTO @average
+    SET @average = 
+    (SELECT AVG(DT1.numOfProducts)
     FROM
         (SELECT O.idPackage, COUNT(*) AS numOfProducts
         FROM ChosenProduct CP
             JOIN `Order` O ON CP.idOrder = O.idOrder
         WHERE O.idPackage = idPkg
         GROUP BY O.idOrder)
-    AS DT1
-    GROUP BY DT1.idPackage;
+    AS DT1);
 
     /* Update with new average */
     UPDATE AvgProductsSold_mv
@@ -205,7 +203,7 @@ create
     definer = admin@localhost procedure updateBestSellerProduct(IN idOrd int)
 BEGIN
     /* Get current bestseller product total value */
-    SET @currTotalValue = 0;
+    SET @currTotalValue = 0.00;
     SET @currId = 0;
     SELECT idProduct, valueOfSales
     INTO @currId, @currTotalValue
@@ -215,7 +213,7 @@ BEGIN
 
     /* Compute total value of sales of the new product */
     SET @idProd = 0;
-    SET @newTotalValue = 0;
+    SET @newTotalValue = 0.00;
     SELECT P.idProduct, SUM(P.fee * V.duration) AS totalValue
     INTO @idProd, @newTotalValue
     FROM
@@ -336,8 +334,8 @@ Given the package id and the validity id, the procedure increments the count of 
 create procedure updateTotalSalesValue(IN idPkg int, IN idVal int, IN totVal int)
 BEGIN
     /* Get old values */
-    SET @completeValue = 0;
-    SET @partialValue = 0;
+    SET @completeValue = 0.00;
+    SET @partialValue = 0.00;
     SELECT completeValue, partialValue
     INTO @completeValue, @partialValue
     FROM TotalSalesValue_mv
@@ -345,7 +343,7 @@ BEGIN
 
     /* Get deltas */
     SET @deltaCompleteValue = totVal;
-    SET @deltaPartialValue = 0;
+    SET @deltaPartialValue = 0.00;
     SELECT duration * fee
     INTO @deltaPartialValue
     FROM Validity
