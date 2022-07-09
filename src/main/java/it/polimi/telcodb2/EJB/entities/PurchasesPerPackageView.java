@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "purchasesperpackage", schema = "TelcoDB")
+@Table(name = "purchasesperpackage_mv", schema = "TelcoDB")
 @NamedQueries(
         {
                 @NamedQuery(

@@ -123,6 +123,9 @@ public class Customer implements Serializable {
     public void setFailedPayments(int failedPayments) {
         this.failedPayments = failedPayments;
     }
+    public void increaseFailedPayments() {
+        this.failedPayments++;
+    }
 
     public Alert getAlert() {
         return alert;

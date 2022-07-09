@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "bestsellerproduct", schema = "TelcoDB")
+@Table(name = "bestsellerproduct_mv", schema = "TelcoDB")
 @NamedQueries(
         {
                 @NamedQuery(

@@ -102,10 +102,6 @@ public class PackageService {
                     return tmpValidity;
                 })
                 .collect(Collectors.toList());
-//        Validity newValidity = new Validity(duration, fee);
-//        List<Validity> validityList = validityIdList.stream()
-//                .map(id -> em.find(Validity.class, id))
-//                .collect(Collectors.toList());
 
         // Create new customer entity object
         Package aPackage = new Package(name, validityList, serviceList, productList);

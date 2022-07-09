@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "insolventcustomersreport", schema = "TelcoDB")
+@Table(name = "insolventcustomersreport_mv", schema = "TelcoDB")
 @NamedQueries(
         {
                 @NamedQuery(

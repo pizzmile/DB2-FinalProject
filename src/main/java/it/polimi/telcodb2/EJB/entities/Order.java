@@ -80,6 +80,16 @@ public class Order implements Serializable {
         this.validity = validity;
         this.paid = false;
     }
+    public Order(LocalDate startDate, Customer customer, List<Product> products, Package aPackage, Validity validity, boolean paid) {
+        this.startDate = startDate;
+        this.creationDateTime = LocalDateTime.now();
+        this.totalCost = products.stream().map(Product::getFee).reduce(validity.getFee(), Float::sum) * validity.getDuration();
+        this.customer = customer;
+        this.products = products;
+        this.aPackage = aPackage;
+        this.validity = validity;
+        this.paid = paid;
+    }
 
     /**
      * Constructor for order summaries (detached)

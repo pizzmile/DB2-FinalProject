@@ -1,9 +1,9 @@
 package it.polimi.telcodb2.EJB.utils;
 
-import it.polimi.telcodb2.EJB.entities.Product;
-import it.polimi.telcodb2.EJB.entities.Validity;
+import it.polimi.telcodb2.EJB.entities.*;
 import it.polimi.telcodb2.EJB.entities.Package;
 
+import javax.validation.ConstraintViolationException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;

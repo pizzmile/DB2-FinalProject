@@ -74,66 +74,33 @@ public class BuyController extends HttpServlet {
         }
         OrderSummary orderSummary = (OrderSummary) orderSummaryObject;
 
-        // If order is new
-        Order order;
-        if (orderSummary.getIdOrder() == -1) {
-            // Parse values for order
-            LocalDate startDate = orderSummary.getStartDate();
-            List<Integer> productIds = orderSummary.getProducts().stream().map(Product::getIdProduct).collect(Collectors.toList());
-            Integer packageId = orderSummary.getPackage().getIdPackage();
-            Integer validityId = orderSummary.getValidity().getIdValidity();
-            // Create order object and add it to the database
-            order = orderService.createOrder(startDate, customerId, productIds, packageId, validityId);
-            if (order == null) {
-                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong while creating the order";
-                response.sendRedirect(path);
-                return;
-            }
-        }
-        // If order already exists
-        else if (orderSummary.getIdOrder() > 0) {
-            order = orderService.findById(orderSummary.getIdOrder());
-            if (order == null) {
+        int paymentStatus = orderService.payOrder(orderSummary, customerId);
+        switch (paymentStatus) {
+            case -1:
+                path = getServletContext().getContextPath() + "/customer-home?error=Unexpected payment status";
+                break;
+            case 0:
+                path = getServletContext().getContextPath() + "/customer-home?success=true";
+                break;
+            case 1:
+                path = getServletContext().getContextPath() + "/customer-home?warning=Failed payment!";
+                break;
+            case 2:
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Unexpected order id";
+                break;
+            case 3:
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Payment was successful but an error occurred while retrieving related entities";
+                break;
+            case 4:
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Payment was successful but an error occurred while retrieving the order";
+                break;
+            case 5:
+                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Payment failed but an error occurred while retrieving related entities";
+                break;
+            default:
                 path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
-                response.sendRedirect(path);
-                return;
-            }
+                break;
         }
-        else {
-            path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
-            response.sendRedirect(path);
-            return;
-        }
-
-        // Simulate the payment
-        boolean paymentSuccess = PaymentService.pay();
-//        boolean paymentSuccess = false; // DEBUG
-//        boolean paymentSuccess = true;  // DEBUG
-
-        // If payment succeed, then update its payment status and create an activations schedule
-        // finally run check this changes the status of the customer to solvent and update alert
-        if (paymentSuccess) {
-            Schedule schedule = orderService.setPaymentSuccess(order.getIdOrder());
-            if (schedule == null) {
-                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
-                response.sendRedirect(path);
-                return;
-            }
-            path = getServletContext().getContextPath() + "/customer-home?success=true";
-            response.sendRedirect(path);
-        }
-        // If payment failed
-        else {
-            // Payment status is left false
-            // Flag user as insolvent
-            Integer numOfFailedPayments = customerService.increaseFailedPayments(customerId, order.getTotalCost());
-            if (numOfFailedPayments == null) {
-                path = getServletContext().getContextPath() + "/customer-home?error=Ops! Something went wrong";
-                response.sendRedirect(path);
-                return;
-            }
-            path = getServletContext().getContextPath() + "/customer-home?warning=Failed payment!";
-            response.sendRedirect(path);
-        }
+        response.sendRedirect(path);
     }
 }

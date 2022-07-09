@@ -63,6 +63,12 @@
                     </div>
                 </div>
             </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${purchasesPerPackageViewsList != null && !purchasesPerPackageViewsList.isEmpty()}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Number of purchases per package</h4>
+                    <p>Nothing to show</p>
+                </div>
+            </div>
 
             <!-- PurchasePerPackageValidity -->
             <div class="content-wrapper" th:if="${purchasesPerPackageValidityViewList != null && !purchasesPerPackageValidityViewList.isEmpty()}">
@@ -104,6 +110,12 @@
                     </div>
                 </div>
             </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${purchasesPerPackageValidityViewList != null && !purchasesPerPackageValidityViewList.isEmpty()}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Number of purchases per package divided for validity</h4>
+                    <p>Nothing to show</p>
+                </div>
+            </div>
 
             <!-- TotalSalesValue -->
             <div class="content-wrapper" th:if="${totalSalesValueViewList != null && !totalSalesValueViewList.isEmpty()}">
@@ -139,6 +151,12 @@
                     </div>
                 </div>
             </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${totalSalesValueViewList != null && !totalSalesValueViewList.isEmpty()}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Total sales value per package</h4>
+                    <p>Nothing to show</p>
+                </div>
+            </div>
 
             <!-- AvgProductSold -->
             <div class="content-wrapper" th:if="${avgProductSoldList != null && !avgProductSoldList.isEmpty()}">
@@ -166,6 +184,12 @@
                             <p th:text="${avgProductSold.getAvgNumOfProducts()}">Average</p>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${avgProductSoldList != null && !avgProductSoldList.isEmpty()}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Average number of products per package</h4>
+                    <p>Nothing to show</p>
                 </div>
             </div>
 
@@ -221,6 +245,12 @@
                     </div>
                 </div>
             </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${customerReportList != null && !customerReportList.isEmpty()}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Insolvent customers report</h4>
+                    <p>Nothing to show</p>
+                </div>
+            </div>
 
             <!-- BestSellerProduct -->
             <div class="content-wrapper" th:if="${bestSellerProductView != null}">
@@ -234,6 +264,12 @@
                             <p>(Value of sales: <strong th:text="${bestSellerProductView.getValueOfSales()}">VALUE</strong>)</p>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="content-wrapper pt-2 pb-2" th:unless="${bestSellerProductView != null}">
+                <div class="col w100 aln-start jst-center margin-bottom-children-2">
+                    <h4>Best seller product</h4>
+                    <p>Nothing to show</p>
                 </div>
             </div>
 
