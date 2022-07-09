@@ -9,116 +9,356 @@ across all the sold service packages.Number of total purchases per package;
 5. `AvgProductsSold_mv`: average number of optional products sold together with each service package;
 6. `InsolventCustomersReport_mv`: list of insolvent users, suspended orders and alerts;
 
-
 ## Triggers
 
-### Package creation
+### Alert
 
-**CompatibleValidities**
-
-1. Insert new default row (`purchases=0`) in `PurchasesPerPackageValidity_mv`
+#### After insert
 ````
-CREATE TRIGGER `TelcoDB`.`CompatibleValidities_AFTER_INSERT`
-AFTER INSERT ON `TelcoDB`.`CompatibleValidities`
-FOR EACH ROW
+create trigger update_alert_mvs
+    after insert
+    on Alert
+    for each row
 BEGIN
-    CALL defaultPurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
-END
+    CALL updateInsolventCustomersReport(NEW.idCustomer);
+END;
 ````
 
-Test:
-1. ✅
+The trigger adds in every tuple in `InsolventCustomersReport_mv` with the new values of the alert.
 
-**Package**
+#### After update
 
-1. Insert new default (``value=0``) row in TotalSalesValue_mv
-2. Insert new default (``purchases=0``) row in PurchasesPerPackage_mv
-3. Insert new default (``average=0``) row In AvgProductsSold_mv
 ````
-CREATE TRIGGER `TelcoDB`.`Package_AFTER_INSERT`
-AFTER INSERT ON `TelcoDB`.`Package`
-FOR EACH ROW
+create trigger update_alert_mvs_2
+    after update
+    on Alert
+    for each row
 BEGIN
-    INSERT INTO TotalSalesValue_mv (idPackage, `name`, completeValue, partialValue) 
-    VALUES (NEW.idPackage, NEW.`name`, 0, 0);
-    
-    INSERT INTO PurchasesPerPackage_mv (idPackage, `name`, purchases) 
-    VALUES (NEW.idPackage, NEW.`name`, 0);
-    
-    INSERT INTO AvgProductsSold_mv (idPackage, `name`, avgNumOfProducts)
-    VALUES (NEW.idPackage, NEW.`name`, 0);
-END
+    CALL updateInsolventCustomersReport(NEW.idCustomer);
+END;
 ````
 
-Test:
-1. ✅
-2. ✅
-3. ✅
+The trigger updates every tuple in `InsolventCustomersReport_mv` with the new values of the alert.
 
-### Order creation
+### Compatible validity
 
-**Order**
-
-If the new order has been paid then proceed as follows:
-1. update the tuple `TotalSalesValue_mv` for the package in order with the new value of sales;
-2. update the tuple `PurchasesPerPackage_mv` for the package in order with the new number of purchases;
-3. update the tuple `PurchasesPerPackageValidity_mv` for the couple ``<package, validity`` in order with the new number
-of purchases;
-4. update `BestSellerProduct_mv` by recomputing the new current bestseller product;
-5. update the tuple `AvgProductsSold_mv` for the package in order with the new average of products sold with it.
-
-If the new order has not been paid yet then:
-6. inset a row into `InsolventCustomersReport_mv` for the current triple `<customer, order, alert>` and update the 
-already existing tuples for that customer.
+#### After insert
 ````
-CREATE TRIGGER `TelcoDB`.`Order_AFTER_INSERT`
-AFTER INSERT ON `TelcoDB`.`Order`
-FOR EACH ROW
+create trigger update_chosen_validity_mvs
+    after insert
+    on CompatibleValidities
+    for each row
 BEGIN
-	IF (NEW.paid = true) THEN
-		CALL updateTotalSalesValue(NEW.idPackage);
-        CALL updatePurchasesPerPackage(NEW.idPackage);
-        CALL updatePurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
-        CALL updateBestSellerProduct(NEW.idOrder);
+    SET @name = (SELECT name FROM Package P WHERE P.idPackage = NEW.idPackage);
+    SET @duration = 0;
+    SET @fee = 0;
+    SELECT duration, fee
+    INTO @duration, @fee
+    FROM Validity V
+    WHERE V.idValidity = NEW.idValidity;
+
+    INSERT INTO PurchasesPerPackageValidity_mv (hashId, idPackage, name, idValidity, duration, fee, purchases)
+    VALUES (MD5(CONCAT(NEW.idPackage, NEW.idValidity)), NEW.idPackage, @name, NEW.idValidity, @duration, @fee, 0);
+END;
+````
+
+When a package is created, and it is associated with a validity  the trigger creates a new row into 
+``PurchasesPerPackageValidity`` with default value ``purchases = 0``.
+
+### Order
+
+#### After insert
+````
+create trigger update_order_mvs
+    after insert
+    on `Order`
+    for each row
+BEGIN
+    IF (NEW.paid = true) THEN
+        /* Update TotalSalesValue */
+        CALL updateTotalSalesValue(NEW.idPackage, NEW.idValidity, NEW.totalCost);
+        /* Update AvgProductsSold */
         CALL updateAvgProductsSold(NEW.idPackage);
-	ELSE
-		CALL updateInsolventCustomersReport(NEW.idCustomer);
-	END IF;
-END
+        /* Update PurchasesPerPackage */
+        CALL updatePurchasesPerPackage(NEW.idPackage);
+        /* Update PurchasesPerPackageValidity */
+        CALL updatePurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
+        /* BestSellerProduct */
+       CALL updateBestSellerProduct(NEW.idOrder);
+    ELSE
+        /* InsolventCustomersReport */
+        CALL updateInsolventCustomersReport(NEW.idCustomer);
+    END IF;
+END;
 ````
 
-Test:
-1. ✅
-2. ✅
-3. ⚠️
-4. ⚠️
-5. ⚠️
-6. ✅
+When an order is created: 
+* if it has already been paid, then the trigger updates the statistics associated with the included package;
+* if the order has not been paid yet, then the trigger inserts a row into `InsolventCustomersReport_mv` for the order and updates the 
+attributes from `Alert` - if there is one - for each row corresponding with the customer.
 
-### Order update
+#### After update
 
-**Order**
-If the order status has changed from unpaid (`false`) to paid (`true`), then 
-1. update the tuple `TotalSalesValue_mv` for the package in order with the new value of sales;
-2. update the tuple `PurchasesPerPackage_mv` for the package in order with the new number of purchases;
-3. update the tuple `PurchasesPerPackageValidity_mv` for the couple ``<package, validity`` in order with the new number
-   of purchases;
-4. update `BestSellerProduct_mv` by recomputing the new current bestseller product;
-5. update the tuple `AvgProductsSold_mv` for the package in order with the new average of products sold with it;
-6. delete the tuple in `InsolventCustomersReport_mv` for the current order.
-```
-CREATE TRIGGER `TelcoDB`.`Order_AFTER_UPDATE`
-AFTER UPDATE ON `TelcoDB`.`Order`
-FOR EACH ROW
+````
+create trigger update_order_mvs_2
+    after update
+    on `Order`
+    for each row
 BEGIN
     IF (OLD.paid = false AND NEW.paid = true) THEN
-        CALL updateTotalSalesValue(NEW.idPackage);
-        CALL updatePurchasesPerPackage(NEW.idPackage);
-        CALL updatePurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
-        CALL updateBestSellerProduct(NEW.idOrder);
+        /* Update TotalSalesValue_mv */
+        CALL updateTotalSalesValue(NEW.idPackage, NEW.idValidity, NEW.totalCost);
+        /* Update AvgProductsSold_mv */
         CALL updateAvgProductsSold(NEW.idPackage);
+        /* Update PurchasesPerPackage_mv */
+        CALL updatePurchasesPerPackage(NEW.idPackage);
+        /* Update PurchasesPerPackageValidity_mv */
+        CALL updatePurchasesPerPackageValidity(NEW.idPackage, NEW.idValidity);
+        /* BestSellerProduct_mv */
+        CALL updateBestSellerProduct(NEW.idOrder);
         
-        DELETE FROM InsolventCustomersReport_mv ICR WHERE ICR.idOrder = NEW.idOrder;
+        /* InsolventCustomersReport_mv */
+        DELETE FROM InsolventCustomersReport_mv WHERE idOrder = NEW.idOrder;
     END IF;
-END
+END;
 ````
+
+When an order is update from not-paid (`paid=false`) to paid (`paid=true`), then the trigger updates the statistics for the 
+included package and delete the corresponding tuple from `InsolventCustomersReport_mv`.
+
+### Package
+
+#### After insert
+````
+create trigger update_package_mvs
+after insert
+on Package
+for each row
+BEGIN
+    /* Create default rows in materialized views */
+    INSERT INTO AvgProductsSold_mv (idPackage, name, avgNumOfProducts)
+    VALUES (NEW.idPackage, NEW.name, 0);
+
+    INSERT INTO PurchasesPerPackage_mv (idPackage, name, purchases)
+    VALUES (NEW.idPackage, NEW.name, 0);
+
+    INSERT INTO TotalSalesValue_mv (idPackage, name, completeValue, partialValue)
+    VALUES (NEW.idPackage, NEW.name, 0, 0);
+END;
+````
+
+When a package is created then the trigger adds rows for it in `AvgProductsSold_mv`, `PurchasesPerPackage_mv` and `TotalSalesValue_mv`
+with default statistics.
+
+### Product
+
+#### After insert
+
+````
+create trigger update_product_mvs
+    after insert
+    on Product
+    for each row
+BEGIN
+    IF ((SELECT COUNT(*) FROM BestSellerProduct_mv) = 0) THEN
+        INSERT INTO BestSellerProduct_mv (idProduct, name, valueOfSales)
+        VALUES (NEW.idProduct, NEW.name, 0);
+    end if;
+end;
+````
+
+When a product is created, if it is the first one, then the trigger adds a default tuple for it in ``BestSellerProduct_mv``.
+
+## Stored procedures
+
+### updateAvgProductsSold
+````
+create procedure updateAvgProductsSold(IN idPkg int)
+BEGIN
+    /* Compute average */
+    SET @average = 0;
+    SELECT AVG(DT1.numOfProducts)
+    INTO @average
+    FROM
+        (SELECT O.idPackage, COUNT(*) AS numOfProducts
+        FROM ChosenProduct CP
+            JOIN `Order` O ON CP.idOrder = O.idOrder
+        WHERE O.idPackage = idPkg
+        GROUP BY O.idOrder)
+    AS DT1
+    GROUP BY DT1.idPackage;
+
+    /* Update with new average */
+    UPDATE AvgProductsSold_mv
+    SET
+        avgNumOfProducts = @average
+    WHERE idPackage = idPkg;
+END;
+````
+
+Given the order id, the procedure computes the average number of product sold with a service package and updates its value inside 
+`AvgProductsSold_mv`.
+
+### updateBestSellerProduct
+````
+create
+    definer = admin@localhost procedure updateBestSellerProduct(IN idOrd int)
+BEGIN
+    /* Get current bestseller product total value */
+    SET @currTotalValue = 0;
+    SET @currId = 0;
+    SELECT idProduct, valueOfSales
+    INTO @currId, @currTotalValue
+    FROM BestSellerProduct_mv
+    ORDER BY valueOfSales DESC
+    LIMIT 1;
+
+    /* Compute total value of sales of the new product */
+    SET @idProd = 0;
+    SET @newTotalValue = 0;
+    SELECT P.idProduct, SUM(P.fee * V.duration) AS totalValue
+    INTO @idProd, @newTotalValue
+    FROM
+        (SELECT idProduct FROM ChosenProduct CP WHERE idOrder = idOrd) AS DT1 
+        JOIN ChosenProduct CP ON DT1.idProduct = CP.idProduct
+        JOIN `Order` O ON O.idOrder = CP.idOrder
+        JOIN Validity V on O.idValidity = V.idValidity
+        JOIN Product P on CP.idProduct = P.idProduct
+    WHERE O.paid = true
+    GROUP BY P.idProduct
+    ORDER BY totalValue DESC
+    LIMIT 1;
+
+    SET @newName = (SELECT name FROM Product WHERE idProduct = @idProd);
+
+    /* Update the best seller product */
+    IF (@currTotalValue < @newTotalValue) THEN
+        IF (@currId = @idProd) THEN
+            UPDATE BestSellerProduct_mv
+            SET valueOfSales = @newTotalValue
+            WHERE idProduct = @idProd;
+        ELSE
+            INSERT INTO BestSellerProduct_mv(idProduct, name, valueOfSales)
+            VALUES (@idProd, @newName, @newTotalValue);
+
+            DELETE FROM BestSellerProduct_mv WHERE idProduct != @idProd;
+        END IF;
+    END IF;
+END;
+````
+
+Given the order id, the procedure finds the total sales value of each one of the products included in it. Then, if the highest total 
+sales value is greater than the one of the current bestseller product, it sets this as the new bestseller product.
+
+### updateInsolventCustomersReport
+````
+create procedure updateInsolventCustomersReport(IN idCus int)
+BEGIN
+    INSERT INTO InsolventCustomersReport_mv (idCustomer, username, email, idOrder, startDate, creationDateTime, totalCost, idPackage, idValidity, idAlert, lastPayment, amount)
+    SELECT *
+    FROM
+        (SELECT
+            C.idCustomer,
+            C.username,
+            C.email,
+            O.idOrder,
+            O.startDate,
+            O.creationDateTime,
+            O.totalCost,
+            O.idPackage,
+            O.idValidity,
+            A.idAlert,
+            A.lastPayment,
+            A.amount
+        FROM
+            Customer C 
+            JOIN `Order` O ON C.idCustomer = O.idCustomer
+            LEFT JOIN Alert A ON A.idCustomer = C.idCustomer
+        WHERE
+            O.paid = false AND C.idCustomer = idCus)
+    AS DT1
+    ON DUPLICATE KEY UPDATE
+        idAlert = DT1.idAlert,
+        amount = DT1.amount,
+        lastPayment = DT1.lastPayment;
+END;
+````
+
+Given a customer id, the procedure creates a report into `InsolventCustomersReport_mv` for each unpaid order of the customer with:
+* the customer data
+* the order data
+* the alert data if there is one
+If there is already a tuple for the order then it updates the attributes for the alert with the current values.
+
+### updatePurchasesPerPackage
+````
+create procedure updatePurchasesPerPackage(IN idPkg int)
+BEGIN
+    /* Get current purchases */
+    SET @purchases = 0;
+    SELECT purchases
+    INTO @purchases
+    FROM PurchasesPerPackage_mv
+    WHERE idPackage = idPkg;
+
+    /* Update with the incremented number of purchases */
+    UPDATE PurchasesPerPackage_mv
+    SET purchases = @purchases + 1
+    WHERE idPackage = idPkg;
+END;
+````
+
+Given the package id, the procedure increments the count of purchases for the package.
+
+### updatePurchasesPerPackageValidity
+````
+create procedure updatePurchasesPerPackageValidity(IN idPkg int, IN idVal int)
+BEGIN
+    /* Get current purchases */
+    SET @purchases = 0;
+    SELECT purchases
+    INTO @purchases
+    FROM PurchasesPerPackageValidity_mv
+    WHERE hashId = MD5(CONCAT(idPkg, idVal));
+
+    /* Update with the incremented number of purchases */
+    UPDATE PurchasesPerPackageValidity_mv
+    SET
+        purchases = @purchases + 1
+    WHERE idPackage = idPkg AND idValidity = idVal;
+END;
+````
+
+Given the package id and the validity id, the procedure increments the count of purchases for the couple package-validity.
+
+### updateTotalSalesValue
+````
+create procedure updateTotalSalesValue(IN idPkg int, IN idVal int, IN totVal int)
+BEGIN
+    /* Get old values */
+    SET @completeValue = 0;
+    SET @partialValue = 0;
+    SELECT completeValue, partialValue
+    INTO @completeValue, @partialValue
+    FROM TotalSalesValue_mv
+    WHERE idPackage = idPkg;
+
+    /* Get deltas */
+    SET @deltaCompleteValue = totVal;
+    SET @deltaPartialValue = 0;
+    SELECT duration * fee
+    INTO @deltaPartialValue
+    FROM Validity
+    WHERE idValidity = idVal;
+
+    /* Update with new values */
+    UPDATE TotalSalesValue_mv
+    SET
+        completeValue = @completeValue + @deltaCompleteValue,
+        partialValue = @partialValue + @deltaPartialValue
+    WHERE idPackage = idPkg;
+END;
+````
+
+Given the package id, the validity id and the total value of an order, the procedure updates the total sales value for 
+the package.
