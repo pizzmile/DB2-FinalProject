@@ -198,36 +198,6 @@
             <!-- Services -->
             <div class="form-section col aln-start jst-start w100 margin-bottom-children-1">
               <h5>Included services</h5>
-              <!--
-              <div class="col w100 aln-center jst-start">
-                <div class="row w100 aln-center jst-end">
-                  <div class="w10"></div>
-                  <div class="w20 row aln-center jst-center">Type</div>
-                  <div class="w70 row aln-center jst-space-between">
-                    <div class="w15 row aln-center jst-center">Minutes</div>
-                    <div class="w15 row aln-center jst-center">Extra minutes</div>
-                    <div class="w15 row aln-center jst-center">SMS</div>
-                    <div class="w15 row aln-center jst-center">Extra SMS</div>
-                    <div class="w15 row aln-center jst-center">GIGA</div>
-                    <div class="w15 row aln-center jst-center">Extra GIGA</div>
-                  </div>
-                </div>
-                <div class="w100 vertical-scroll table-body">
-                  <div class="row w100 aln-center jst-start" th:each="service : ${services}">
-                    <div class="w10 row aln-center jst-start"><input type="checkbox" name="services" th:value="${service.getIdService()}"></div>
-                    <div class="w20 row aln-center jst-start"><span th:text="${service.getServiceTypeHumanReadable()}"> Type </span></div>
-                    <div class="w70 row aln-center jst-space-between">
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getMinutes()}"> Minutes </span></div>
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getExtraMinutesFee()}"> Extra Minutes </span></div>
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getSms()}"> SMS </span></div>
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getExtraSmsFee()}"> Extra SMS </span></div>
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getGiga()}"> GIGA </span></div>
-                      <div class="w15 row aln-center jst-start"><span th:text="${service.getExtraGigaFee()}"> Extra GIGA </span></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              -->
               <div class="col w100 aln-center jst-start pb-1">
                 <div class="row w100 aln-center jst-start pb-1 pt-1">
                   <p>Fixed phone services:</p>
@@ -241,7 +211,12 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                   <div class="row w100 aln-center jst-start" th:each="service : ${fixedPhoneServices}">
-                    <div class="w20 row aln-center jst-center table-cell"><input type="checkbox" name="services" th:value="${service.getIdService()}"></div>
+                    <div class="w20 row aln-center jst-center table-cell">
+                      <input type="checkbox" name="services" th:value="${service.getIdService()}"
+                             class="w10">
+                      <input type="number" th:name="'mult-' + ${service.getIdService()}" step="1" min="1" value="1" name="multiplier"
+                             class="w20">
+                    </div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getMinutes()}"> Minutes </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getExtraMinutesFee()}"> Extra Minutes </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getSms()}"> SMS </span></div>
@@ -262,7 +237,12 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                   <div class="row w100 aln-center jst-start" th:each="service : ${fixedInternetServices}">
-                    <div class="w20 row aln-center jst-center table-cell"><input type="checkbox" name="services" th:value="${service.getIdService()}"></div>
+                    <div class="w20 row aln-center jst-center table-cell">
+                      <input type="checkbox" name="services" th:value="${service.getIdService()}"
+                             class="w10">
+                      <input type="number" th:name="'mult-' + ${service.getIdService()}" step="1" min="1" value="1" name="multiplier"
+                             class="w20">
+                    </div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getGiga()}"> GIGA </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getExtraGigaFee()}"> Extra GIGA </span></div>
                     <div class="w20 row aln-center jst-start table-cell"></div>
@@ -283,7 +263,12 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                   <div class="row w100 aln-center jst-start" th:each="service : ${mobilePhoneServices}">
-                    <div class="w20 row aln-center jst-center table-cell"><input type="checkbox" name="services" th:value="${service.getIdService()}"></div>
+                    <div class="w20 row aln-center jst-center table-cell">
+                      <input type="checkbox" name="services" th:value="${service.getIdService()}"
+                             class="w10">
+                      <input type="number" th:name="'mult-' + ${service.getIdService()}" step="1" min="1" value="1" name="multiplier"
+                             class="w20">
+                    </div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getMinutes()}"> Minutes </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getExtraMinutesFee()}"> Extra Minutes </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getSms()}"> SMS </span></div>
@@ -304,7 +289,12 @@
                 </div>
                 <div class="w100 vertical-scroll table-body">
                   <div class="row w100 aln-center jst-start" th:each="service : ${mobileInternetServices}">
-                    <div class="w20 row aln-center jst-center table-cell"><input type="checkbox" name="services" th:value="${service.getIdService()}"></div>
+                    <div class="w20 row aln-center jst-center table-cell">
+                      <input type="checkbox" name="services" th:value="${service.getIdService()}"
+                             class="w10">
+                      <input type="number" th:name="'mult-' + ${service.getIdService()}" step="1" min="1" value="1" name="multiplier"
+                             class="w20">
+                    </div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getGiga()}"> GIGA </span></div>
                     <div class="w20 row aln-center jst-start table-cell"><span th:text="${service.getExtraGigaFee()}"> Extra GIGA </span></div>
                     <div class="w20 row aln-center jst-start table-cell"></div>

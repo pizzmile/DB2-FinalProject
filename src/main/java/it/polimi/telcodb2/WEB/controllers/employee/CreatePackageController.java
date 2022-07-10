@@ -77,6 +77,21 @@ public class CreatePackageController extends HttpServlet {
         // Parse services
         List<Integer> serviceIds = ParseUtils.toIntegerList(
                 ParseUtils.toStringListSafe(request.getParameterValues("services")), false);
+        List<Integer> serviceIdsMultiplied = new ArrayList<>();
+        serviceIds.forEach(elem -> {
+            int multiplier = ParseUtils.toInteger(request.getParameter("mult-" + elem), -1);
+            if (multiplier > 0) {
+                for (int i=0; i<multiplier; i++) {
+                    serviceIdsMultiplied.add(elem);
+                }
+            } else {
+                try {
+                    response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Ops! Something went wrong");
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
         // Parse optional products
         List<Integer> productIds = ParseUtils.toIntegerList(
                 ParseUtils.toStringListSafe(request.getParameterValues("products")), false);
@@ -122,7 +137,7 @@ public class CreatePackageController extends HttpServlet {
 //        });
 
         // Create package
-        Package newPackage = packageService.createPackage(name, validityOptions, serviceIds, productIds);
+        Package newPackage = packageService.createPackage(name, validityOptions, serviceIdsMultiplied, productIds);
         if (newPackage == null) {
             response.sendRedirect(getServletContext().getContextPath() + "/employee-home?error=Ops! Something went wrong");
             return;

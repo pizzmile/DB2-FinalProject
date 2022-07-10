@@ -55,14 +55,6 @@ public class ServiceService {
      */
     public Service createService(int serviceType, Integer minutes, Float extraMinutesFee, Integer sms, Float extraSmsFee, Integer giga, Float extraGigaFee) {
         Service newService = new Service(serviceType, minutes, extraMinutesFee, sms, extraSmsFee, giga, extraGigaFee);
-        System.out.println(newService.getServiceType());
-        System.out.println(newService.getMinutes());
-        System.out.println(newService.getExtraMinutesFee());
-        System.out.println(newService.getSms());
-        System.out.println(newService.getExtraSmsFee());
-        System.out.println(newService.getGiga());
-        System.out.println(newService.getExtraGigaFee());
-
 
         try {
             em.persist(newService);
