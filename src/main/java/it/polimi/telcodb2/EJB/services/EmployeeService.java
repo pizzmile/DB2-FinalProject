@@ -15,8 +15,16 @@ public class EmployeeService {
     @PersistenceContext
     private EntityManager em;
 
+    /**
+     * Check if some given credentials match any employee in the database
+     * @param username the username of the employee
+     * @param password the password of the employee
+     * @return the employee entity object if credentials match, else null
+     * @throws CredentialsException if any error occurs during the fetching of the data from the database
+     * @throws NonUniqueResultException if there are more than one customer with the same username
+     */
     public Employee checkCredentials(String username, String password) throws CredentialsException, NonUniqueResultException {
-        List<Employee> employeeList = null;
+        List<Employee> employeeList;
 
         try {
             employeeList = em.createNamedQuery("Employee.checkCredentials", Employee.class)

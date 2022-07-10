@@ -24,13 +24,6 @@ public class CreatePackageController extends HttpServlet {
 
     @EJB
     private PackageService packageService;
-    @EJB
-    private ProductService productService;
-    @EJB
-    private ServiceService serviceService;
-    @EJB
-    private ValidityService validityService;
-
 
     public CreatePackageController() {
         super();

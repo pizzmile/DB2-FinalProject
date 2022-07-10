@@ -9,12 +9,8 @@ import it.polimi.telcodb2.EJB.utils.Pair;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Stateless
@@ -30,50 +26,17 @@ public class PackageService {
      */
     public List<Package> findByName(String name) {
         return em.createNamedQuery("Product.findByName", Package.class)
+                .setParameter("name", name)
                 .getResultList();
     }
 
     /**
-     * Create new package and insert it into the database
-     * @param name name of the package
-     * @param validityIdList list of ids of compatible validities
-     * @param serviceIdList lis of ids of included service
-     * @param productIdList list of ids of optional products
-     * @return the product if everything went good, else null
-     */
-    public Package createOnlyPackage(String name, List<Integer> validityIdList, List<Integer> serviceIdList, List<Integer> productIdList) {
-        // Get optional product entity objects
-        List<Product> productList = productIdList.stream()
-                .map(id -> em.find(Product.class, id))
-                .collect(Collectors.toList());
-        // Get included service entity objects
-        List<Service> serviceList = serviceIdList.stream()
-                .map(id -> em.find(Service.class, id))
-                .collect(Collectors.toList());
-        // Get included validity entity objects
-        List<Validity> validityList = validityIdList.stream()
-                .map(id -> em.find(Validity.class, id))
-                .collect(Collectors.toList());
-
-        // Create new customer entity object
-        Package aPackage = new Package(name, validityList, serviceList, productList);
-        // Try to store the new customer into the database
-        try {
-            em.persist(aPackage);
-            em.flush();
-            return aPackage;
-        } catch (ConstraintViolationException e) {
-            return null;
-        }
-    }
-
-    /**
      * Create a package and every related entity that does not exist
-     * @param name
-     * @param validityData
-     * @param serviceIds
-     * @param productIds
-     * @return
+     * @param name the name of the package
+     * @param validityDataList the list of data for each validity compatible with the package
+     * @param serviceIdList the list of ids of the services included in the package
+     * @param productIdList the list of ids of the products compatible with the package
+     * @return the package entity object
      */
     public Package createPackage(String name, List<Pair<Integer, Float>> validityDataList, List<Integer> serviceIdList, List<Integer> productIdList) {
         // Get optional product entity objects

@@ -37,6 +37,10 @@ public class ServiceService {
                 .getResultList();
     }
 
+    /**
+     * Find all services in the database
+     * @return the list of services
+     */
     public List<Service> findAll() {
         return em.createNamedQuery("Service.findAll", Service.class)
                 .getResultList();

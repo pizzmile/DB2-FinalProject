@@ -1,8 +1,6 @@
 package it.polimi.telcodb2.EJB.services;
 
-import it.polimi.telcodb2.EJB.entities.Alert;
 import it.polimi.telcodb2.EJB.entities.Customer;
-import it.polimi.telcodb2.EJB.entities.Employee;
 import it.polimi.telcodb2.EJB.entities.Order;
 import it.polimi.telcodb2.EJB.exceptions.CredentialsException;
 
@@ -12,7 +10,6 @@ import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Stateless
@@ -21,14 +18,23 @@ public class CustomerService {
     @PersistenceContext
     private EntityManager em;
 
-    // Fetch customers by username
+    /**
+     * Find customer given his/her username
+     * @param username the username of the customer
+     * @return the customer entity object
+     */
     public List<Customer> findByUsername(String username) {
         return em.createNamedQuery("Customer.findByUsername", Customer.class)
                 .setParameter("username", username)
                 .getResultList();
     }
 
-    // Fetch customers by email
+
+    /**
+     * Find customer given his/her email
+     * @param email the email of the customer
+     * @return the customer entity object
+     */
     public List<Customer> findByEmail(String email) {
         return em.createNamedQuery("Customer.findByEmail", Customer.class)
                 .setParameter("email", email)
@@ -95,72 +101,10 @@ public class CustomerService {
         }
     }
 
-    public Integer increaseFailedPayments(int customerId, float amount) {
-        // Check if params are valid
-        if (customerId < 0 || amount < 0) {
-            return null;
-        }
-
-        // Increment failed payments by 1
-        Customer customer = em.find(Customer.class, customerId);
-        customer.setFailedPayments(customer.getFailedPayments() + 1);
-
-        // If customer is solvent, set is as insolvent
-        if (customer.isSolvent()) {
-            customer.setSolvent(false);
-        }
-
-        // If failed payments reach 3, then create an alert
-        if (customer.getFailedPayments() == 3) {
-            // Create alert
-            Alert alert = new Alert(
-                    LocalDateTime.now(),
-                    amount,
-                    customer.getEmail(),
-                    customer.getUsername(),
-                    customer
-            );
-
-            // Commit changes
-            try {
-                em.merge(customer);
-                em.persist(alert);
-                em.flush();
-                return customer.getFailedPayments();
-            } catch (ConstraintViolationException e) {
-                return null;
-            }
-        }
-        else if (customer.getFailedPayments() > 3) {
-            // Find existing alert
-            Alert alert = em.createNamedQuery("Alert.findByCustomerId", Alert.class)
-                    .setParameter("idCustomer", customer.getIdCustomer())
-                    .getSingleResult();
-            if (alert == null) {
-                return null;
-            }
-
-            alert.setLastPayment(LocalDateTime.now());
-            alert.setAmount(amount);
-
-            // Commit changes
-            try {
-                em.merge(customer);
-                em.merge(alert);
-                em.flush();
-                return customer.getFailedPayments();
-            } catch (ConstraintViolationException e) {
-                return null;
-            }
-        }
-
-        return customer.getFailedPayments();
-    }
-
     /**
-     *
-     * @param customerId
-     * @return
+     * Get the list of all non paid order for a customer
+     * @param customerId the id of the customer
+     * @return the list of orders
      */
     public List<Order> findPendingOrders(int customerId) {
         // Check if customer is valid
@@ -169,10 +113,8 @@ public class CustomerService {
         }
 
         // Find pending orders
-        List<Order> pendingOrders = em.createNamedQuery("Order.findPendingByIdCustomer", Order.class)
+        return em.createNamedQuery("Order.findPendingByIdCustomer", Order.class)
                 .setParameter("idCustomer", customerId)
                 .getResultList();
-        pendingOrders.forEach(Order::getPackage);
-        return pendingOrders;
     }
 }
