@@ -183,11 +183,7 @@ public class OrderService {
             return null;
         }
 
-        Order order = em.find(Order.class, orderId);
-        order.getValidity();
-        order.getProducts();
-        order.getPackage();
-        return order;
+        return em.find(Order.class, orderId);
     }
 
     public int payOrder(OrderSummary orderSummary, int idCustomer) {

@@ -43,13 +43,13 @@ public class Order implements Serializable {
 
     // REL: Create
     // Relationship between an order (owner) and its creator customer
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 
     // REL: ChosenProducts
     // Relationship between an order (owner) and the selected additional products
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "ChosenProduct",
             joinColumns = @JoinColumn(name = "idOrder"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
@@ -57,13 +57,13 @@ public class Order implements Serializable {
 
     // REL: About
     // Relationship between an order (owner) and its included package
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idPackage")
     private Package aPackage;
 
     // REL: With
     // Relationship between an order (owner) and its included package
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idValidity")
     private Validity validity;
 
@@ -91,13 +91,6 @@ public class Order implements Serializable {
         this.paid = paid;
     }
 
-    /**
-     * Constructor for order summaries (detached)
-     * @param startDate
-     * @param validity
-     * @param products
-     * @param aPackage
-     */
     public Order(LocalDate startDate, Validity validity, List<Product> products, Package aPackage) {
         this.idOrder = -1;
         this.startDate = startDate;

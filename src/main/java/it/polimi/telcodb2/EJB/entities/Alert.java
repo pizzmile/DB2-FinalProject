@@ -35,7 +35,7 @@ public class Alert implements Serializable {
 
     // REL: Trigger
     // Relationship between an alert (owner) and the customer it refers to
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 

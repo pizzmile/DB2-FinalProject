@@ -57,11 +57,7 @@ public class Service implements Serializable {
 
     // Relationship between package (owner) and its services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
-//    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinTable(name = "IncludedServices", schema = "TelcoDB",
-//            joinColumns = @JoinColumn(name = "idService"),
-//            inverseJoinColumns = @JoinColumn(name = "idPackage"))
-    private List<Package> packages  = new ArrayList<>();
+   private List<Package> packages  = new ArrayList<>();
 
     // Relationship between schedule (owner) and the scheduled services
     @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)

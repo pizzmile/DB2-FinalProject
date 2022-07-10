@@ -24,13 +24,13 @@ public class Schedule implements Serializable {
 
     // REL: Has
     // Relationship between a client and its schedules (owner)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 
     // REL: ScheduledProducts
     // Relationship between schedule (owner) and the scheduled products
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "ScheduledProducts",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
@@ -38,7 +38,7 @@ public class Schedule implements Serializable {
 
     // REL: ScheduledServices
     // Relationship between schedule (owner) and the scheduled services
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany
     @JoinTable(name = "ScheduledServices",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
