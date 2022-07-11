@@ -22,23 +22,23 @@ public class Schedule implements Serializable {
     @Column(name="deactivationDate", nullable = false)
     private LocalDate deactivationDate;
 
-    // REL: Has
-    // Relationship between a client and its schedules (owner)
-    @ManyToOne
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 
-    // REL: ScheduledProducts
-    // Relationship between schedule (owner) and the scheduled products
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "ScheduledProducts",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private List<Product> products;
 
-    // REL: ScheduledServices
-    // Relationship between schedule (owner) and the scheduled services
-    @ManyToMany
+    @ManyToMany(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "ScheduledServices",
             joinColumns = @JoinColumn(name = "idSchedule"),
             inverseJoinColumns = @JoinColumn(name = "idService"))

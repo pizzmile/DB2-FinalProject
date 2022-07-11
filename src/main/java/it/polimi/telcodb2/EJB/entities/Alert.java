@@ -33,9 +33,9 @@ public class Alert implements Serializable {
     @Column(name = "username", nullable = false, unique = true)
     private String username;
 
-    // REL: Trigger
-    // Relationship between an alert (owner) and the customer it refers to
-    @OneToOne
+    @OneToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 
@@ -48,10 +48,6 @@ public class Alert implements Serializable {
         this.email = email;
         this.username = username;
         this.customer = customer;
-    }
-
-    public int getIdAlert() {
-        return idAlert;
     }
 
     public void setIdAlert(int idAlert) {

@@ -31,30 +31,30 @@ public class Package implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    // REL: About
-    // Relationship between an order (owner) and its included package
-    @OneToMany(mappedBy = "aPackage", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "aPackage",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Order> orders;
 
-    // REL: IncludedServices
-    // Relationship between package (owner) and its included services
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "IncludedServices", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idService"))
     private List<Service> services = new ArrayList<>();
 
-    // REL: CompatibleProducts
-    // Relationship between package (owner) and its compatible products
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "CompatibleProducts", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private List<Product> products = new ArrayList<>();
 
-    // REL: CompatibleValidities
-    // Relationship between package (owner) and its compatible validities
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "CompatibleValidities", schema = "TelcoDB",
             joinColumns = @JoinColumn(name = "idPackage"),
             inverseJoinColumns = @JoinColumn(name = "idValidity"))

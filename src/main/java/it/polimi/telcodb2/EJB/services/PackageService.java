@@ -58,7 +58,7 @@ public class PackageService {
                     if (tmpValidityList.isEmpty()) {    // If there are no equivalent validities, create a new one
                         tmpValidity = new Validity(data.getX(), data.getY());
                         em.persist(tmpValidity);
-                        em.flush();
+                        // em.flush(); TODO: check if it
                     } else { // else, take the first (only one)
                         tmpValidity = tmpValidityList.get(0);
                     }

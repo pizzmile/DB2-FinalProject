@@ -71,21 +71,17 @@ public class CustomerService {
      * @throws CredentialsException if any error occurs during the fetching of the data from the database
      * @throws NonUniqueResultException if there are more than one customer with the same username
      */
-    public Customer checkCredentials(String username, String password) throws CredentialsException, NonUniqueResultException {
+    public Customer
+    checkCredentials(String username, String password) throws NonUniqueResultException {
         // Fetch customers by username
         List<Customer> customerList;
-        try {
-            customerList = findByUsername(username);
-        } catch (PersistenceException e) {
-            throw new CredentialsException("Could not verify credentials");
-        }
+        customerList = findByUsername(username);
 
         // If there are no customers, then return null
         // if there is only one customer, then check the password
         // else (there are more customers for the same username) throw exception
         if (customerList.isEmpty()) {
             return null;
-
         } else if (customerList.size() == 1) {
             Customer customer = customerList.get(0);
             // If the password match, then return the customer

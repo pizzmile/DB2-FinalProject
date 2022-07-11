@@ -62,7 +62,7 @@ public class LoginCustomerController extends HttpServlet {
         Customer customer;
         try {
             customer = customerService.checkCredentials(username, password);
-        } catch (CredentialsException | NonUniqueResultException e) {
+        } catch (NonUniqueResultException e) {
             String path = getServletContext().getContextPath() + "/customer-landing?error=Could not check credentials.";
             response.sendRedirect(path);
             return;

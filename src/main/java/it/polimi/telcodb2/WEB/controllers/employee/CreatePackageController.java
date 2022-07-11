@@ -115,20 +115,6 @@ public class CreatePackageController extends HttpServlet {
             return;
         }
 
-        // Create the list of compatible validities
-//        List<Integer> validityIds = new ArrayList<Integer>();
-//        validityOptions.forEach(validityOption -> {
-//            List<Validity> tmpValidityList = validityService.findEquivalents(validityOption.getX(), validityOption.getY());
-//            // Create a new validity and add it to the validity list if tre is not already an equivalent one
-//            if (tmpValidityList.isEmpty()) {
-//                validityIds.add(validityService.createValidity(validityOption.getX(), validityOption.getY()).getIdValidity());
-//            }
-//            // Add an already existing equivalent validity to the validity list
-//            else {
-//                validityIds.add(tmpValidityList.get(0).getIdValidity());
-//            }
-//        });
-
         // Create package
         Package newPackage = packageService.createPackage(name, validityOptions, serviceIdsMultiplied, productIds);
         if (newPackage == null) {

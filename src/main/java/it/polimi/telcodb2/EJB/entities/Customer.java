@@ -43,19 +43,22 @@ public class Customer implements Serializable {
     @Column(name="failedPayments", nullable = false)
     private int failedPayments = 0;
 
-    // REL: Trigger
-    // Relationship between an alert (owner) and the customer it refers to
-    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Alert alert = null;
 
-    // REL: Create
-    // Relationship between an order (owner) and its creator customer
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Collection<Order> orders = new ArrayList<Order>();
 
-    // REL: Has
-    // Relationship between a client and its schedules (owner)
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "customer",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Collection<Schedule> schedules = new ArrayList<Schedule>();
 
     public Customer() {

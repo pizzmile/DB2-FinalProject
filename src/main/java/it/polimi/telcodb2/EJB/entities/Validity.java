@@ -27,13 +27,14 @@ public class Validity {
     @Column(name = "fee", nullable = false)
     private float fee;
 
-    // Relationship between package (owner) and its compatible validities
-    @ManyToMany(mappedBy = "validities", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "validities",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private Collection<Package> packages;
 
-    // REL: With
-    // Relationship between an order (owner) and its included package
-    @OneToMany(mappedBy = "validity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "validity",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Order> orders = new ArrayList<Order>();
 
     public Validity() {}

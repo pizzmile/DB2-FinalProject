@@ -41,29 +41,29 @@ public class Order implements Serializable {
     @Column(name="paid", nullable = false)
     private boolean paid = false;
 
-    // REL: Create
-    // Relationship between an order (owner) and its creator customer
-    @ManyToOne
+    @ManyToOne(
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "idCustomer")
     private Customer customer;
 
-    // REL: ChosenProducts
-    // Relationship between an order (owner) and the selected additional products
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinTable(name = "ChosenProduct",
             joinColumns = @JoinColumn(name = "idOrder"),
             inverseJoinColumns = @JoinColumn(name = "idProduct"))
     private List<Product> products;
 
-    // REL: About
-    // Relationship between an order (owner) and its included package
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "idPackage")
     private Package aPackage;
 
-    // REL: With
-    // Relationship between an order (owner) and its included package
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(
+            fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     @JoinColumn(name = "idValidity")
     private Validity validity;
 

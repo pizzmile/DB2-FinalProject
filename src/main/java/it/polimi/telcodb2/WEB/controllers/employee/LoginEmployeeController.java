@@ -42,11 +42,10 @@ public class LoginEmployeeController extends HttpServlet {
 
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // obtain and escape params
+        // Obtain and escape params
         String username = StringEscapeUtils.escapeJava(request.getParameter("username"));
         String password = StringEscapeUtils.escapeJava(request.getParameter("password"));
         if (username == null || password == null || username.isEmpty() || password.isEmpty()) {
-//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing or empty credentials");
             String path = getServletContext().getContextPath() + "/employee-login?error=Missing or empty credentials.";
             response.sendRedirect(path);
             return;
@@ -55,9 +54,7 @@ public class LoginEmployeeController extends HttpServlet {
         Employee employee;
         try {
             employee = employeeService.checkCredentials(username, password);
-        } catch (CredentialsException | NonUniqueResultException e) {
-//            e.printStackTrace();
-//            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Could not check credentials");
+        } catch (NonUniqueResultException e) {
             String path = getServletContext().getContextPath() + "/customer-login?error=Could not check credentials.";
             response.sendRedirect(path);
             return;

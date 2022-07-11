@@ -10,7 +10,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "Service", schema = "TelcoDB", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"serviceType", "minutes", "extraMinutesFee", "sms", "extraSmsFee", "giga", "extraGigaFee"})
+        @UniqueConstraint(columnNames = {"serviceType", "minutes", "extraMinutesFee",
+                "sms", "extraSmsFee", "giga", "extraGigaFee"})
 })
 @NamedQueries(
         {
@@ -55,12 +56,14 @@ public class Service implements Serializable {
     @Column(name="extraGigaFee", nullable = false)
     private float extraGigaFee = 0;
 
-    // Relationship between package (owner) and its services
-    @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "services",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
    private List<Package> packages  = new ArrayList<>();
 
-    // Relationship between schedule (owner) and the scheduled services
-    @ManyToMany(mappedBy = "services", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "services",
+            fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Schedule> schedules = new ArrayList<>();
 
     public Service() {
