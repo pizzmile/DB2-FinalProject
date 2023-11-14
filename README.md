@@ -19,5 +19,5 @@ The customer applciation has an home page where users can browse and select serv
 
 From the home page, customers can also pay un-paid orders.
 
-## Grade
+## Grade
 The project was inspected and was judged excellent. It was awarded 15/15 points.
